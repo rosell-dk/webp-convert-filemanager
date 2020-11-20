@@ -1,0 +1,42 @@
+<template>
+  <!--
+  svgrepo.com
+  https://publicdomainvectors.org/
+  https://openclipart.org/
+  -->
+  <svg style="position: absolute; width: 0; height: 0;" width="0" height="0" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+    <defs>
+      <symbol id="icon-folder" viewBox="0 0 309.267 309.267">
+        <g>
+        	<path style="fill:#D0994B;" d="M260.944,43.491H125.64c0,0-18.324-28.994-28.994-28.994H48.323c-10.67,0-19.329,8.65-19.329,19.329
+        		v222.286c0,10.67,8.659,19.329,19.329,19.329h212.621c10.67,0,19.329-8.659,19.329-19.329V62.82
+        		C280.273,52.15,271.614,43.491,260.944,43.491z"/>
+        	<path style="fill:#E4E7E7;" d="M28.994,72.484h251.279v77.317H28.994V72.484z"/>
+        	<path style="fill:#F4B459;" d="M19.329,91.814h270.609c10.67,0,19.329,8.65,19.329,19.329l-19.329,164.298
+        		c0,10.67-8.659,19.329-19.329,19.329H38.658c-10.67,0-19.329-8.659-19.329-19.329L0,111.143C0,100.463,8.659,91.814,19.329,91.814z
+        		"/>
+        </g>
+      </symbol>
+      <symbol id="icon-unfold" viewBox="0 0 32 32">
+        <path d="M28,14H18V4c0-1.104-0.896-2-2-2s-2,0.896-2,2v10H4c-1.104,0-2,0.896-2,2s0.896,2,2,2h10v10c0,1.104,0.896,2,2,2  s2-0.896,2-2V18h10c1.104,0,2-0.896,2-2S29.104,14,28,14z"/>
+      </symbol>
+      <symbol id="icon-fold" viewBox="0 0 24 24">
+        <g fill="none" stroke="#000" stroke-width="3" stroke-linecap="round" stroke-linejoin="round">
+          <line x1="5" y1="12" x2="19" y2="12"/>
+        </g>
+      </symbol>
+      <symbol id="icon-file" viewBox="0 0 56 56">
+        <g>
+        	<path style="fill:#E9E9E0;" d="M36.985,0H7.963C7.155,0,6.5,0.655,6.5,1.926V55c0,0.345,0.655,1,1.463,1h40.074
+        		c0.808,0,1.463-0.655,1.463-1V12.978c0-0.696-0.093-0.92-0.257-1.085L37.607,0.257C37.442,0.093,37.218,0,36.985,0z"/>
+        	<polygon style="fill:#D9D7CA;" points="37.5,0.151 37.5,12 49.349,12 	"/>
+        	<circle style="fill:#F3D55B;" cx="18.931" cy="14.431" r="4.569"/>
+        	<polygon style="fill:#26B99A;" points="6.5,39 17.5,39 49.5,39 49.5,28 39.5,18.5 29,30 23.517,24.517 	"/>
+        	<path style="fill:#14A085;" d="M48.037,56H7.963C7.155,56,6.5,55.345,6.5,54.537V39h43v15.537C49.5,55.345,48.845,56,48.037,56z"/>
+        	<g>
+        	</g>
+        </g>
+      </symbol>
+    </defs>
+  </svg>
+</template>

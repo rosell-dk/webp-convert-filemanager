@@ -1,0 +1,21 @@
+{
+  "name": "test",
+  "version": "0.0.0",
+  "scripts": {
+    "dev": "vite",
+    "build": "vite build",
+    "build2": "vite build  --base=",
+    "copy": "cp dist/_assets/index* /var/www/webp-express-tests/we0/plugins-moved/webp-express/lib/wcfm/wcfm.js && cp dist/_assets/style* /var/www/webp-express-tests/we0/plugins-moved/webp-express/lib/wcfm/style.css",
+    "build-copy": "npm run build && npm run copy"
+  },
+  "dependencies": {
+    "splitpanes": "^3.0.4",
+    "vue": "^3.0.2"
+  },
+  "devDependencies": {
+    "@vue/compiler-sfc": "^3.0.2",
+    "postcss-cli": "^8.3.0",
+    "postcss-nesting": "^7.0.1",
+    "vite": "^1.0.0-rc.8"
+  }
+}
