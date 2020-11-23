@@ -18,6 +18,8 @@
     </div>
     <multipane-resizer></multipane-resizer>
     <div class="pane" :style="{ flexGrow: 1 }">
+      <ConvertOptions :info="selectedInfo" />
+      <hr/>
       <InfoPane :info="selectedInfo" />
     </div>
   </multipane>
@@ -28,6 +30,7 @@
 import Poster from './classes/Poster.js'
 
 import SVGs from './components/SVGs.vue'
+import ConvertOptions from './components/ConvertOptions.vue'
 import FileTree from './components/FileTree.vue'
 import InfoPane from './components/InfoPane.vue'
 
@@ -42,6 +45,7 @@ export default {
   name: 'WCFM',
   components: {
     SVGs,
+    ConvertOptions,
     FileTree,
     InfoPane,
     Multipane, MultipaneResizer
@@ -51,7 +55,7 @@ export default {
     onConvertClick(path) {
       alert(path);
     },
-    onInfoClick(path) {
+    displayInfo(path) { // called from FileItem.vue
       var me = this;
       Poster.post('info', {path: path}, function(response) {
         me.selectedInfo = response;
@@ -68,9 +72,15 @@ export default {
   },
   data() {
     return {
+      selectedPath: null,
       selectedItem: null,
       item: {},
       selectedInfo: {}
+    }
+  },
+  provide() {
+    return {
+      wcfm: this
     }
   }
 }

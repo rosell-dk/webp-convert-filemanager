@@ -22,8 +22,8 @@ if (!window["wcfmoptions"]) {
                 {name:'file', isDir:false}
               ]
               },
-              {name:'file', isDir:false},
-              {name:'file2', isDir:false}
+              {name:'file', isDir:false, isConverted: true},
+              {name:'file2', isDir:false, isConverted: false}
             ]
           };
           break;

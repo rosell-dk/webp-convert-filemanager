@@ -8,8 +8,10 @@
       <svg v-if="item.isDir" class="icon-folder" @click="this.$emit('foldUnfoldClick')"><use xlink:href="#icon-folder" /></svg>
       <svg v-if="!item.isDir" class="icon-file"><use xlink:href="#icon-file" /></svg>
       {{ item.name }}
-      <button v-if="hover" @click.stop="convertClick()">Convert</button>
-      <button v-if="hover" @click.stop="infoClick()">Info</button>
+      <div class="buttons">
+        <button v-if="hover" @click.stop="infoClick()">Info</button>
+        <button v-if="hover" @click.stop="convertClick()" v-html="(item.isConverted ? 'Reconvert' : 'Convert')" ></button>
+      </div>
     </p>
   </div>
 </template>
@@ -28,17 +30,10 @@ export default {
       hover: false
     }
   },
+  inject: ['wcfm'],
   methods: {
     getWCFM() {
-      var node = this.$parent;
-      window.n = node;
-      while (node) {
-        node = node.$parent;
-        if (node.$.type.name == 'WCFM') {
-          return node;
-        }
-      }
-      return node;
+      return this.wcfm;
     },
     getFullPath() {
       var node = this.$parent;
@@ -52,7 +47,7 @@ export default {
       return path.reverse().join('/');
     },
     infoClick() {
-      this.getWCFM().onInfoClick(this.getFullPath());
+      this.getWCFM().displayInfo(this.getFullPath());
       //alert(this.item.name);
     },
     convertClick() {
@@ -85,7 +80,7 @@ export default {
 
   & p {
     user-select: none;
-    cursor: default;
+    cursor: pointer;
     margin: 0;
     padding: 3px;
     line-height: 25px;
@@ -96,12 +91,18 @@ export default {
       cursor: pointer;
     }
 
-    & button {
+    & .buttons {
+
       float: right;
-      margin-top: 2px;
-      cursor: pointer;
-      background-color: white;
-      margin-right: 10px;
+      cursor: default;
+
+      & button {
+        margin-top: 2px;
+        margin-bottom: 0px;
+        cursor: pointer;
+        background-color: white;
+        margin-right: 10px;
+      }
     }
 
     & svg.icon-unfold, & svg.icon-fold{

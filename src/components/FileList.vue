@@ -24,8 +24,8 @@
 </template>
 
 <script>
-import FileItem from './FileItem.vue'
 import Poster from '../classes/Poster.js'
+import FileItem from './FileItem.vue'
 
 export default {
   name: 'FileList',
