@@ -18,7 +18,7 @@
     </div>
     <multipane-resizer></multipane-resizer>
     <div class="pane" :style="{ flexGrow: 1 }">
-      <ConvertOptions :info="selectedInfo" />
+      <ConvertOptions />
       <hr/>
       <InfoPane :info="selectedInfo" />
     </div>

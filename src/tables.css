@@ -1,0 +1,35 @@
+/* The following CSS uses nesting (future standard compliant).
+   You must use "PostCSS Nesting" package to compile to current standard
+
+   https://css-tricks.com/accessible-simple-responsive-tables/
+ */
+
+/* Table, - in order to autosize first column */
+.table-table {
+  display: table;
+
+  & > * {
+    display: table-row;
+
+    & > * {
+      display: table-cell;
+      padding: 5px 20px 5px 0;
+    }
+  }
+}
+
+/* Table, inline blocks - for fixed widths */
+
+.table-inline-block {
+  & > div {
+    & > * {
+      display: inline-block;
+      margin-right: 10px;
+      padding: 5px 20px 5px 0;
+    }
+
+    & > *:first-child {
+      width: 120px;
+    }
+  }
+}

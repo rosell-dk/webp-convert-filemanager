@@ -1,6 +1,7 @@
 import { createApp } from 'vue'
 import WCFM from './WCFM.vue'
 import './index.css'
+import './tables.css'
 
 const wcfm = createApp(WCFM);
 

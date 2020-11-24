@@ -1,7 +1,7 @@
 <template>
   <div class="selectbox">
-    <div :class="['box', {'is-open':isOpen}]" @click.stop="onBoxClick">
-      {{ selectedOption ? selectedOption[optionsKey] : placeholder }}
+    <div :class="['box', {'is-open':isOpen}]" @click="onBoxClick">
+      {{ selectedOption ? selectedOption[optionsLabel] : placeholder }}
     </div>
     <div class="dropdown" v-show="isOpen">
       <div v-for="option in options">
@@ -20,6 +20,7 @@ inspiration:
 https://www.w3schools.com/howto/howto_custom_select.asp
 https://v3.vuejs.org/guide/events.html#event-modifiers
 https://primefaces.org/primevue/showcase/#/multiselect
+https://www.reddit.com/r/vuejs/comments/i89bw9/selectdropdown_library_for_vue3/
 
 TODO:
 Custom template for option, via slot, like they do here:
@@ -32,35 +33,48 @@ export default {
     options: Array,
     optionsLabel: String,
     optionsKey: String,
-    placeholder: String
+    placeholder: String,
+    modelValue: String
   },
+  emits: ['update:modelValue'],
   data() {
     return {
       selectedOption: null,
       isOpen: false
     }
   },
+  watch: {
+    modelValue(newValue, oldValue) {
+      this.select(newValue);
+    }
+  },
   mounted() {
-    document.addEventListener('click', this.onDocumentClick)
+    document.addEventListener('click', this.onDocumentClick);
+    this.select(this.modelValue);
   },
   beforeUnmount: function () {
-    document.removeEventListener('click', this.onDocumentClick)
-    // document.removeEventListener('click', this.onClick)
+    document.removeEventListener('click', this.onDocumentClick);
   },
   methods: {
-    onDocumentClick() {
-      this.isOpen = false;
+    onDocumentClick(event) {      
+      if (event.target.parentNode != this.$el) {
+        this.isOpen = false;
+
+      }
     },
     onBoxClick() {
       this.isOpen = !(this.isOpen);
     },
+    onOptionClick(event) {
+      this.isOpen = false;
+      this.select(event.target.getAttribute('data-key'));
+      this.$emit('update:modelValue', this.selectedOption[this.optionsKey]);
+    },
     getOptionByKey(key) {
       return this.options.find(element => element[this.optionsKey] == key);
     },
-    onOptionClick(event) {
-      var selectedKey = event.target.getAttribute('data-key');
-      this.selectedOption = this.getOptionByKey(selectedKey);
-      this.isOpen = false;
+    select(key) {
+      this.selectedOption = this.getOptionByKey(key);
     }
   }
 }

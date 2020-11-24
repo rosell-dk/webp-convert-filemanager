@@ -1,3 +1,7 @@
+/* The following CSS uses nesting (future standard compliant).
+   You must use "PostCSS Nesting" package to compile to current standard
+ */
+
 #app {
   font-family: Avenir, Helvetica, Arial, sans-serif;
   -webkit-font-smoothing: antialiased;
