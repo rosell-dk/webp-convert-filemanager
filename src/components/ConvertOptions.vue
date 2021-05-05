@@ -24,16 +24,29 @@
         <QualityLossless v-model="qualityLossless" :converter="converter" />
       </div>
     </div>
+    <div v-show="converterSupportsMethod">
+      <div><label>Method (0-5)</label></div>
+      <div>
+        <input type="number" class="method" v-model="method" />
+      </div>
+    </div>
+    <div v-if="converter == 'ewww'">
+      <div><label>Api key</label></div>
+      <div>
+        <input v-model="converterOptions.ewww['api-key']" />
+      </div>
+    </div>
 
   </div>
   <pre>
+  Converter: {{ converter }}
+  Encoding: {{ encoding }}
+  Quality (lossy):
+    quality: {{ qualityLossy.quality }},
+    max: {{ qualityLossy.max }},
 
-
-
-Converter: {{ converter }}
-Encoding: {{ encoding }}
-Quality (lossy): quality: {{ qualityLossy.quality }}, max: {{ qualityLossy.max }}, default: {{ qualityLossy.default }}
-  </pre>
+    default: {{ qualityLossy.default }}
+</pre>
 </template>
 
 <script>
@@ -53,49 +66,138 @@ export default {
   },
   computed: {
     converterSupportsEncoding() {
-      return (this.converter != 'ewww') && (this.converter != 'gd');
-      /*
-      switch (this.converter) {
-        case 'gd':
-        case 'ewwww':
-          return false;
-        default:
-          return true;
-      }*/
+      return this.converterSupports('encoding');
     },
     converterSupportsNearLossless() {
-      switch (this.converter) {
-        case 'cwebp':
-        case 'vips':
-        case 'wpc':
-          return true;
-        default:
-          return false;
-      }
+      return this.converterSupports('nearLossless');
+    },
+    converterSupportsMethod() {
+      return this.converterSupports('method');
     }
+
   },
   data() {
     return {
+      // Global "constants"
+      converters: [
+        {id: 'cwebp', name: 'cwebp'},
+        {id: 'vips', name: 'vips'},
+        {id: 'ewww', name: 'ewww'},
+        {id: 'gd', name: 'gd'},
+      ],
+      supportedOptions: {
+        encoding: ['cwebp', 'vips', 'imagick', 'gmagick', 'imagemagick', 'graphicsmagick', 'ffmpeg', 'wpc'],
+        method: ['cwebp', 'imagick', 'gmagick', 'imagemagick', 'graphicsmagick', 'ffmpeg', 'wpc'],
+        nearLossless: ['cwebp', 'vips', 'wpc']
+      },
+
+      // System status
       qualityDetectionSupported: true,
-      converter: 'ewww',
+
+      // Options
       encoding: 'auto',
+      converter: 'cwebp',
       qualityLossy: {
         quality: 'auto',     // auto | number
         max: 85,
         default: 75
       },
+      'use-nice': true,
       qualityLossless: {
         quality: 60
       },
-      converters: [
-        {id: 'cwebp', name: 'cwebp', },
-        {id: 'vips', name: 'vips'},
-        {id: 'ewww', name: 'ewww'},
-        {id: 'gd', name: 'gd'},
-      ]
+      method: 5,
+      converterOptions: {
+        ewww: {
+          'api-key': 'bogus-key-for-testing',
+          'check-key-status-before-converting': false
+        },
+        cwebp: {
+        }
+      }
     }
   },
   mounted() {
+    var me = this;
+    Poster.post('conversion-settings', {folder: ''}, function(response) {
+      //me.item = response;
+      // TODO: Loading animation
+      //console.log('r:', response);
+      if (response.supportedStandardOptions) {
+        var supportedStandardOptions = response.supportedStandardOptions;
+        if (supportedStandardOptions.encoding) {
+          me.supportedOptions.encoding = supportedStandardOptions.encoding;
+        }
+        if (supportedStandardOptions.method) {
+          me.supportedOptions.method = supportedStandardOptions.method;
+        }
+        if (supportedStandardOptions.nearLossless) {
+          me.supportedOptions.nearLossless = supportedStandardOptions.nearLossless;
+        }
+      }
+      var newConverters = null;
+      if (response.converters) {
+        newConverters = response.converters;
+      } else {
+        if (response.systemStatus.converterRequirements) {
+          newConverters = me.converters;
+        }
+      }
+
+      if (response.systemStatus.converterRequirements) {
+        var req = response.systemStatus.converterRequirements
+        for (var i=0; i<newConverters.length; i++) {
+          var id = newConverters[i]['id'];
+          if (req[id]) {
+            var r = req[id];
+            for (var prop in r) {
+              if (r[prop] === false) {
+                newConverters[i]['icon'] = 'not-available';
+
+                // TODO: set hover text.
+                // We could provide standard hover texts in this class
+                // for others (unknown requirements), generate a standard hover text
+                // newConverters[i]['hoverText'] =
+              }
+            }
+            /*
+            switch (id) {
+              case 'gd':
+                if (r['extensionLoaded'] === false) {
+                  newConverters[i]['hoverText'] = 'Required Gd extension is not available';
+                }
+                if (r['compiledWithWebP'] === false) {
+                  newConverters[i]['icon'] = 'not-available';
+                  newConverters[i]['hoverText'] = 'Gd has been compiled without webp support';
+                }
+                break;
+            }*/
+          }
+        }
+      }
+      if (newConverters) {
+        me.converters = newConverters;
+
+        // Hack to forces change event even though no change, in case cwebp
+        var temp = me.converter;
+        me.converter = 'vips';
+        me.converter = temp;
+      }
+      if (response.overrideDefaults) {
+        var defaults = response.overrideDefaults;
+        if (defaults.converter) {
+          me.converter = defaults.converter;
+        }
+        if (defaults.encoding) {
+          me.encoding = defaults.encoding;
+        }
+        if (defaults.method) {
+          me.method = defaults.method;
+        }
+        // TODO: Provide more overridable defaults
+      }
+    });
+
     if (!this.qualityDetectionSupported) {
       this.qualityLossy['quality'] = this.qualityLossy['default'];
     }
@@ -110,14 +212,15 @@ export default {
     converter(newConverter, oldConverter) {
       //alert(newConverter)
       // TODO: Use code below or a local model (like in QualityLossy) ???
-
+      /*
+alert('h')
       if (this.doesConverterSupportEncoding(newConverter)) {
         if (!this.doesConverterSupportEncoding(oldConverter)) {
           this.encoding = 'auto';
         }
       } else {
         this.encoding = null;
-      }
+      }*/
       /*
       if ((newConverter == 'gd') || (newConverter == 'ewww')) {
         this.encoding = null;
@@ -128,11 +231,21 @@ export default {
     }
   },
   methods: {
+    /*
     doesConverterSupportEncoding(converter) {
+      return false;
       if (converter == 'gd') return false;
       if (converter == 'ewww') return false;
       return true;
+    },*/
+    optionSupported(optionName, converter) {
+      var converter = this.converter;
+      return this.supportedOptions[optionName].find(function(el) {return el == converter})
+    },
+    converterSupports(optionName) {
+      return this.optionSupported(optionName, this.converter);
     }
+
   }
 }
 </script>
@@ -147,6 +260,17 @@ export default {
  & > div {
    & > div:first-child {
      min-width: 120px;
+   }
+   & > div:last-child {
+     width: 300px;
+     box-sizing: border-box;
+     & * {
+       box-sizing: border-box;
+       width: 100%;
+     }
+   }
+   & input.method {
+     width: 40px;
    }
  }
 }

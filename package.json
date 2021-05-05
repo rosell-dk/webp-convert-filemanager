@@ -5,7 +5,8 @@
     "dev": "vite",
     "build": "vite build",
     "build2": "vite build  --base=",
-    "copy": "cp dist/_assets/index* /var/www/webp-express-tests/we0/plugins-moved/webp-express/lib/wcfm/wcfm.js && cp dist/_assets/style* /var/www/webp-express-tests/we0/plugins-moved/webp-express/lib/wcfm/style.css",
+    "copy": "cp dist/_assets/index* /var/www/we/we0/wordpress/wp-content/plugins/webp-express/lib/wcfm/wcfm.js && cp dist/_assets/style* /var/www/we/we0/wordpress/wp-content/plugins/webp-express/lib/wcfm/style.css",
+    "copyold": "cp dist/_assets/index* /var/www/webp-express-tests/we0/plugins-moved/webp-express/lib/wcfm/wcfm.js && cp dist/_assets/style* /var/www/webp-express-tests/we0/plugins-moved/webp-express/lib/wcfm/style.css",
     "build-copy": "npm run build && npm run copy"
   },
   "dependencies": {
@@ -13,6 +14,7 @@
     "vue": "^3.0.2"
   },
   "devDependencies": {
+    "npm": "^7.11.2",
     "@vue/compiler-sfc": "^3.0.2",
     "postcss-cli": "^8.3.0",
     "postcss-nesting": "^7.0.1",

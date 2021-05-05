@@ -7,7 +7,9 @@
       <div v-for="option in options">
         <div class="option" :data-key="option[optionsKey]" @click="onOptionClick($event)">
           {{ option[optionsLabel] }}
-          <svg class="icon-ok"><use xlink:href="#icon-ok" /></svg>
+          <slot v-if="option['icon']">
+            <svg class="icon"><use :xlink:href="'#icon-' + option['icon']" /></svg>
+          </slot>
         </div>
       </div>
     </div>
@@ -56,7 +58,7 @@ export default {
     document.removeEventListener('click', this.onDocumentClick);
   },
   methods: {
-    onDocumentClick(event) {      
+    onDocumentClick(event) {
       if (event.target.parentNode != this.$el) {
         this.isOpen = false;
 
@@ -126,7 +128,7 @@ export default {
       padding: 5px 10px;
       border-bottom: 1px solid #eee;
 
-      & .icon-ok {
+      & .icon {
         width: 18px;
         height: 18px;
         float: right;

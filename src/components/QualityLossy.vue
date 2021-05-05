@@ -1,9 +1,9 @@
 <template>
   <div class="quality-lossy">
     <div class="auto" v-if="qualityDetectionSupported">
-      <input class="input-quality" v-model="auto.max" type="number" @input="onLocalChange()"/>
+      <input type="number" class="input-quality" v-model="auto.max" @change="onLocalChange()"/>
       <label>Prevent excess?</label>
-      <input type="checkbox" v-model="auto.limit" type="number" @input="onLocalChange()"/>
+      <input type="checkbox" v-model="auto.limit" @change="onLocalChange()"/>
     </div>
     <div class="no-auto"  v-if="!qualityDetectionSupported">
       <input class="input-quality" v-model="noAuto.quality" type="number" @input="onLocalChange()"/>
@@ -31,7 +31,7 @@ export default {
   data() {
     return {
       auto: {
-        max: 15,
+        max: 75,
         limit: true
       },
       noAuto: {
@@ -51,6 +51,7 @@ export default {
       this.noAuto.quality = modelValue.default;
     },
     onLocalChange() {
+
       if (this.qualityDetectionSupported) {
         this.$emit('update:modelValue', {
           quality: (this.auto.limit ? 'auto' : this.auto.max),

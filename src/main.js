@@ -26,8 +26,38 @@ if (!window["wcfmoptions"]) {
               {name:'file', isDir:false, isConverted: true},
               {name:'file2', isDir:false, isConverted: false}
             ]
-          };
-          break;
+        };
+        break;
+      case 'conversion-settings':
+        var response = {
+          converters: [
+            {id: 'cwebp', name: 'cwebp'}, // TODO: Accept option definitions!
+            {id: 'vips', name: 'vips'},
+            {id: 'ewww', name: 'ewww'},
+            {id: 'gd', name: 'gd'},
+          ],
+          supportedStandardOptions: {
+            encoding: ['cwebp', 'vips', 'imagick', 'gmagick', 'imagemagick', 'graphicsmagick', 'ffmpeg', 'wpc'],
+            method: ['cwebp', 'imagick', 'gmagick', 'imagemagick', 'graphicsmagick', 'ffmpeg', 'wpc'],
+            nearLossless: ['cwebp', 'vips', 'wpc']
+          },
+          overrideDefaults: {
+            converter: 'cwebp',
+            //encoding: 'lossless',
+            //method: 3,
+          },
+          systemStatus: {
+            converterRequirements: {
+              gd: {
+                extensionLoaded: false,
+                compiledWithWebP: true,
+              }
+            }
+
+          }
+
+        }
+        break;
         case 'info':
           var response = {
             original: {

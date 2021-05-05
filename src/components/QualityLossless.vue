@@ -1,6 +1,6 @@
 <template>
   <div class="quality-lossless">
-    <input class="input-quality" v-model="quality" type="number" @input="onLocalChange()"/>
+    <input class="input-quality" v-model="quality" type="number" @input="onLocalChange()"/>    
   </div>
 </template>
 
@@ -13,7 +13,7 @@ export default {
 
   },
   props: {
-    modelValue: Object
+    modelValue: Object,
   },
   emits: ['update:modelValue'],
   mounted() {
@@ -49,7 +49,6 @@ export default {
 .quality-lossless {
   & .input-quality {
     width: 40px;
-    padding: 3px 5px;
   }
 }
 label {}
