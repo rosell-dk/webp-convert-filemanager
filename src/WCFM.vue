@@ -1,29 +1,30 @@
 <template>
-  <SVGs />
-<!--
-<splitpanes style="height: 400px">
-  <pane min-size="20">1</pane>
-  <pane>
-    <splitpanes horizontal>
-      <pane>2</pane>
-      <pane>3</pane>
-    </splitpanes>
-  </pane>
-  <pane>5</pane>
-</splitpanes>-->
+  <div class="wcfm">
+    <SVGs />
+  <!--
+  <splitpanes style="height: 400px">
+    <pane min-size="20">1</pane>
+    <pane>
+      <splitpanes horizontal>
+        <pane>2</pane>
+        <pane>3</pane>
+      </splitpanes>
+    </pane>
+    <pane>5</pane>
+  </splitpanes>-->
 
-  <multipane class="mainpanel" layout="vertical">
-    <div class="pane" style="width:48%">
-      <FileTree :item="item" />
-    </div>
-    <multipane-resizer></multipane-resizer>
-    <div class="pane" :style="{ flexGrow: 1 }">
-      <ConvertOptions />
-      <hr/>
-      <InfoPane :info="selectedInfo" />
-    </div>
-  </multipane>
-
+    <multipane class="mainpanel" layout="vertical">
+      <div class="pane" style="width:48%">
+        <FileTree :item="item" />
+      </div>
+      <multipane-resizer></multipane-resizer>
+      <div class="pane" :style="{ flexGrow: 1 }">
+        <ConvertOptions />
+        <hr/>
+        <InfoPane :info="selectedInfo" />
+      </div>
+    </multipane>
+  </div>
 </template>
 
 <script>
@@ -103,4 +104,14 @@ export default {
   #webpconvert-filemanager {
     padding: 20px;
   }*/
+  .wcfm {
+    font-family: Avenir, Helvetica, Arial, sans-serif;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+    color: #3c434a;
+  }
+
+  input {
+    padding: 3px 5px;
+  }
 </style>

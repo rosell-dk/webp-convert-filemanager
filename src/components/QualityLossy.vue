@@ -17,7 +17,7 @@ import SelectBox from './SelectBox.vue'
 export default {
   name: 'QualityLossy',
   components: {
-
+    SelectBox
   },
   props: {
     converter: String,

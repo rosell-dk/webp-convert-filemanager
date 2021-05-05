@@ -2,12 +2,15 @@
    You must use "PostCSS Nesting" package to compile to current standard
  */
 
+/*
 #app {
   font-family: Avenir, Helvetica, Arial, sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
+  color: #3c434a;
 }
 
 input {
-  padding: 3px 5px;  
+  padding: 3px 5px;
 }
+*/

@@ -3,6 +3,13 @@ import WCFM from './WCFM.vue'
 import './index.css'
 import './tables.css'
 
+// Cannot get v-tooltip to work. But it is also in alpha for Vue 3...
+// https://github.com/Akryum/v-tooltip/issues/545
+// https://github.com/Akryum/v-tooltip/discussions/603
+//import Vue from 'vue'
+//import VTooltip from 'v-tooltip'
+//Vue.use(VTooltip)
+
 const wcfm = createApp(WCFM);
 
 if (!window["wcfmoptions"]) {
