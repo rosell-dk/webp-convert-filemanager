@@ -2,7 +2,7 @@
   <div class="quality-lossy">
     <div class="auto" v-if="qualityDetectionSupported">
       <input type="number" class="input-quality" v-model="auto.max" @change="onLocalChange()"/>
-      <label>Prevent excess?</label>
+      <label>Autolimit?</label>
       <input type="checkbox" v-model="auto.limit" @change="onLocalChange()"/>
     </div>
     <div class="no-auto"  v-if="!qualityDetectionSupported">
