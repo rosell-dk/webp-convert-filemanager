@@ -68,7 +68,6 @@
   Quality (lossy):
     quality: {{ qualityLossy.quality }},
     max: {{ qualityLossy.max }},
-
     default: {{ qualityLossy.default }}
 </pre>
 </template>
