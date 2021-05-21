@@ -43,6 +43,36 @@ if (!window["wcfmoptions"]) {
             {id: 'ewww', name: 'ewww'},
             {id: 'gd', name: 'gd'},
           ],
+          options: [
+            {
+              "id": "try-supplied-binary-for-os",
+              "type": "boolean",
+              "default": false,
+              "ui": {
+                "type": "checkbox",
+                "label": "Try supplied binary for OS",
+                "help-text": "help me!",
+              },
+            },
+            {
+              "id": "skip-these-precompiled-binaries",
+              "type": "string",
+              "default": "",
+              "ui": {
+                "type": "input",
+                "label": "Skip these precompiled binaries",
+                "help-text": "help me too!",
+                "display-condition": {
+                    'type': 'equals',
+                    'arg1': {
+                        'type': 'option-value',
+                        'option-id': 'try-supplied-binary-for-os'
+                    },
+                    'arg2': true
+                },
+              },
+            }
+          ],
           supportedStandardOptions: {
             encoding: ['cwebp', 'vips', 'imagick', 'gmagick', 'imagemagick', 'graphicsmagick', 'ffmpeg', 'wpc'],
             method: ['cwebp', 'imagick', 'gmagick', 'imagemagick', 'graphicsmagick', 'ffmpeg', 'wpc'],

@@ -1,5 +1,15 @@
 <template>
   <div class="table-table convert-options">
+    <div v-for="option in options">
+      <div><label>{{option.ui.label}}</label></div>
+      <div>
+        <input v-if="option.ui.type == 'checkbox'" type="checkbox" v-model="optionValues[option.id]" />
+        <input v-if="option.ui.type == 'input'" v-model="optionValues[option.id]" />
+      </div>
+    </div>
+    {{
+      optionValues
+    }}
     <div>
       <div><label>Converter</label></div>
       <div>
@@ -109,6 +119,7 @@ export default {
         {id: 'ewww', name: 'ewww'},
         {id: 'gd', name: 'gd'},
       ],
+      options: [],
       supportedOptions: {
         encoding: ['cwebp', 'vips', 'imagick', 'gmagick', 'imagemagick', 'graphicsmagick', 'ffmpeg', 'wpc'],
         method: ['cwebp', 'imagick', 'gmagick', 'imagemagick', 'graphicsmagick', 'ffmpeg', 'wpc'],
@@ -118,6 +129,7 @@ export default {
       // System status
       qualityDetectionSupported: true,
 
+      optionValues: {},
       // Options
       encoding: 'auto',
       converter: 'cwebp',
@@ -143,10 +155,18 @@ export default {
   },
   mounted() {
     var me = this;
+
     Poster.post('conversion-settings', {folder: ''}, function(response) {
       //me.item = response;
       // TODO: Loading animation
       //console.log('r:', response);
+
+      me.options = response.options;
+      for (var i=0; i<me.options.length; i++) {
+        var option = me.options[i];
+        me.optionValues[option.id] = option.default;
+      }
+
       if (response.supportedStandardOptions) {
         var supportedStandardOptions = response.supportedStandardOptions;
         if (supportedStandardOptions.encoding) {
