@@ -45,30 +45,17 @@ if (!window["wcfmoptions"]) {
           ],
           options: [
             {
-              "id": "try-supplied-binary-for-os",
-              "type": "boolean",
-              "default": false,
-              "ui": {
-                "type": "checkbox",
-                "label": "Try supplied binary for OS",
-                "help-text": "help me!",
-              },
-            },
-            {
-              "id": "skip-these-precompiled-binaries",
+              "id": "converter",
               "type": "string",
-              "default": "gut",
+              "default": 'cwebp',
               "ui": {
-                "type": "input",
-                "label": "Skip these precompiled binaries",
-                "display-condition": {
-                    'type': 'equals',
-                    'arg1': {
-                        'type': 'option-value',
-                        'option-id': 'try-supplied-binary-for-os'
-                    },
-                    'arg2': true
-                },
+                "type": "select",
+                "label": "Converter",
+                "options": ['cwebp', 'ewww'],
+                "optionLabels": {
+                  'cwebp': 'cwebp',
+                  'ewww': 'ewww',
+                }
               },
             },
             {
@@ -96,7 +83,53 @@ if (!window["wcfmoptions"]) {
                 "type": "input",
                 "label": "Quality (lossy)",
               },
-            }
+            },
+            {
+              "id": "try-supplied-binary-for-os",
+              "type": "boolean",
+              "default": false,
+              "ui": {
+                "type": "checkbox",
+                "label": "Try supplied binary for OS",
+                "help-text": "help me!",
+                "display-condition": {
+                    'type': 'in-array',
+                    'value': {
+                        'type': 'option-value',
+                        'option-id': 'converter'
+                    },
+                    'array': ['cwebp']
+                },
+              },
+            },
+            {
+              "id": "skip-these-precompiled-binaries",
+              "type": "string",
+              "default": "",
+              "ui": {
+                "type": "input",
+                "label": "Skip these precompiled binaries",
+                "display-condition": {
+                    'type': 'and',
+                    'arg1': {
+                      'type': 'in-array',
+                      'value': {
+                          'type': 'option-value',
+                          'option-id': 'converter'
+                      },
+                      'array': ['cwebp']
+                    },
+                    'arg2': {
+                      'type': 'equals',
+                      'arg1': {
+                          'type': 'option-value',
+                          'option-id': 'try-supplied-binary-for-os'
+                      },
+                      'arg2': true
+                    },
+                },
+              },
+            },
           ],
           supportedStandardOptions: {
             encoding: ['cwebp', 'vips', 'imagick', 'gmagick', 'imagemagick', 'graphicsmagick', 'ffmpeg', 'wpc'],
