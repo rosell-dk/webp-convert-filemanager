@@ -1,15 +1,9 @@
 <template>
+  {{
+    optionValues
+  }}
   <div class="table-table convert-options">
-    <div v-for="option in options">
-      <div><label>{{option.ui.label}}</label></div>
-      <div>
-        <input v-if="option.ui.type == 'checkbox'" type="checkbox" v-model="optionValues[option.id]" />
-        <input v-if="option.ui.type == 'input'" v-model="optionValues[option.id]" />
-      </div>
-    </div>
-    {{
-      optionValues
-    }}
+    <ConvertOption v-for="option in options" :option="option" :optionValues="optionValues" v-model="optionValues[option.id]" :disabled="true"/>
     <div>
       <div><label>Converter</label></div>
       <div>
@@ -89,11 +83,12 @@ import EncodingSelector from './EncodingSelector.vue'
 import QualityLossy from './QualityLossy.vue'
 import QualityLossless from './QualityLossless.vue'
 import HelpIcon from './HelpIcon.vue'
+import ConvertOption from './ConvertOption.vue'
 
 export default {
   name: 'ConvertOptions',
   components: {
-    SelectBox, EncodingSelector, QualityLossy, QualityLossless, HelpIcon
+    SelectBox, EncodingSelector, QualityLossy, QualityLossless, HelpIcon, ConvertOption
   },
   props: {
     item: Object

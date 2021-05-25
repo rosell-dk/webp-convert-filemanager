@@ -57,11 +57,10 @@ if (!window["wcfmoptions"]) {
             {
               "id": "skip-these-precompiled-binaries",
               "type": "string",
-              "default": "",
+              "default": "gut",
               "ui": {
                 "type": "input",
                 "label": "Skip these precompiled binaries",
-                "help-text": "help me too!",
                 "display-condition": {
                     'type': 'equals',
                     'arg1': {
@@ -70,6 +69,32 @@ if (!window["wcfmoptions"]) {
                     },
                     'arg2': true
                 },
+              },
+            },
+            {
+              "id": "encoding",
+              "type": "string",
+              "default": 'auto',
+              "ui": {
+                "type": "select",
+                "label": "Encoding",
+                "options": ['auto', 'lossy', 'lossless'],
+                "optionLabels": {
+                  'auto': 'Auto',
+                  'lossy': 'Lossy',
+                  'lossless': 'Lossless'
+                }
+              },
+            },
+            {
+              "id": "quality",
+              "type": "int",
+              "default": 85,
+              "min": 0,
+              "max": 100,
+              "ui": {
+                "type": "input",
+                "label": "Quality (lossy)",
               },
             }
           ],
