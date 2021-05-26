@@ -35,8 +35,8 @@ import ConvertOptions from './components/ConvertOptions.vue'
 import FileTree from './components/FileTree.vue'
 import InfoPane from './components/InfoPane.vue'
 
-import Multipane from './components/multipane.vue';
-import MultipaneResizer from './components/multipane-resizer.vue';
+import Multipane from './components/standard/multipane.vue';
+import MultipaneResizer from './components/standard/multipane-resizer.vue';
 
 //import Pane from './components/pane.vue';
 //import Splitpanes from './components/splitpanes.vue';
