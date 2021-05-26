@@ -10,12 +10,15 @@
         <SelectBox v-model="converter" :options="converters" optionsLabel="name" optionsKey="id" placeholder="Select converter" />
       </div>
     </div>
+    <!--
     <div v-show="converter && converterSupportsEncoding">
       <div><label>WebP encoding</label></div>
       <div>
         <EncodingSelector v-model="encoding" :converter="converter" />
       </div>
     </div>
+  -->
+    <!--
     <div v-show="converter && ((encoding == 'auto') || (encoding == 'lossy') || (!converterSupportsEncoding))">
       <div>
         <label>Quality{{ converterSupportsEncoding && (encoding != 'lossy') ? ' (lossy)' : '' }}</label>
@@ -52,43 +55,20 @@
         <QualityLossless v-model="qualityLossless" :converter="converter" />
       </div>
     </div>
-    <div v-show="converterSupportsMethod">
-      <div><label>Method (0-5)</label></div>
-      <div>
-        <input type="number" class="method" v-model="method" />
-      </div>
-    </div>
-    <div v-if="converter == 'ewww'">
-      <div><label>Api key</label></div>
-      <div>
-        <input v-model="converterOptions.ewww['api-key']" />
-      </div>
-    </div>
-
+  -->
   </div>
-  <pre>
-  Converter: {{ converter }}
-  Encoding: {{ encoding }}
-  Quality (lossy):
-    quality: {{ qualityLossy.quality }},
-    max: {{ qualityLossy.max }},
-    default: {{ qualityLossy.default }}
-</pre>
 </template>
 
 <script>
 import Poster from '../classes/Poster.js'
-import SelectBox from './SelectBox.vue'
-import EncodingSelector from './EncodingSelector.vue'
-import QualityLossy from './QualityLossy.vue'
-import QualityLossless from './QualityLossless.vue'
+import SelectBox from './standard/SelectBox.vue'
 import HelpIcon from './HelpIcon.vue'
 import ConvertOption from './ConvertOption.vue'
 
 export default {
   name: 'ConvertOptions',
   components: {
-    SelectBox, EncodingSelector, QualityLossy, QualityLossless, HelpIcon, ConvertOption
+    SelectBox, HelpIcon, ConvertOption
   },
   props: {
     item: Object
@@ -128,15 +108,7 @@ export default {
       // Options
       encoding: 'auto',
       converter: 'cwebp',
-      qualityLossy: {
-        quality: 'auto',     // auto | number
-        max: 85,
-        default: 75
-      },
       'use-nice': true,
-      qualityLossless: {
-        quality: 60
-      },
       method: 5,
       converterOptions: {
         ewww: {
@@ -237,15 +209,6 @@ export default {
       }
     });
 
-    if (!this.qualityDetectionSupported) {
-      this.qualityLossy['quality'] = this.qualityLossy['default'];
-    }
-    /*
-    this.qualityLossy = {
-      quality: 'auto',     // auto | number
-      max: 25,
-      default: 17
-    }*/
   },
   watch: {
     converter(newConverter, oldConverter) {
@@ -313,7 +276,4 @@ alert('h')
    }
  }
 }
-
-
-
 </style>

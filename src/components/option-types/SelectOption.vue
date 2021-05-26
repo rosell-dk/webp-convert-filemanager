@@ -3,7 +3,7 @@
 </template>
 
 <script>
-import SelectBox from '../SelectBox.vue'
+import SelectBox from '../standard/SelectBox.vue'
 
 export default {
   name: 'SelectOption',

@@ -15,10 +15,7 @@
 </template>
 
 <script>
-import SelectBox from './SelectBox.vue'
-import EncodingSelector from './EncodingSelector.vue'
-import QualityLossy from './QualityLossy.vue'
-import QualityLossless from './QualityLossless.vue'
+import SelectBox from './standard/SelectBox.vue'
 import HelpIcon from './HelpIcon.vue'
 import InputOption from './option-types/InputOption.vue'
 import SelectOption from './option-types/SelectOption.vue'
@@ -28,7 +25,7 @@ import ConditionEvaluator from '../classes/ConditionEvaluator.js'
 export default {
   name: 'ConvertOption',
   components: {
-    SelectBox, EncodingSelector, QualityLossy, QualityLossless, HelpIcon, InputOption, SelectOption
+    SelectBox, HelpIcon, InputOption, SelectOption
   },
   props: ['option', 'modelValue', 'disabled', 'optionValues'],
   methods: {
