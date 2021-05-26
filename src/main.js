@@ -110,12 +110,14 @@ if (!window["wcfmoptions"]) {
                 "label": "Try supplied binary for OS",
                 "help-text": "help me!",
                 "display-condition": {
-                    'type': 'in-array',
-                    'value': {
-                        'type': 'option-value',
-                        'option-id': 'converter'
+                  'type': 'in-array',
+                  'args': [
+                    {
+                      'type': 'option-value',
+                      'args': ['converter']
                     },
-                    'array': ['cwebp']
+                    ['cwebp']
+                  ]
                 },
               },
             },
@@ -127,23 +129,29 @@ if (!window["wcfmoptions"]) {
                 "type": "input",
                 "label": "Skip these precompiled binaries",
                 "display-condition": {
-                    'type': 'and',
-                    'arg1': {
+                  'type': 'and',
+                  'args': [
+                    {
                       'type': 'in-array',
-                      'value': {
+                      'args': [
+                        {
                           'type': 'option-value',
-                          'option-id': 'converter'
-                      },
-                      'array': ['cwebp']
+                          'args': ['converter']
+                        },
+                        ['cwebp']
+                      ]
                     },
-                    'arg2': {
+                    {
                       'type': 'equals',
-                      'arg1': {
+                      'args': [
+                        {
                           'type': 'option-value',
-                          'option-id': 'try-supplied-binary-for-os'
-                      },
-                      'arg2': true
-                    },
+                          'args': ['try-supplied-binary-for-os']
+                        },
+                        true
+                      ]
+                    }
+                  ],
                 },
               },
             },

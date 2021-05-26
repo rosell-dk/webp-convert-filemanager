@@ -1,4 +1,5 @@
 <template>
+  <!-- https://vue-multiselect.js.org/ -->
   <VueMultiselect
     v-model="valueAsArray"
     :options="option.ui.options"
