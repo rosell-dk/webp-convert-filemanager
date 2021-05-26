@@ -10,6 +10,52 @@
         <SelectBox v-model="converter" :options="converters" optionsLabel="name" optionsKey="id" placeholder="Select converter" />
       </div>
     </div>
+    <!--
+    <div v-show="converter && converterSupportsEncoding">
+      <div><label>WebP encoding</label></div>
+      <div>
+        <EncodingSelector v-model="encoding" :converter="converter" />
+      </div>
+    </div>
+  -->
+    <!--
+    <div v-show="converter && ((encoding == 'auto') || (encoding == 'lossy') || (!converterSupportsEncoding))">
+      <div>
+        <label>Quality{{ converterSupportsEncoding && (encoding != 'lossy') ? ' (lossy)' : '' }}</label>
+        <HelpIcon v-if="qualityDetectionSupported">
+          <p>
+          Set quality when converting to a webp with lossy encoding.
+          The "autolimit" option limits the quality setting of the webp
+          so it doesn't exceed that of the jpeg being converted.
+          </p>
+          <p>
+            Example:
+            You have set the quality to 85.
+            The jpeg that is going to be converted has quality 42.
+            With "autolimit" on, the converted image will be of quality 42 rather than 85.
+            Visually, the result will be the same, but converting with quality 42 rather than 85 produces a much lighter file.
+          </p>
+          <p>
+            Note that the "autolimitter" only applies to Jpegs. PNGs doesn't have a quality setting, as they are lossless.
+          </p>
+          <p>
+            PS:
+            The fact that the autolimit option is available to you here
+            means that webpconvert has the means to detect the quality of jpeg files.
+          </p>
+        </HelpIcon>
+      </div>
+      <div>
+        <QualityLossy v-model="qualityLossy" :converter="converter" :qualityDetectionSupported="qualityDetectionSupported" />
+      </div>
+    </div>
+    <div v-show="converterSupportsNearLossless && ((encoding == 'auto') || (encoding == 'lossless'))">
+      <div><label>Quality{{(encoding != 'lossless') ? ' (lossless)' : '' }}</label></div>
+      <div>
+        <QualityLossless v-model="qualityLossless" :converter="converter" />
+      </div>
+    </div>
+  -->
   </div>
 </template>
 

@@ -59,6 +59,23 @@ if (!window["wcfmoptions"]) {
               },
             },
             {
+              "id": "metadata",
+              "type": "string",
+              "default": 'exif',
+              "ui": {
+                "type": "multi-select",
+                "label": "Metadata",
+                "options": ['all', 'none', 'exif', 'icc', 'xmp'],
+                "optionLabels": {
+                  'all': 'All',
+                  'none': 'None',
+                  'exif': 'Exif',
+                  'icc': 'ICC',
+                  'xmp': 'XMP'
+                }
+              },
+            },
+            {
               "id": "encoding",
               "type": "string",
               "default": 'auto',

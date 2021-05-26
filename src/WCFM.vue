@@ -115,3 +115,4 @@ export default {
     padding: 3px 5px;
   }
 </style>
+<style src="vue-multiselect/dist/vue-multiselect.css"></style>

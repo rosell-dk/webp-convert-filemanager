@@ -11,7 +11,8 @@
   },
   "dependencies": {
     "splitpanes": "^3.0.4",
-    "vue": "^3.0.11"
+    "vue": "^3.0.11",
+    "vue-multiselect": "^3.0.0-alpha.2"
   },
   "devDependencies": {
     "@vitejs/plugin-vue": "^1.2.2",
