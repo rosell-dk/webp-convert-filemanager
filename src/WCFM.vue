@@ -114,5 +114,41 @@ export default {
   input {
     padding: 3px 5px;
   }
+
+  /* vue-multiselect tweaks */
+  div .multiselect {
+    min-height: 30px;
+  }
+  div .multiselect__select {
+    height: 30px;
+    line-height: 16px;
+    width: 30px;
+  }
+  div .multiselect__select::before {
+    border-top-color: #000;
+    border-width: 6px 6px 0 6px;
+  }
+  div .multiselect__single {
+    margin-bottom: 3px;
+  }
+
+  div .multiselect__tags {
+    border-color: #000;
+    border-radius: 0;
+    padding: 5px 40px 0 5px;
+    min-height: 30px;
+  }
+  li.multiselect__element {
+    margin-left: 0px;
+  }
+  div .multiselect__option--selected.multiselect__option--highlight,
+  div .multiselect__option--selected.multiselect__option--highlight:after {
+    background: #41b883;
+  }
+  div .multiselect__tag {
+    margin-bottom: 0;
+    padding-bottom: 3px;
+    padding-top: 3px;
+  }
 </style>
 <style src="vue-multiselect/dist/vue-multiselect.css"></style>

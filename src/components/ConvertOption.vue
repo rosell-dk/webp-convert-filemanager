@@ -1,5 +1,5 @@
 <template>
-  <div v-show="enabled">
+  <div class="convert-option" v-show="enabled">
     <div>
       <label :disabled="!enabled">{{option.ui.label}}</label>
       <HelpIcon v-if="option.ui['help-text']">
@@ -57,5 +57,29 @@ export default {
 </script>
 
 <style scoped>
+/* The following CSS uses nesting (future standard compliant).
+   You must use "PostCSS Nesting" package to compile to current standard
+ */
+
+/* PS: The parent has "table-table" class, which means that
+       this component has "display: table-row */
+.convert-option {
+   & > div:first-child {
+     min-width: 210px;
+     vertical-align: top;
+     padding-top: 10px;
+   }
+   & > div:last-child {
+     width: 300px;
+     box-sizing: border-box;
+     & * {
+       box-sizing: border-box;
+       width: 100%;
+     }
+   }
+   & input.method {
+     width: 40px;
+   }
+}
 
 </style>

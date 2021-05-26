@@ -9,9 +9,12 @@
     :preserve-search="false"
     :preselect-first="false"
     :searchable="false"
-    :allowEmpty="false"
+    :allowEmpty="true"
     @select="onSelect"
     @update:model-value="onLocalChange"
+    :hideSelected="false"
+    selectLabel=""
+    deselectLabel=""
   >
     <!--
 
@@ -20,17 +23,27 @@
   -->
     <template v-slot:selection="{ values, search, isOpen }">
       <span v-if="!isOpen">
-      <span class="multiselect__single" v-if="(values.length > 0) &amp;&amp (values.length < option.ui.options.length)">
-        {{ values.join(', ') }}
+        <span class="multiselect__single" v-if="(values.length > 0) &amp;&amp (values.length < option.ui.options.length)">
+          {{ values.join(', ') }}
+        </span>
+        <span class="multiselect__single" v-if="values.length == option.ui.options.length">
+          all
+        </span>
+        <span class="multiselect__single" v-if="(values.length == 0) &amp;&amp; !isOpen">
+          none
+        </span>
       </span>
-      <span class="multiselect__single" v-if="values.length == option.ui.options.length">
-        all
-      </span>
-      <span class="multiselect__single" v-if="(values.length == 0) &amp;&amp; !isOpen">
-        none
-      </span>
-    </span>
     </template>
+
+    <template v-slot:option="{ option, index }">
+      <div class="option__desc">
+        {{ option }}
+        <div class="click-to-add" style="float:right" v-if="(option != 'none') &amp;&amp; (option != 'all')">
+          Click to add
+        </div>
+      </div>
+    </template>
+
   </VueMultiselect>
 </template>
 
@@ -72,7 +85,14 @@ export default {
         arr = arr.filter(function (word) { return word != 'all' });
         this.valueAsArray = arr;
       }
-
+      if (this.valueAsArray.length == 0) {
+        this.valueAsArray = ['none'];
+        this.$refs.multiselect.toggle();
+      }
+      if (this.valueAsArray.length == 3) {
+        this.valueAsArray = ['all'];
+        this.$refs.multiselect.toggle();
+      }
 /*
       if (this.valueAsArray.indexOf('all') > -1) {
         this.valueAsArray = ['all'];
@@ -99,5 +119,14 @@ export default {
 }
 </script>
 
+<style>
+.multiselect__option--selected .click-to-add {
+  display: none;
+}
+</style>
 <style scoped>
+  .click-to-add {
+    float: right;
+    font-size: 13px;
+  }
 </style>

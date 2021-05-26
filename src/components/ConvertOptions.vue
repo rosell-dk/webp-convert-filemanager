@@ -207,27 +207,4 @@ alert('h')
 </script>
 
 <style scoped>
-/* The following CSS uses nesting (future standard compliant).
-   You must use "PostCSS Nesting" package to compile to current standard
- */
-
-/* Table, - in order to autosize first column */
-.convert-options {
- & > div {
-   & > div:first-child {
-     min-width: 120px;
-   }
-   & > div:last-child {
-     width: 300px;
-     box-sizing: border-box;
-     & * {
-       box-sizing: border-box;
-       width: 100%;
-     }
-   }
-   & input.method {
-     width: 40px;
-   }
- }
-}
 </style>
