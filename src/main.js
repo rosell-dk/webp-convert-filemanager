@@ -132,7 +132,7 @@ if (!window["wcfmoptions"]) {
                   'function': 'and',
                   'args': [
                     {
-                      'function': 'in-array',
+                      'function': 'inArray',
                       'args': [
                         {
                           'function': 'optionValue',
