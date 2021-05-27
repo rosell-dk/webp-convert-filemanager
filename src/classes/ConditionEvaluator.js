@@ -14,10 +14,10 @@ export default class ConditionEvaluator {
     }
     */
     //console.log('Evaluating condition',  conditionDef);
-    if (!conditionDef['type']) {
+    if (!conditionDef['function']) {
       return conditionDef;
     }
-    switch (conditionDef['type']) {
+    switch (conditionDef['function']) {
       case 'equals':
         var arg1 = ConditionEvaluator.evaluate(conditionDef['args'][0], optionValues);
         var arg2 = ConditionEvaluator.evaluate(conditionDef['args'][1], optionValues);
