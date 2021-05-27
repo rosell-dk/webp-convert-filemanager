@@ -25,7 +25,7 @@ import InputOption from './option-types/InputOption.vue'
 import MultiSelectOption from './option-types/MultiSelectOption.vue'
 import MetadataOption from './option-types/MetadataOption.vue'
 import SelectOption from './option-types/SelectOption.vue'
-import ConditionEvaluator from '../classes/ConditionEvaluator.js'
+import ExpressionEvaluator from '../classes/ExpressionEvaluator.js'
 
 
 export default {
@@ -44,7 +44,7 @@ export default {
       var displayConditionDef = this.option.ui['display'];
       if (displayConditionDef) {
         //console.log('condition', displayConditionDef);
-        return ConditionEvaluator.evaluate(displayConditionDef, this.optionValues);
+        return ExpressionEvaluator.evaluate(displayConditionDef, this.optionValues);
       }
       return true;
     }

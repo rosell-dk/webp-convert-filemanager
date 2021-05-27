@@ -1,0 +1,62 @@
+export default class ExpressionEvaluator {
+  static evaluate(conditionDef, optionValues) {
+    /*
+    Example of a condition definition:
+    {
+      'type': 'equals',
+      'args': [
+        {
+          'type': 'option-value',
+          'option-id': 'try-supplied-binary-for-os'
+        },
+        true
+      ]
+    }
+    */
+    //console.log('Evaluating condition',  conditionDef);
+    if (!conditionDef['function']) {
+      return conditionDef;
+    }
+    switch (conditionDef['function']) {
+      case 'equals':
+        var arg1 = ExpressionEvaluator.evaluate(conditionDef['args'][0], optionValues);
+        var arg2 = ExpressionEvaluator.evaluate(conditionDef['args'][1], optionValues);
+        return (arg1 == arg2);
+
+      case 'notEquals':
+        return !(ExpressionEvaluator.evaluate(conditionDef, optionValues));
+
+      case 'inArray':
+        var val = ExpressionEvaluator.evaluate(conditionDef['args'][0], optionValues);
+        var arr = ExpressionEvaluator.evaluate(conditionDef['args'][1], optionValues);
+        return (arr.indexOf(val) > -1);
+
+      case 'and':
+        var arg1 = ExpressionEvaluator.evaluate(conditionDef['args'][0], optionValues);
+        if (!arg1) {
+          return false;
+        }
+        var arg2 = ExpressionEvaluator.evaluate(conditionDef['args'][1], optionValues);
+        return !!arg2;
+
+      case 'or':
+        var arg1 = ExpressionEvaluator.evaluate(conditionDef['args'][0], optionValues);
+        if (arg1) {
+          return true;
+        }
+        var arg2 = ExpressionEvaluator.evaluate(conditionDef['args'][1], optionValues);
+        return !!arg2;
+
+      case 'not':
+        var arg1 = ExpressionEvaluator.evaluate(conditionDef['args'][0], optionValues);
+        return !!!arg1;
+
+      case 'optionValue':
+        var optionId = ExpressionEvaluator.evaluate(conditionDef['args'][0], optionValues);
+        if (!optionValues) {
+          //return '';
+        }
+        return (optionValues[optionId]);
+    }
+  }
+}
