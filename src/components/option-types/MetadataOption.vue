@@ -24,7 +24,7 @@
     <template v-slot:selection="{ values, search, isOpen }">
       <span v-if="!isOpen">
         <span class="multiselect__single" v-if="(values.length > 0) &amp;&amp (values.length < option.ui.options.length)">
-          {{ values.join(', ') }}
+          {{ values.join(',') }}
         </span>
         <span class="multiselect__single" v-if="values.length == option.ui.options.length">
           all
