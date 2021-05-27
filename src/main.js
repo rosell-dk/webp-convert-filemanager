@@ -113,8 +113,8 @@ if (!window["wcfmoptions"]) {
                   'function': 'inArray',
                   'args': [
                     {
-                      'function': 'optionValue',
-                      'args': ['converter']
+                      'function': 'state',
+                      'args': ['option', 'converter']
                     },
                     ['cwebp']
                   ]
@@ -135,8 +135,8 @@ if (!window["wcfmoptions"]) {
                       'function': 'inArray',
                       'args': [
                         {
-                          'function': 'optionValue',
-                          'args': ['converter']
+                          'function': 'state',
+                          'args': ['option', 'converter']
                         },
                         ['cwebp']
                       ]
@@ -145,8 +145,8 @@ if (!window["wcfmoptions"]) {
                       'function': 'equals',
                       'args': [
                         {
-                          'function': 'optionValue',
-                          'args': ['try-supplied-binary-for-os']
+                          'function': 'state',
+                          'args': ['option', 'try-supplied-binary-for-os']
                         },
                         true
                       ]

@@ -44,7 +44,9 @@ export default {
       var displayConditionDef = this.option.ui['display'];
       if (displayConditionDef) {
         //console.log('condition', displayConditionDef);
-        return ExpressionEvaluator.evaluate(displayConditionDef, this.optionValues);
+        return ExpressionEvaluator.evaluate(displayConditionDef, {
+          'option': this.optionValues
+        });
       }
       return true;
     }
