@@ -19,6 +19,7 @@ import SelectBox from './standard/SelectBox.vue'
 import HelpIcon from './HelpIcon.vue'
 import ConvertOption from './ConvertOption.vue'
 import ExpressionEvaluator from '../classes/ExpressionEvaluator.js'
+import SimpleMarkdown from '../classes/SimpleMarkdown.js'
 
 export default {
   name: 'ConvertOptions',
@@ -104,6 +105,13 @@ export default {
           );
         }
       }
+      for (var i=0; i<me.options.length; i++) {
+        var option = me.options[i];
+        if (option['ui']['help-text']) {
+          option['ui']['help-text'] = SimpleMarkdown.md2html(option['ui']['help-text']);
+        }
+      }
+
 
 
       if (response.supportedStandardOptions) {

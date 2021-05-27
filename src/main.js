@@ -174,47 +174,130 @@ if (!window["wcfmoptions"]) {
               },
             },*/
             {
-            "id": "encoding",
-            "type": "string",
-            "allowed-value-types": [
-                "string"
-            ],
-            "default": "auto",
-            "ui": {
-                "component": "select",
-                "label": "Encoding",
-                "options": [
-                    "auto",
-                    "lossy",
-                    "lossless"
-                ],
-                "optionLabels": {
-                    "auto": "Auto",
-                    "lossy": "Lossy",
-                    "lossless": "Lossless"
+    "id": "encoding",
+    "type": "string",
+    "allowed-value-types": [
+        "string"
+    ],
+    "default": "auto",
+    "ui": {
+        "component": "select",
+        "label": "Encoding",
+        "options": [
+            "auto",
+            "lossy",
+            "lossless"
+        ],
+        "optionLabels": {
+            "auto": "Auto",
+            "lossy": "Lossy",
+            "lossless": "Lossless"
+        },
+        "help-text": "Set encoding for the webp. If you choose \"auto\", webp-convert will convert to both lossy and lossless and pick the smallest result"
+    },
+    "sensitive": false,
+    "options": [
+        "lossy",
+        "lossless",
+        "auto"
+    ]
+},
+{
+    "id": "quality",
+    "type": "int",
+    "allowed-value-types": [
+        "int",
+        "string"
+    ],
+    "default": 85,
+    "ui": {
+        "component": "input",
+        "label": "Quality (Lossy)",
+        "help-text": "Quality for lossy encoding. ",
+        "display": {
+            "function": "notEquals",
+            "args": [
+                {
+                    "function": "state",
+                    "args": [
+                        "option",
+                        "encoding"
+                    ]
                 },
-                "help-text": "Set encoding for the webp. If you choose \"auto\", webp-convert will convert to both lossy and lossless and pick the smallest result"
-            },
-            "sensitive": false,
-            "options": [
-                "lossy",
-                "lossless",
-                "auto"
+                "lossless"
             ]
-        },
-        {
-            "id": "quality",
-            "type": "int",
-            "allowed-value-types": [
-                "int",
-                "string"
-            ],
-            "default": 85,
-            "ui": {
-                "component": "input",
-                "label": "Quality (Lossy)",
-                "help-text": "Quality for lossy encoding. ",
-                "display": {
+        }
+    }
+},
+{
+    "id": "auto-limit",
+    "type": "boolean",
+    "allowed-value-types": [
+        "boolean"
+    ],
+    "default": true,
+    "ui": {
+        "component": "checkbox",
+        "label": "Auto-limit",
+        "help-text": "Enable this option to prevent an unnecessarily high quality setting for low quality jpegs. You really should enable this. Read more about the feature [here](https:\/\/github.com\/rosell-dk\/webp-convert\/blob\/master\/docs\/v2.0\/converting\/introduction-for-converting.md#preventing-unnecessarily-high-quality-setting-for-low-quality-jpegs).",
+        "display": {
+            "function": "notEquals",
+            "args": [
+                {
+                    "function": "state",
+                    "args": [
+                        "option",
+                        "encoding"
+                    ]
+                },
+                "lossless"
+            ]
+        }
+    }
+},
+{
+    "id": "near-lossless",
+    "type": "int",
+    "allowed-value-types": [
+        "int"
+    ],
+    "default": 60,
+    "ui": {
+        "component": "input",
+        "label": "\"Near lossless\" quality",
+        "help-text": "This option allows you to get impressively better compression for lossless encoding, with minimal impact on visual quality. The range is 0 (no preprocessing) to 100 (maximum preprocessing). Read more [here](https:\/\/github.com\/rosell-dk\/webp-convert\/blob\/master\/docs\/v2.0\/converting\/introduction-for-converting.md#near-lossless).",
+        "display": {
+            "function": "notEquals",
+            "args": [
+                {
+                    "function": "state",
+                    "args": [
+                        "option",
+                        "encoding"
+                    ]
+                },
+                "lossy"
+            ]
+        }
+    },
+    "min": 0,
+    "max": 100
+},
+{
+    "id": "alpha-quality",
+    "type": "int",
+    "allowed-value-types": [
+        "int"
+    ],
+    "default": 85,
+    "ui": {
+        "component": "input",
+        "label": "Alpha quality",
+        "help-text": "Quality of *alpha* channel. Often, there is no need for high quality transparency layer and in some cases you can tweak this all the way down to 10 and save a lot in file size. The option only has effect with lossy encoding, and of course only on images with transparency. Read more [here](https:\/\/github.com\/rosell-dk\/webp-convert\/blob\/master\/docs\/v2.0\/converting\/introduction-for-converting.md#alpha-quality)",
+        "display": {
+            "function": "and",
+            "args": [
+                {
                     "function": "notEquals",
                     "args": [
                         {
@@ -226,91 +309,25 @@ if (!window["wcfmoptions"]) {
                         },
                         "lossless"
                     ]
-                }
-            }
-        },
-        {
-            "id": "auto-limit",
-            "type": "boolean",
-            "allowed-value-types": [
-                "boolean"
-            ],
-            "default": true,
-            "ui": {
-                "component": "checkbox",
-                "label": "Auto-limit",
-                "help-text": "Enable this option to prevent an unnecessarily high quality setting for low quality jpegs. You really should enable this. Read more about the feature [here](https:\/\/github.com\/rosell-dk\/webp-convert\/blob\/master\/docs\/v2.0\/converting\/introduction-for-converting.md#preventing-unnecessarily-high-quality-setting-for-low-quality-jpegs).",
-                "display": {
+                },
+                {
                     "function": "notEquals",
                     "args": [
                         {
                             "function": "state",
                             "args": [
-                                "option",
-                                "encoding"
+                                "imageType"
                             ]
                         },
-                        "lossless"
+                        "jpeg"
                     ]
                 }
-            }
-        },
-        {
-            "id": "near-lossless",
-            "type": "int",
-            "allowed-value-types": [
-                "int"
-            ],
-            "default": 60,
-            "ui": {
-                "component": "input",
-                "label": "\"Near lossless\" quality",
-                "help-text": "This option allows you to get impressively better compression for lossless encoding, with minimal impact on visual quality. The range is 0 (no preprocessing) to 100 (maximum preprocessing). Read more [here](https:\/\/github.com\/rosell-dk\/webp-convert\/blob\/master\/docs\/v2.0\/converting\/introduction-for-converting.md#near-lossless).",
-                "display": {
-                    "function": "notEquals",
-                    "args": [
-                        {
-                            "function": "state",
-                            "args": [
-                                "option",
-                                "encoding"
-                            ]
-                        },
-                        "lossy"
-                    ]
-                }
-            },
-            "min": 0,
-            "max": 100
-        },
-        {
-            "id": "alpha-quality",
-            "type": "int",
-            "allowed-value-types": [
-                "int"
-            ],
-            "default": 85,
-            "ui": {
-                "component": "input",
-                "label": "Alpha quality",
-                "help-text": "Quality of alpha channel. Often, there is no need for high quality transparency layer and in some cases you can tweak this all the way down to 10 and save a lot in file size. The option only has effect with lossy encoding, and of course only on images with transparency. Read more [here](https:\/\/github.com\/rosell-dk\/webp-convert\/blob\/master\/docs\/v2.0\/converting\/introduction-for-converting.md#alpha-quality)",
-                "display": {
-                    "function": "notEquals",
-                    "args": [
-                        {
-                            "function": "state",
-                            "args": [
-                                "option",
-                                "encoding"
-                            ]
-                        },
-                        "lossy"
-                    ]
-                }
-            },
-            "min": 0,
-            "max": 100
-        },
+            ]
+        }
+    },
+    "min": 0,
+    "max": 100
+}
 
           ],
           supportedStandardOptions: {

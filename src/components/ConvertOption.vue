@@ -4,7 +4,7 @@
       <div>
         <label :disabled="!enabled">{{option.ui.label}}</label>
         <HelpIcon v-if="option.ui['help-text']">
-          {{ option.ui['help-text'] }}
+          <span v-html="option.ui['help-text']" />
         </HelpIcon>
       </div>
       <div :change="emitChange()">
@@ -29,7 +29,6 @@ import MetadataOption from './option-types/MetadataOption.vue'
 import SelectOption from './option-types/SelectOption.vue'
 import ExpressionEvaluator from '../classes/ExpressionEvaluator.js'
 
-
 export default {
   name: 'ConvertOption',
   components: {
@@ -48,7 +47,7 @@ export default {
         //console.log('condition', displayExpr);
         return ExpressionEvaluator.evaluate(displayExpr, {
           'option': this.optionValues,
-          'imageType': 'png'
+          'imageType': 'any'
         });
       }
       return true;
