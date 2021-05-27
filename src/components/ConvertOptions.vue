@@ -18,6 +18,7 @@ import Poster from '../classes/Poster.js'
 import SelectBox from './standard/SelectBox.vue'
 import HelpIcon from './HelpIcon.vue'
 import ConvertOption from './ConvertOption.vue'
+import ExpressionEvaluator from '../classes/ExpressionEvaluator.js'
 
 export default {
   name: 'ConvertOptions',
@@ -83,10 +84,27 @@ export default {
       //console.log('r:', response);
 
       me.options = response.options;
+
+
+
       for (var i=0; i<me.options.length; i++) {
         var option = me.options[i];
         me.optionValues[option.id] = option.default;
       }
+      for (var i=0; i<me.options.length; i++) {
+        var option = me.options[i];
+        if (option['ui']['default']) {
+          console.log(option['ui']['default'])
+          me.optionValues[option.id] = ExpressionEvaluator.evaluate(
+            option['ui']['default'],
+            {
+              'option': me.optionValues,
+              'imageType': 'jpeg'
+            }
+          );
+        }
+      }
+
 
       if (response.supportedStandardOptions) {
         var supportedStandardOptions = response.supportedStandardOptions;

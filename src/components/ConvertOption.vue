@@ -41,11 +41,12 @@ export default {
   },
   computed: {
     enabled() {
-      var displayConditionDef = this.option.ui['display'];
-      if (displayConditionDef) {
-        //console.log('condition', displayConditionDef);
-        return ExpressionEvaluator.evaluate(displayConditionDef, {
-          'option': this.optionValues
+      var displayExpr = this.option.ui['display'];
+      if (displayExpr) {
+        //console.log('condition', displayExpr);
+        return ExpressionEvaluator.evaluate(displayExpr, {
+          'option': this.optionValues,
+          'imageType': 'png'
         });
       }
       return true;

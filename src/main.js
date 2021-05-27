@@ -99,6 +99,23 @@ if (!window["wcfmoptions"]) {
               "ui": {
                 "component": "input",
                 "label": "Quality (lossy)",
+                "default": {
+                  'function': 'if-else',
+                  'args': [
+                    {
+                      'function': 'equals',
+                      'args': [
+                        {
+                          'function': 'state',
+                          'args': ['imageType']
+                        },
+                        'png'
+                      ]
+                    },
+                    90,
+                    95
+                  ]
+                }
               },
             },
             {

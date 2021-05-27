@@ -65,6 +65,10 @@ export default class ExpressionEvaluator {
           return state[key][subkey];
         }
         return (state[key]);
+
+      case 'if-else':
+        return (args[0] ? args[1] : args[2]);
+
     }
   }
 }
