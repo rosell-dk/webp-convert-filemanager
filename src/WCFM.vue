@@ -104,15 +104,19 @@ export default {
   #webpconvert-filemanager {
     padding: 20px;
   }*/
-  .wcfm {
-    font-family: Avenir, Helvetica, Arial, sans-serif;
+  .wcfm, input {
+    font-family: 'Avenir',Helvetica,Arial,sans-serif;
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
-    color: #3c434a;
+    color: #222;
+    font-size: 14px;
   }
 
   input {
-    padding: 3px 5px;
+    padding: 5px 8px;
+    border-color: #333;
+    border-width: 1px;
+    box-sizing: border-box;
   }
 
   /* vue-multiselect tweaks */
@@ -133,7 +137,7 @@ export default {
   }
 
   div .multiselect__tags {
-    border-color: #000;
+    border-color: #333;
     border-radius: 0;
     padding: 5px 40px 0 5px;
     min-height: 30px;

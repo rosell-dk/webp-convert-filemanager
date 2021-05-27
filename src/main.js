@@ -357,6 +357,34 @@ if (!window["wcfmoptions"]) {
             "sensitive": false,
             "options": null
         },
+        {
+            "id": "method",
+            "type": "int",
+            "allowed-value-types": [
+                "int"
+            ],
+            "default": 6,
+            "ui": {
+                "component": "input",
+                "label": "Reduction effort (0-6)",
+                "help-text": "Controls the trade off between encoding speed and the compressed file size and quality. Possible values range from 0 to 6. 0 is fastest. 6 results in best quality and compression"
+            },
+            "min": 0,
+            "max": 6
+        },
+        {
+            "id": "sharp-yuv",
+            "type": "boolean",
+            "allowed-value-types": [
+                "boolean"
+            ],
+            "default": true,
+            "ui": {
+                "component": "checkbox",
+                "label": "Sharp YUV",
+                "help-text": "Better RGB->YUV color conversion (sharper and more accurate) at the expense of a little extra conversion time. Read more [here](https:\/\/www.ctrl.blog\/entry\/webp-sharp-yuv.html)."
+            }
+        },
 
           ],
           supportedStandardOptions: {

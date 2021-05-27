@@ -8,7 +8,7 @@
         </HelpIcon>
       </div>
       <div :change="emitChange()">
-        <input v-if="option.ui.component == 'checkbox'" type="checkbox" v-model="modelValue" />
+        <div v-if="option.ui.component == 'checkbox'"><input type="checkbox" v-model="modelValue" /></div>
         <InputOption v-if="option.ui.component == 'input'" v-model="modelValue" :option="option"/>
         <SelectOption v-if="option.ui.component == 'select'" v-model="modelValue" :option="option"/>
         <template v-if="option.ui.component == 'multi-select'">
@@ -77,10 +77,10 @@ export default {
    & > div:last-child {
      width: 300px;
      box-sizing: border-box;
-     & * {
+     /*& * {
        box-sizing: border-box;
        width: 100%;
-     }
+     }*/
    }
    & input.method {
      width: 40px;

@@ -2,7 +2,7 @@
   <div @input="onLocalChange()">
     <input v-if="option.type == 'string'" v-model="stringValue" />
     <input v-if="option.type == 'float'" type="number" v-model="stringValue" />
-    <input v-if="option.type == 'int'" type="number" v-model="stringValue" />
+    <input v-if="option.type == 'int'" type="number" v-model="stringValue" class="small"/>
   </div>
 </template>
 
@@ -54,4 +54,10 @@ export default {
 </script>
 
 <style scoped>
+  input {
+    width: 100%
+  }
+  input.small {
+    max-width: 100px;
+  }
 </style>
