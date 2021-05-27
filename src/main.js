@@ -58,6 +58,7 @@ if (!window["wcfmoptions"]) {
                 }
               },
             },
+            /*
             {
               "id": "metadata",
               "type": "string",
@@ -171,7 +172,145 @@ if (!window["wcfmoptions"]) {
                   ],
                 },
               },
+            },*/
+            {
+            "id": "encoding",
+            "type": "string",
+            "allowed-value-types": [
+                "string"
+            ],
+            "default": "lossless",
+            "ui": {
+                "component": "select",
+                "label": "Encoding",
+                "options": [
+                    "auto",
+                    "lossy",
+                    "lossless"
+                ],
+                "optionLabels": {
+                    "auto": "Auto",
+                    "lossy": "Lossy",
+                    "lossless": "Lossless"
+                },
+                "help-text": "Set encoding for the webp. If you choose \"auto\", webp-convert will convert to both lossy and lossless and pick the smallest result"
             },
+            "sensitive": false,
+            "options": [
+                "lossy",
+                "lossless",
+                "auto"
+            ]
+        },
+        {
+            "id": "quality",
+            "type": "int",
+            "allowed-value-types": [
+                "int",
+                "string"
+            ],
+            "default": 85,
+            "ui": {
+                "component": "input",
+                "label": "Quality (Lossy)",
+                "help-text": "Quality for lossy encoding. ",
+                "display": {
+                    "function": "notEquals",
+                    "args": [
+                        {
+                            "function": "state",
+                            "args": [
+                                "option",
+                                "encoding"
+                            ]
+                        },
+                        "lossless"
+                    ]
+                }
+            }
+        },
+        {
+            "id": "auto-limit",
+            "type": "boolean",
+            "allowed-value-types": [
+                "boolean"
+            ],
+            "default": true,
+            "ui": {
+                "component": "checkbox",
+                "label": "Auto limit",
+                "help-text": "Limit the quality to be no more than that of the jpeg. The option is only relevant when converting jpegs to lossy webp. To be functional, webp-convert needs to be able to detect the quality of the jpeg, which requires ImageMagick or GraphicsMagick.",
+                "display": {
+                    "function": "notEquals",
+                    "args": [
+                        {
+                            "function": "state",
+                            "args": [
+                                "option",
+                                "encoding"
+                            ]
+                        },
+                        "lossless"
+                    ]
+                }
+            }
+        },
+        {
+            "id": "near-lossless",
+            "type": "int",
+            "allowed-value-types": [
+                "int"
+            ],
+            "default": 60,
+            "ui": {
+                "component": "input",
+                "label": "\"Near lossless\" quality",
+                "help-text": "This option allows you to get impressively better compression for lossless encoding, with minimal impact on visual quality. The result is still lossless (lossless encoding). What libwebp does is that it preprocesses the image before encoding it, in order to make it better suited for compression. The range is 0 (no preprocessing) to 100 (maximum preprocessing). A good compromise would be around 60. The option is ignored when encoding is set to lossy. Read more [here](https:\/\/github.com\/rosell-dk\/webp-convert\/blob\/master\/docs\/v2.0\/converting\/introduction-for-converting.md#near-lossless).",
+                "display": {
+                    "function": "notEquals",
+                    "args": [
+                        {
+                            "function": "state",
+                            "args": [
+                                "option",
+                                "encoding"
+                            ]
+                        },
+                        "lossy"
+                    ]
+                }
+            },
+            "min": 0,
+            "max": 100
+        },
+        {
+            "id": "alpha-quality",
+            "type": "int",
+            "allowed-value-types": [
+                "int"
+            ],
+            "default": 85,
+            "ui": {
+                "component": "input",
+                "label": "Alpha quality",
+                "help-text": "Quality of alpha channel. Only relevant for lossy encoding and only relevant for imageswith transparency",
+                "display": {
+                    "function": "notEquals",
+                    "args": [
+                        {
+                            "function": "state",
+                            "args": [
+                                "option",
+                                "encoding"
+                            ]
+                        },
+                        "lossy"
+                    ]
+                }
+            },
+            "min": 0,
+            "max": 100
+        },
           ],
           supportedStandardOptions: {
             encoding: ['cwebp', 'vips', 'imagick', 'gmagick', 'imagemagick', 'graphicsmagick', 'ffmpeg', 'wpc'],

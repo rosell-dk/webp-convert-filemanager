@@ -1,21 +1,23 @@
 <template>
-  <div class="convert-option" v-show="enabled">
-    <div>
-      <label :disabled="!enabled">{{option.ui.label}}</label>
-      <HelpIcon v-if="option.ui['help-text']">
-        {{ option.ui['help-text'] }}
-      </HelpIcon>
+  <transition name="fade">
+    <div class="convert-option" v-if="enabled">
+      <div>
+        <label :disabled="!enabled">{{option.ui.label}}</label>
+        <HelpIcon v-if="option.ui['help-text']">
+          {{ option.ui['help-text'] }}
+        </HelpIcon>
+      </div>
+      <div :change="emitChange()">
+        <input v-if="option.ui.component == 'checkbox'" type="checkbox" v-model="modelValue" />
+        <InputOption v-if="option.ui.component == 'input'" v-model="modelValue" :option="option"/>
+        <SelectOption v-if="option.ui.component == 'select'" v-model="modelValue" :option="option"/>
+        <template v-if="option.ui.component == 'multi-select'">
+          <MultiSelectOption v-if="option.id != 'metadata'" v-model="modelValue" :option="option"/>
+          <MetadataOption v-if="option.id == 'metadata'" v-model="modelValue" :option="option"/>
+        </template>
+      </div>
     </div>
-    <div :change="emitChange()">
-      <input v-if="option.ui.component == 'checkbox'" type="checkbox" v-model="modelValue" />
-      <InputOption v-if="option.ui.component == 'input'" v-model="modelValue" :option="option"/>
-      <SelectOption v-if="option.ui.component == 'select'" v-model="modelValue" :option="option"/>
-      <template v-if="option.ui.component == 'multi-select'">
-        <MultiSelectOption v-if="option.id != 'metadata'" v-model="modelValue" :option="option"/>
-        <MetadataOption v-if="option.id == 'metadata'" v-model="modelValue" :option="option"/>
-      </template>
-    </div>
-  </div>
+  </transition>
 </template>
 
 <script>
@@ -86,4 +88,26 @@ export default {
    }
 }
 
+
+.fade-enter-active {
+  transition: all 1s;
+  opacity: 0;
+  transform: scale(0);
+  transform: translateX(30px);
+}
+.fade-enter-to {
+  opacity: 1;
+  transform: translateX(0px);
+  transform: scale(1);
+}
+
+.fade-leave-active {
+  transition: all 1s;
+  opacity: 1;
+  /*transform: scale(1) translateX(0px);*/
+}
+.fade-leave-to {
+  opacity: 0;
+  /*transform: scale(0.9) translateX(30px);*/
+}
 </style>

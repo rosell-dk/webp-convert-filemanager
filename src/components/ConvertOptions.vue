@@ -94,7 +94,7 @@ export default {
       for (var i=0; i<me.options.length; i++) {
         var option = me.options[i];
         if (option['ui']['default']) {
-          console.log(option['ui']['default'])
+          //console.log(option['ui']['default'])
           me.optionValues[option.id] = ExpressionEvaluator.evaluate(
             option['ui']['default'],
             {
