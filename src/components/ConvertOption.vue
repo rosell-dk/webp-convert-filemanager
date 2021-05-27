@@ -7,10 +7,10 @@
       </HelpIcon>
     </div>
     <div :change="emitChange()">
-      <input v-if="option.ui.type == 'checkbox'" type="checkbox" v-model="modelValue" />
-      <InputOption v-if="option.ui.type == 'input'" v-model="modelValue" :option="option"/>
-      <SelectOption v-if="option.ui.type == 'select'" v-model="modelValue" :option="option"/>
-      <template v-if="option.ui.type == 'multi-select'">
+      <input v-if="option.ui.component == 'checkbox'" type="checkbox" v-model="modelValue" />
+      <InputOption v-if="option.ui.component == 'input'" v-model="modelValue" :option="option"/>
+      <SelectOption v-if="option.ui.component == 'select'" v-model="modelValue" :option="option"/>
+      <template v-if="option.ui.component == 'multi-select'">
         <MultiSelectOption v-if="option.id != 'metadata'" v-model="modelValue" :option="option"/>
         <MetadataOption v-if="option.id == 'metadata'" v-model="modelValue" :option="option"/>
       </template>

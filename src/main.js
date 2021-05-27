@@ -49,7 +49,7 @@ if (!window["wcfmoptions"]) {
               "type": "string",
               "default": 'cwebp',
               "ui": {
-                "type": "select",
+                "component": "select",
                 "label": "Converter",
                 "options": ['cwebp', 'ewww'],
                 "optionLabels": {
@@ -63,7 +63,7 @@ if (!window["wcfmoptions"]) {
               "type": "string",
               "default": 'exif',
               "ui": {
-                "type": "multi-select",
+                "component": "multi-select",
                 "label": "Metadata",
                 "options": ['all', 'none', 'exif', 'icc', 'xmp'],
                 "optionLabels": {
@@ -80,7 +80,7 @@ if (!window["wcfmoptions"]) {
               "type": "string",
               "default": 'auto',
               "ui": {
-                "type": "select",
+                "component": "select",
                 "label": "Encoding",
                 "options": ['auto', 'lossy', 'lossless'],
                 "optionLabels": {
@@ -97,7 +97,7 @@ if (!window["wcfmoptions"]) {
               "min": 0,
               "max": 100,
               "ui": {
-                "type": "input",
+                "component": "input",
                 "label": "Quality (lossy)",
               },
             },
@@ -106,7 +106,7 @@ if (!window["wcfmoptions"]) {
               "type": "boolean",
               "default": false,
               "ui": {
-                "type": "checkbox",
+                "component": "checkbox",
                 "label": "Try supplied binary for OS",
                 "help-text": "help me!",
                 "display-condition": {
@@ -126,7 +126,7 @@ if (!window["wcfmoptions"]) {
               "type": "string",
               "default": "",
               "ui": {
-                "type": "input",
+                "component": "input",
                 "label": "Skip these precompiled binaries",
                 "display-condition": {
                   'type': 'and',
