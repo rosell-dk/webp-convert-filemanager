@@ -23,10 +23,10 @@ export default class ConditionEvaluator {
         var arg2 = ConditionEvaluator.evaluate(conditionDef['args'][1], optionValues);
         return (arg1 == arg2);
 
-      case 'not-equals':
+      case 'notEquals':
         return !(ConditionEvaluator.evaluate(conditionDef, optionValues));
 
-      case 'in-array':
+      case 'inArray':
         var val = ConditionEvaluator.evaluate(conditionDef['args'][0], optionValues);
         var arr = ConditionEvaluator.evaluate(conditionDef['args'][1], optionValues);
         return (arr.indexOf(val) > -1);
@@ -51,7 +51,7 @@ export default class ConditionEvaluator {
         var arg1 = ConditionEvaluator.evaluate(conditionDef['args'][0], optionValues);
         return !!!arg1;
 
-      case 'option-value':
+      case 'optionValue':
         var optionId = ConditionEvaluator.evaluate(conditionDef['args'][0], optionValues);
         if (!optionValues) {
           //return '';

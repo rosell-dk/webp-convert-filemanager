@@ -41,7 +41,7 @@ export default {
   },
   computed: {
     enabled() {
-      var displayConditionDef = this.option.ui['display-condition'];
+      var displayConditionDef = this.option.ui['display'];
       if (displayConditionDef) {
         //console.log('condition', displayConditionDef);
         return ConditionEvaluator.evaluate(displayConditionDef, this.optionValues);

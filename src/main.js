@@ -109,11 +109,11 @@ if (!window["wcfmoptions"]) {
                 "component": "checkbox",
                 "label": "Try supplied binary for OS",
                 "help-text": "help me!",
-                "display-condition": {
-                  'function': 'in-array',
+                "display": {
+                  'function': 'inArray',
                   'args': [
                     {
-                      'function': 'option-value',
+                      'function': 'optionValue',
                       'args': ['converter']
                     },
                     ['cwebp']
@@ -128,14 +128,14 @@ if (!window["wcfmoptions"]) {
               "ui": {
                 "component": "input",
                 "label": "Skip these precompiled binaries",
-                "display-condition": {
+                "display": {
                   'function': 'and',
                   'args': [
                     {
                       'function': 'in-array',
                       'args': [
                         {
-                          'function': 'option-value',
+                          'function': 'optionValue',
                           'args': ['converter']
                         },
                         ['cwebp']
@@ -145,7 +145,7 @@ if (!window["wcfmoptions"]) {
                       'function': 'equals',
                       'args': [
                         {
-                          'function': 'option-value',
+                          'function': 'optionValue',
                           'args': ['try-supplied-binary-for-os']
                         },
                         true
