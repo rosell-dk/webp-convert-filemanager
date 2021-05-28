@@ -174,216 +174,314 @@ if (!window["wcfmoptions"]) {
               },
             },*/
             {
-                        "id": "encoding",
-                        "type": "string",
-                        "allowed-value-types": [
-                            "string"
-                        ],
-                        "default": "auto",
-                        "ui": {
-                            "component": "select",
-                            "label": "Encoding",
-                            "options": [
-                                "auto",
-                                "lossy",
-                                "lossless"
-                            ],
-                            "optionLabels": {
-                                "auto": "Auto",
-                                "lossy": "Lossy",
-                                "lossless": "Lossless"
-                            },
-                            "help-text": "Set encoding for the webp. If you choose \"auto\", webp-convert will convert to both lossy and lossless and pick the smallest result"
-                        },
-                        "sensitive": false,
-                        "options": [
-                            "lossy",
-                            "lossless",
-                            "auto"
-                        ]
-                    },
-                    {
-                        "id": "quality",
-                        "type": "int",
-                        "allowed-value-types": [
-                            "int",
-                            "string"
-                        ],
-                        "default": 85,
-                        "ui": {
-                            "component": "input",
-                            "label": "Quality (Lossy)",
-                            "help-text": "Quality for lossy encoding. ",
-                            "display": {
-                                "function": "notEquals",
-                                "args": [
-                                    {
-                                        "function": "state",
-                                        "args": [
-                                            "option",
-                                            "encoding"
-                                        ]
-                                    },
-                                    "lossless"
-                                ]
-                            }
-                        }
-                    },
-                    {
-                        "id": "auto-limit",
-                        "type": "boolean",
-                        "allowed-value-types": [
-                            "boolean"
-                        ],
-                        "default": true,
-                        "ui": {
-                            "component": "checkbox",
-                            "label": "Auto-limit",
-                            "help-text": "Enable this option to prevent an unnecessarily high quality setting for low quality jpegs. You really should enable this. Read more about the feature [here](https:\/\/github.com\/rosell-dk\/webp-convert\/blob\/master\/docs\/v2.0\/converting\/introduction-for-converting.md#preventing-unnecessarily-high-quality-setting-for-low-quality-jpegs).",
-                            "display": {
-                                "function": "notEquals",
-                                "args": [
-                                    {
-                                        "function": "state",
-                                        "args": [
-                                            "option",
-                                            "encoding"
-                                        ]
-                                    },
-                                    "lossless"
-                                ]
-                            }
-                        }
-                    },
-                    {
-                        "id": "alpha-quality",
-                        "type": "int",
-                        "allowed-value-types": [
-                            "int"
-                        ],
-                        "default": 85,
-                        "ui": {
-                            "component": "input",
-                            "label": "Alpha quality",
-                            "help-text": "Quality of alpha channel. Often, there is no need for high quality transparency layer and in some cases you can tweak this all the way down to 10 and save a lot in file size. The option only has effect with lossy encoding, and of course only on images with transparency. Read more [here](https:\/\/github.com\/rosell-dk\/webp-convert\/blob\/master\/docs\/v2.0\/converting\/introduction-for-converting.md#alpha-quality)",
-                            "display": {
-                                "function": "and",
-                                "args": [
-                                    {
-                                        "function": "notEquals",
-                                        "args": [
-                                            {
-                                                "function": "state",
-                                                "args": [
-                                                    "option",
-                                                    "encoding"
-                                                ]
-                                            },
-                                            "lossless"
-                                        ]
-                                    },
-                                    {
-                                        "function": "notEquals",
-                                        "args": [
-                                            {
-                                                "function": "state",
-                                                "args": [
-                                                    "imageType"
-                                                ]
-                                            },
-                                            "jpeg"
-                                        ]
-                                    }
-                                ]
-                            }
-                        },
-                        "min": 0,
-                        "max": 100
-                    },
-                    {
-                        "id": "near-lossless",
-                        "type": "int",
-                        "allowed-value-types": [
-                            "int"
-                        ],
-                        "default": 60,
-                        "ui": {
-                            "component": "input",
-                            "label": "\"Near lossless\" quality",
-                            "help-text": "This option allows you to get impressively better compression for lossless encoding, with minimal impact on visual quality. The range is 0 (no preprocessing) to 100 (maximum preprocessing). Read more [here](https:\/\/github.com\/rosell-dk\/webp-convert\/blob\/master\/docs\/v2.0\/converting\/introduction-for-converting.md#near-lossless).",
-                            "display": {
-                                "function": "notEquals",
-                                "args": [
-                                    {
-                                        "function": "state",
-                                        "args": [
-                                            "option",
-                                            "encoding"
-                                        ]
-                                    },
-                                    "lossy"
-                                ]
-                            }
-                        },
-                        "min": 0,
-                        "max": 100
-                    },
-                    {
-            "id": "metadata",
-            "type": "metadata",
+              "id": "encoding",
+              "type": "string",
+              "allowed-value-types": [
+                  "string"
+              ],
+              "default": "auto",
+              "ui": {
+                  "component": "select",
+                  "label": "Encoding",
+                  "options": [
+                      "auto",
+                      "lossy",
+                      "lossless"
+                  ],
+                  "optionLabels": {
+                      "auto": "Auto",
+                      "lossy": "Lossy",
+                      "lossless": "Lossless"
+                  },
+                  "help-text": "Set encoding for the webp. If you choose \"auto\", webp-convert will convert to both lossy and lossless and pick the smallest result"
+              },
+              "sensitive": false,
+              "options": [
+                  "lossy",
+                  "lossless",
+                  "auto"
+              ]
+          },
+          {
+              "id": "quality",
+              "type": "int",
+              "allowed-value-types": [
+                  "int",
+                  "string"
+              ],
+              "default": 85,
+              "ui": {
+                  "component": "input",
+                  "label": "Quality (Lossy)",
+                  "help-text": "Quality for lossy encoding. ",
+                  "display": {
+                      "function": "notEquals",
+                      "args": [
+                          {
+                              "function": "state",
+                              "args": [
+                                  "option",
+                                  "encoding"
+                              ]
+                          },
+                          "lossless"
+                      ]
+                  }
+              }
+          },
+          {
+              "id": "auto-limit",
+              "type": "boolean",
+              "allowed-value-types": [
+                  "boolean"
+              ],
+              "default": true,
+              "ui": {
+                  "component": "checkbox",
+                  "label": "Auto-limit",
+                  "help-text": "Enable this option to prevent an unnecessarily high quality setting for low quality jpegs. You really should enable this. Read more about the feature [here](https:\/\/github.com\/rosell-dk\/webp-convert\/blob\/master\/docs\/v2.0\/converting\/introduction-for-converting.md#preventing-unnecessarily-high-quality-setting-for-low-quality-jpegs).",
+                  "display": {
+                      "function": "notEquals",
+                      "args": [
+                          {
+                              "function": "state",
+                              "args": [
+                                  "option",
+                                  "encoding"
+                              ]
+                          },
+                          "lossless"
+                      ]
+                  }
+              }
+          },
+          {
+              "id": "alpha-quality",
+              "type": "int",
+              "allowed-value-types": [
+                  "int"
+              ],
+              "default": 85,
+              "ui": {
+                  "component": "input",
+                  "label": "Alpha quality",
+                  "help-text": "Quality of alpha channel. Often, there is no need for high quality transparency layer and in some cases you can tweak this all the way down to 10 and save a lot in file size. The option only has effect with lossy encoding, and of course only on images with transparency. Read more [here](https:\/\/github.com\/rosell-dk\/webp-convert\/blob\/master\/docs\/v2.0\/converting\/introduction-for-converting.md#alpha-quality)",
+                  "display": {
+                      "function": "and",
+                      "args": [
+                          {
+                              "function": "notEquals",
+                              "args": [
+                                  {
+                                      "function": "state",
+                                      "args": [
+                                          "option",
+                                          "encoding"
+                                      ]
+                                  },
+                                  "lossless"
+                              ]
+                          },
+                          {
+                              "function": "notEquals",
+                              "args": [
+                                  {
+                                      "function": "state",
+                                      "args": [
+                                          "imageType"
+                                      ]
+                                  },
+                                  "jpeg"
+                              ]
+                          }
+                      ]
+                  }
+              },
+              "min": 0,
+              "max": 100
+          },
+          {
+              "id": "near-lossless",
+              "type": "int",
+              "allowed-value-types": [
+                  "int"
+              ],
+              "default": 60,
+              "ui": {
+                  "component": "input",
+                  "label": "\"Near lossless\" quality",
+                  "help-text": "This option allows you to get impressively better compression for lossless encoding, with minimal impact on visual quality. The range is 0 (no preprocessing) to 100 (maximum preprocessing). Read more [here](https:\/\/github.com\/rosell-dk\/webp-convert\/blob\/master\/docs\/v2.0\/converting\/introduction-for-converting.md#near-lossless).",
+                  "display": {
+                      "function": "notEquals",
+                      "args": [
+                          {
+                              "function": "state",
+                              "args": [
+                                  "option",
+                                  "encoding"
+                              ]
+                          },
+                          "lossy"
+                      ]
+                  }
+              },
+              "min": 0,
+              "max": 100
+          },
+          {
+              "id": "metadata",
+              "type": "metadata",
+              "allowed-value-types": [
+                  "string"
+              ],
+              "default": "none",
+              "ui": {
+                  "component": "multi-select",
+                  "label": "Metadata",
+                  "help-text": "Determines which metadata that should be copied over to the webp. Setting it to \"all\" preserves all metadata, setting it to \"none\" strips all metadata. *cwebp* can take a comma-separated list of which kinds of metadata that should be copied (ie \"exif,icc\"). *gd* will always remove all metadata and *ffmpeg* will always keep all metadata. The rest can either strip all or keep all (they will keep all, unless the option is set to *none*)",
+                  "options": [
+                      "all",
+                      "none",
+                      "exif",
+                      "icc",
+                      "xmp"
+                  ],
+                  "optionLabels": {
+                      "all": "All",
+                      "none": "None",
+                      "exif": "Exif",
+                      "icc": "ICC",
+                      "xmp": "XMP"
+                  }
+              },
+              "sensitive": false,
+              "options": null
+          },
+          {
+              "id": "method",
+              "type": "int",
+              "allowed-value-types": [
+                  "int"
+              ],
+              "default": 6,
+              "ui": {
+                  "component": "input",
+                  "label": "Reduction effort (0-6)",
+                  "help-text": "Controls the trade off between encoding speed and the compressed file size and quality. Possible values range from 0 to 6. 0 is fastest. 6 results in best quality and compression. PS: The option corresponds to the \"method\" option in libwebp"
+              },
+              "min": 0,
+              "max": 6
+          },
+          {
+              "id": "sharp-yuv",
+              "type": "boolean",
+              "allowed-value-types": [
+                  "boolean"
+              ],
+              "default": true,
+              "ui": {
+                  "component": "checkbox",
+                  "label": "Sharp YUV",
+                  "help-text": "Better RGB->YUV color conversion (sharper and more accurate) at the expense of a little extra conversion time. Read more [here](https:\/\/www.ctrl.blog\/entry\/webp-sharp-yuv.html)."
+              }
+          },
+          {
+              "id": "auto-filter",
+              "type": "boolean",
+              "allowed-value-types": [
+                  "boolean"
+              ],
+              "default": false,
+              "ui": {
+                  "component": "checkbox",
+                  "label": "Auto-filter",
+                  "help-text": "Turns auto-filter on. This algorithm will spend additional time optimizing the filtering strength to reach a well-balanced quality. Unfortunately, it is extremely expensive in terms of computation. It takes about 5-10 times longer to do a conversion. A 1MB picture which perhaps typically takes about 2 seconds to convert, will takes about 15 seconds to convert with auto-filter. "
+              }
+          },
+          {
+                      "id": "low-memory",
+                      "type": "boolean",
+                      "allowed-value-types": [
+                          "boolean"
+                      ],
+                      "default": false,
+                      "ui": {
+                          "component": "checkbox",
+                          "label": "Low memory",
+                          "help-text": "Reduce memory usage of lossy encoding at the cost of ~30% longer encoding time and marginally larger output size. Only effective when the *method* option is 3 or more. Read more in [the docs](https:\/\/developers.google.com\/speed\/webp\/docs\/cwebp)",
+                          "display": {
+                              "function": "and",
+                              "args": [
+                                  {
+                                      "function": "notEquals",
+                                      "args": [
+                                          {
+                                              "function": "state",
+                                              "args": [
+                                                  "option",
+                                                  "encoding"
+                                              ]
+                                          },
+                                          "lossless"
+                                      ]
+                                  },
+                                  {
+                                      "function": "gt",
+                                      "args": [
+                                          {
+                                              "function": "state",
+                                              "args": [
+                                                  "option",
+                                                  "method"
+                                              ]
+                                          },
+                                          2
+                                      ]
+                                  }
+                              ]
+                          }
+                      }
+                  },
+          {
+            "id": "preset",
+            "type": "string",
             "allowed-value-types": [
                 "string"
             ],
             "default": "none",
             "ui": {
-                "component": "multi-select",
-                "label": "Metadata",
-                "help-text": "Determines which metadata that should be copied over to the webp. Setting it to \"all\" preserves all metadata, setting it to \"none\" strips all metadata.*cwebp* can take a comma-separated list of which kinds of metadata that should be copied (ie \"exif,icc\"). *gd* will always remove all metadata and *ffmpeg* will always keep all metadata. The rest can either strip all or keep all (they will keep all, unless the option is set to *none*)",
+                "component": "select",
+                "label": "Preset",
                 "options": [
-                    "all",
                     "none",
-                    "exif",
-                    "icc",
-                    "xmp"
+                    "default",
+                    "photo",
+                    "picture",
+                    "drawing",
+                    "icon",
+                    "text"
                 ],
                 "optionLabels": {
-                    "all": "All",
                     "none": "None",
-                    "exif": "Exif",
-                    "icc": "ICC",
-                    "xmp": "XMP"
-                }
+                    "default": "Default",
+                    "photo": "Photo",
+                    "picture": "Picture",
+                    "drawing": "Drawing",
+                    "icon": "Icon",
+                    "text": "Text"
+                },
+                "help-text": "Using a preset will set many of the other options to suit a particular type of source material. It even overrides them. It does however not override the quality option. \"none\" means that no preset will be set"
             },
             "sensitive": false,
-            "options": null
-        },
-        {
-            "id": "method",
-            "type": "int",
-            "allowed-value-types": [
-                "int"
-            ],
-            "default": 6,
-            "ui": {
-                "component": "input",
-                "label": "Reduction effort (0-6)",
-                "help-text": "Controls the trade off between encoding speed and the compressed file size and quality. Possible values range from 0 to 6. 0 is fastest. 6 results in best quality and compression"
-            },
-            "min": 0,
-            "max": 6
-        },
-        {
-            "id": "sharp-yuv",
-            "type": "boolean",
-            "allowed-value-types": [
-                "boolean"
-            ],
-            "default": true,
-            "ui": {
-                "component": "checkbox",
-                "label": "Sharp YUV",
-                "help-text": "Better RGB->YUV color conversion (sharper and more accurate) at the expense of a little extra conversion time. Read more [here](https:\/\/www.ctrl.blog\/entry\/webp-sharp-yuv.html)."
-            }
+            "options": [
+                "none",
+                "default",
+                "photo",
+                "picture",
+                "drawing",
+                "icon",
+                "text"
+            ]
         },
 
           ],
