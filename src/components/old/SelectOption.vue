@@ -1,37 +1,19 @@
 <template>
-
-  <!--<SelectBox v-model="modelValue" :options="options" optionsLabel="label" optionsKey="id"
-  placeholder="Select"
-  @update:model-value="onLocalChange"
-  />-->
-  <VueMultiselect
-    v-model="modelValue"
-    :options="option.ui.options"
-    :multiple="false"
-    :close-on-select="true"
-    :clear-on-select="false"
-    :preserve-search="false"
-    :preselect-first="false"
-    :searchable="false"
-    @update:model-value="onLocalChange"
-    selectLabel=""
-    deselectLabel=""
-  />
+  <SelectBox v-model="modelValue" :options="options" optionsLabel="label" optionsKey="id" placeholder="Select" @update:model-value="onLocalChange"/>
 </template>
 
 <script>
-import VueMultiselect from 'vue-multiselect'
+import SelectBox from '../standard/SelectBox.vue'
 
 export default {
   name: 'SelectOption',
   components: {
-    VueMultiselect
+    SelectBox
   },
   props: ['modelValue', 'option'],
   emits: ['update:modelValue'],
   methods: {
     updateLocalModel(modelValue) {
-      //this.modelValue = modelValue;
     },
     onLocalChange() {
       this.$emit('update:modelValue', this.modelValue);
@@ -52,15 +34,16 @@ export default {
     }
   },
   mounted() {
-    //this.updateLocalModel(this.modelValue);
+    this.updateLocalModel(this.modelValue);
   },
   watch: {
     modelValue(newValue, oldValue) {
-      //this.updateLocalModel(newValue);
+      this.updateLocalModel(newValue);
     }
   },
   data() {
     return {
+      'selected': ''
     }
   }
 }
