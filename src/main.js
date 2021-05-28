@@ -16,8 +16,12 @@ import VTooltip from 'v-tooltip'
 //import VTooltip from 'v-tooltip'
 //Vue.use(VTooltip)
 
+//VTooltip.options.defaultHtml = true;
 const wcfm = createApp(WCFM);
-wcfm.use(VTooltip);
+wcfm.use(VTooltip, {
+  defaultHtml: false,
+});
+
 
 
 if (!window["wcfmoptions"]) {
@@ -201,7 +205,13 @@ if (!window["wcfmoptions"]) {
                       "lossy": "Lossy",
                       "lossless": "Lossless"
                   },
-                  "help-text": "Set encoding for the webp. If you choose \"auto\", webp-convert will convert to both lossy and lossless and pick the smallest result"
+                  "help-text": "Set encoding for the webp. If you choose \"auto\", webp-convert will convert to both lossy and lossless and pick the smallest result",
+                  "links": [
+                      [
+                          "Guide",
+                          "https:\/\/github.com\/rosell-dk\/webp-convert\/blob\/master\/docs\/v2.0\/converting\/introduction-for-converting.md#auto-selecting-between-losslesslossy-encoding"
+                      ]
+                  ]
               },
               "sensitive": false,
               "options": [
@@ -247,7 +257,13 @@ if (!window["wcfmoptions"]) {
               "ui": {
                   "component": "checkbox",
                   "label": "Auto-limit",
-                  "help-text": "Enable this option to prevent an unnecessarily high quality setting for low quality jpegs. You really should enable this. Read more about the feature [here](https:\/\/github.com\/rosell-dk\/webp-convert\/blob\/master\/docs\/v2.0\/converting\/introduction-for-converting.md#preventing-unnecessarily-high-quality-setting-for-low-quality-jpegs).",
+                  "help-text": "Enable this option to prevent an unnecessarily high quality setting for low quality jpegs. You really should enable this.",
+                  "links": [
+                      [
+                          "Guide",
+                          "https:\/\/github.com\/rosell-dk\/webp-convert\/blob\/master\/docs\/v2.0\/converting\/introduction-for-converting.md#preventing-unnecessarily-high-quality-setting-for-low-quality-jpegs"
+                      ]
+                  ],
                   "display": {
                       "function": "notEquals",
                       "args": [
@@ -273,7 +289,13 @@ if (!window["wcfmoptions"]) {
               "ui": {
                   "component": "input",
                   "label": "Alpha quality",
-                  "help-text": "Quality of alpha channel. Often, there is no need for high quality transparency layer and in some cases you can tweak this all the way down to 10 and save a lot in file size. The option only has effect with lossy encoding, and of course only on images with transparency. Read more [here](https:\/\/github.com\/rosell-dk\/webp-convert\/blob\/master\/docs\/v2.0\/converting\/introduction-for-converting.md#alpha-quality)",
+                  "help-text": "Quality of alpha channel. Often, there is no need for high quality transparency layer and in some cases you can tweak this all the way down to 10 and save a lot in file size. The option only has effect with lossy encoding, and of course only on images with transparency.",
+                  "links": [
+                      [
+                          "Guide",
+                          "https:\/\/github.com\/rosell-dk\/webp-convert\/blob\/master\/docs\/v2.0\/converting\/introduction-for-converting.md#alpha-quality"
+                      ]
+                  ],
                   "display": {
                       "function": "and",
                       "args": [
@@ -318,7 +340,13 @@ if (!window["wcfmoptions"]) {
               "ui": {
                   "component": "input",
                   "label": "\"Near lossless\" quality",
-                  "help-text": "This option allows you to get impressively better compression for lossless encoding, with minimal impact on visual quality. The range is 0 (no preprocessing) to 100 (maximum preprocessing). Read more [here](https:\/\/github.com\/rosell-dk\/webp-convert\/blob\/master\/docs\/v2.0\/converting\/introduction-for-converting.md#near-lossless).",
+                  "help-text": "This option allows you to get impressively better compression for lossless encoding, with minimal impact on visual quality. The range is 0 (no preprocessing) to 100 (maximum preprocessing).",
+                  "links": [
+                      [
+                          "Guide",
+                          "https:\/\/github.com\/rosell-dk\/webp-convert\/blob\/master\/docs\/v2.0\/converting\/introduction-for-converting.md#near-lossless"
+                      ]
+                  ],
                   "display": {
                       "function": "notEquals",
                       "args": [
@@ -390,7 +418,13 @@ if (!window["wcfmoptions"]) {
               "ui": {
                   "component": "checkbox",
                   "label": "Sharp YUV",
-                  "help-text": "Better RGB->YUV color conversion (sharper and more accurate) at the expense of a little extra conversion time. Read more [here](https:\/\/www.ctrl.blog\/entry\/webp-sharp-yuv.html)."
+                  "help-text": "Better RGB->YUV color conversion (sharper and more accurate) at the expense of a little extra conversion time.",
+                  "links": [
+                      [
+                          "External blog",
+                          "https:\/\/www.ctrl.blog\/entry\/webp-sharp-yuv.html"
+                      ]
+                  ]
               }
           },
           {
@@ -407,90 +441,90 @@ if (!window["wcfmoptions"]) {
               }
           },
           {
-                      "id": "low-memory",
-                      "type": "boolean",
-                      "allowed-value-types": [
-                          "boolean"
-                      ],
-                      "default": false,
-                      "ui": {
-                          "component": "checkbox",
-                          "label": "Low memory",
-                          "help-text": "Reduce memory usage of lossy encoding at the cost of ~30% longer encoding time and marginally larger output size. Only effective when the *method* option is 3 or more. Read more in [the docs](https:\/\/developers.google.com\/speed\/webp\/docs\/cwebp)",
-                          "display": {
-                              "function": "and",
+              "id": "low-memory",
+              "type": "boolean",
+              "allowed-value-types": [
+                  "boolean"
+              ],
+              "default": false,
+              "ui": {
+                  "component": "checkbox",
+                  "label": "Low memory",
+                  "help-text": "Reduce memory usage of lossy encoding at the cost of ~30% longer encoding time and marginally larger output size. Only effective when the *method* option is 3 or more. Read more in [the docs](https:\/\/developers.google.com\/speed\/webp\/docs\/cwebp)",
+                  "display": {
+                      "function": "and",
+                      "args": [
+                          {
+                              "function": "notEquals",
                               "args": [
                                   {
-                                      "function": "notEquals",
+                                      "function": "state",
                                       "args": [
-                                          {
-                                              "function": "state",
-                                              "args": [
-                                                  "option",
-                                                  "encoding"
-                                              ]
-                                          },
-                                          "lossless"
+                                          "option",
+                                          "encoding"
                                       ]
                                   },
+                                  "lossless"
+                              ]
+                          },
+                          {
+                              "function": "gt",
+                              "args": [
                                   {
-                                      "function": "gt",
+                                      "function": "state",
                                       "args": [
-                                          {
-                                              "function": "state",
-                                              "args": [
-                                                  "option",
-                                                  "method"
-                                              ]
-                                          },
-                                          2
+                                          "option",
+                                          "method"
                                       ]
-                                  }
+                                  },
+                                  2
                               ]
                           }
-                      }
-                  },
+                      ]
+                  }
+              }
+          },
           {
-            "id": "preset",
-            "type": "string",
-            "allowed-value-types": [
-                "string"
-            ],
-            "default": "none",
-            "ui": {
-                "component": "select",
-                "label": "Preset",
-                "options": [
-                    "none",
-                    "default",
-                    "photo",
-                    "picture",
-                    "drawing",
-                    "icon",
-                    "text"
-                ],
-                "optionLabels": {
-                    "none": "None",
-                    "default": "Default",
-                    "photo": "Photo",
-                    "picture": "Picture",
-                    "drawing": "Drawing",
-                    "icon": "Icon",
-                    "text": "Text"
-                },
-                "help-text": "Using a preset will set many of the other options to suit a particular type of source material. It even overrides them. It does however not override the quality option. \"none\" means that no preset will be set"
-            },
-            "sensitive": false,
-            "options": [
-                "none",
-                "default",
-                "photo",
-                "picture",
-                "drawing",
-                "icon",
-                "text"
-            ]
-        },
+              "id": "preset",
+              "type": "string",
+              "allowed-value-types": [
+                  "string"
+              ],
+              "default": "none",
+              "ui": {
+                  "component": "select",
+                  "label": "Preset",
+                  "options": [
+                      "none",
+                      "default",
+                      "photo",
+                      "picture",
+                      "drawing",
+                      "icon",
+                      "text"
+                  ],
+                  "optionLabels": {
+                      "none": "None",
+                      "default": "Default",
+                      "photo": "Photo",
+                      "picture": "Picture",
+                      "drawing": "Drawing",
+                      "icon": "Icon",
+                      "text": "Text"
+                  },
+                  "help-text": "Using a preset will set many of the other options to suit a particular type of source material. It even overrides them. It does however not override the quality option. \"none\" means that no preset will be set"
+              },
+              "sensitive": false,
+              "options": [
+                  "none",
+                  "default",
+                  "photo",
+                  "picture",
+                  "drawing",
+                  "icon",
+                  "text"
+              ]
+          },
 
           ],
           supportedStandardOptions: {

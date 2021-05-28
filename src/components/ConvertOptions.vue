@@ -111,6 +111,20 @@ export default {
           option['ui']['help-text'] = SimpleMarkdown.md2html(option['ui']['help-text']);
         }
       }
+      for (var i=0; i<me.options.length; i++) {
+        var option = me.options[i];
+        //console.log('option:', option);
+        if (!option['ui']['links']) {
+          option['ui']['links'] = [];
+        }
+        option['ui']['links'].push(
+          [
+            'API',
+            'https://github.com/rosell-dk/webp-convert/blob/master/docs/v2.0/converting/options.md#'
+              + option['id']
+          ]
+        )
+      }
 
 
 

@@ -14,3 +14,23 @@ input {
   padding: 3px 5px;
 }
 */
+
+div.v-popper--theme-menu .v-popper__inner {
+  background-color: #66f;   /* or purple, 83f?*/
+  color: white;
+  padding: 10px 15px 11px;
+  line-height: 1.2;
+  max-width: 300px;
+}
+
+.v-popper__inner a {
+  color: white;
+  text-decoration: underline;
+}
+
+.v-popper__inner p {
+  margin-top: 0;
+}
+.v-popper__inner p:last-child {
+  margin-bottom: 0;
+}

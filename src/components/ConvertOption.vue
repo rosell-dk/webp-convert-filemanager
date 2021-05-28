@@ -3,7 +3,7 @@
     <div class="convert-option" v-if="enabled">
       <div>
         <label :disabled="!enabled">{{option.ui.label}}</label>
-        <HelpIcon v-if="option.ui['help-text']" :helpText="option.ui['help-text']"/>
+        <ConvertOptionMenu v-if="option.ui['help-text']" :ui="option.ui" />
       </div>
       <div :change="emitChange()">
         <div v-if="option.ui.component == 'checkbox'"><input type="checkbox" v-model="modelValue" /></div>
@@ -21,16 +21,18 @@
 <script>
 import SelectBox from './standard/SelectBox.vue'
 import HelpIcon from './HelpIcon.vue'
+import ConvertOptionMenu from './ConvertOptionMenu.vue'
 import InputOption from './option-types/InputOption.vue'
 import MultiSelectOption from './option-types/MultiSelectOption.vue'
 import MetadataOption from './option-types/MetadataOption.vue'
+
 import SelectOption from './option-types/SelectOption.vue'
 import ExpressionEvaluator from '../classes/ExpressionEvaluator.js'
 
 export default {
   name: 'ConvertOption',
   components: {
-    SelectBox, HelpIcon, InputOption, SelectOption, MultiSelectOption, MetadataOption
+    SelectBox, HelpIcon, InputOption, SelectOption, MultiSelectOption, MetadataOption, ConvertOptionMenu
   },
   props: ['option', 'modelValue', 'disabled', 'optionValues'],
   methods: {
