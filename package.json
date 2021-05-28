@@ -11,6 +11,7 @@
   },
   "dependencies": {
     "splitpanes": "^3.0.4",
+    "v-tooltip": "^4.0.0-alpha.1",
     "vue": "^3.0.11",
     "vue-multiselect": "^3.0.0-alpha.2"
   },

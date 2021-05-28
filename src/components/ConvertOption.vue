@@ -3,9 +3,7 @@
     <div class="convert-option" v-if="enabled">
       <div>
         <label :disabled="!enabled">{{option.ui.label}}</label>
-        <HelpIcon v-if="option.ui['help-text']">
-          <span v-html="option.ui['help-text']" />
-        </HelpIcon>
+        <HelpIcon v-if="option.ui['help-text']" :helpText="option.ui['help-text']"/>
       </div>
       <div :change="emitChange()">
         <div v-if="option.ui.component == 'checkbox'"><input type="checkbox" v-model="modelValue" /></div>

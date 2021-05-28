@@ -2,6 +2,12 @@ import { createApp } from 'vue'
 import WCFM from './WCFM.vue'
 import './index.css'
 import './tables.css'
+import 'v-tooltip/dist/v-tooltip.css'
+import VTooltip from 'v-tooltip'
+
+// npm i -S v-tooltip@next    (tries to install 3.0.0-alpha.21, but cannot resolve dependency: vue@"^2.6.10")
+// npm i -S v-tooltip@vue3    (installs 4.0.0-alpha.1)
+// npm uninstall v-tooltip
 
 // Cannot get v-tooltip to work. But it is also in alpha for Vue 3...
 // https://github.com/Akryum/v-tooltip/issues/545
@@ -11,6 +17,8 @@ import './tables.css'
 //Vue.use(VTooltip)
 
 const wcfm = createApp(WCFM);
+wcfm.use(VTooltip);
+
 
 if (!window["wcfmoptions"]) {
   window["wcfmoptions"] = {}
@@ -538,5 +546,4 @@ if (window['wcfmoptions']) {
 }
 */
 wcfm.mount('#webpconvert-filemanager');
-
 //window.wcfileman = wcfm;

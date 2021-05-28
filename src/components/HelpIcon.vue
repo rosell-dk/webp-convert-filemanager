@@ -1,9 +1,11 @@
 <template>
+  <!--
+  https://github.com/Akryum/v-tooltip/discussions/603
+  https://github.com/Akryum/v-tooltip/issues/545
+  https://v-tooltip.netlify.app/guide/#quick-start
+  -->
   <div class="help-icon">
-    <svg class="icon"><use xlink:href="#icon-help" /></svg>
-    <div class="help-popup">
-      <slot></slot>
-    </div>
+    <svg class="icon" v-tooltip="{content: helpText,html: true, delay:{show:100, hide:200}}"><use xlink:href="#icon-help" /></svg>
   </div>
 </template>
 
@@ -11,7 +13,8 @@
 export default {
   name: 'HelpIcon',
   props: {
-    label: String
+    label: String,
+    helpText: String
   },
   data() {
     return {
@@ -31,28 +34,6 @@ export default {
   width: 16px;
   height: 16px;
   vertical-align: top;
+  padding: 0px 2px 1px;
 }
-.help-popup {
-    display: none;
-    position: absolute;
-    border: 1px solid #666;
-    z-index:2;
-    background-color: #ffffcc;
-    padding: 12px 15px;
-    /*left: 22px;
-    top: 20px;*/
-    margin-top: -5px;
-    /*white-space: nowrap;*/
-    /*min-width: 150px;*/
-}
-.help-icon:hover .help-popup {
-  display: block;
-}
-.help-popup p:first-child {
-  margin-top: 3px;
-}
-.help-popup p:last-child {
-  margin-bottom: 3px;
-}
-
 </style>
