@@ -69,6 +69,18 @@ export default class ExpressionEvaluator {
       case 'if-else':
         return (args[0] ? args[1] : args[2]);
 
+      case 'gt':
+        return (args[0] > args[1]);
+
+      case 'gte':
+        return (args[0] >= args[1]);
+
+      case 'lt':
+        return (args[0] < args[1]);
+
+      case 'lte':
+        return (args[0] <= args[1]);
+
     }
   }
 }
