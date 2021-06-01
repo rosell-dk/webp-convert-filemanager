@@ -1,6 +1,7 @@
 <!--
 took and modified code from here:
 https://github.com/juliandreas/vue-toggles
+https://vue-toggles.netlify.app/
 -->
 <template>
   <span
