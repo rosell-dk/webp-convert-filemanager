@@ -10,7 +10,10 @@
       <svg class="icon"><use xlink:href="#icon-help" /></svg>
       <template #popper>
         <div class="menu-inner">
-          <p v-html="option.schema['description']"></p>
+          <!--<p v-html="option.schema['description']"></p>-->
+          <p>
+            {{ option.schema['description'] }}
+          </p>
           <div class="buttons" v-if="option.ui.links">
             <!--<button v-if="ui.urls.guide">Guide</button>
             <button v-if="ui.urls.api">API</button>-->
