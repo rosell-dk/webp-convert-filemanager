@@ -6,7 +6,7 @@
   />-->
   <VueMultiselect
     v-model="modelValue"
-    :options="option.ui.options"
+    :options="options"
     :multiple="false"
     :close-on-select="true"
     :clear-on-select="false"
@@ -41,14 +41,23 @@ export default {
     options: function() {
       var result = [];
       var ui = this.option.ui;
-      if (ui.options) {
-        for (var i=0; i<ui.options.length; i++) {
-          var id = ui.options[i];
-          result.push({'id':id, 'label':ui.optionLabels[id]});
-        }
-        console.log('result', result);
+
+      var options = [];
+      if (this.option.schema['enum']) {
+        options = this.option.schema['enum'];
       }
+      if (ui.options) {
+        options = this.option.ui.options;
+      }
+      return options;
+      /*
+      for (var i=0; i<options.length; i++) {
+        var id = options[i];
+        result.push({'id':id, 'label':ui.optionLabels[id]});
+      }
+      console.log('result', result);
       return result;
+      */
     }
   },
   mounted() {
