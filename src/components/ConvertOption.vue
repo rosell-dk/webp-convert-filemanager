@@ -2,8 +2,8 @@
   <transition name="fade">
     <div class="convert-option" v-if="enabled">
       <div>
-        <label :disabled="!enabled">{{option.ui.label}}</label>
-        <ConvertOptionMenu v-if="option.ui['help-text']" :ui="option.ui" />
+        <label :disabled="!enabled">{{option.schema.title}}</label>
+        <ConvertOptionMenu v-if="option.schema['description']" :option="option" />
       </div>
       <div :change="emitChange()">
         <div v-if="option.ui.component == 'checkbox'"><input type="checkbox" v-model="modelValue" /></div>
@@ -42,10 +42,10 @@ export default {
   },
   computed: {
     enabled() {
-      var displayExpr = this.option.ui['display'];
-      if (displayExpr) {
+      //var displayExpr = this.option.ui['display'];
+      if ((this.option.ui) && (this.option.ui['display'])) {
         //console.log('condition', displayExpr);
-        return ExpressionEvaluator.evaluate(displayExpr, {
+        return ExpressionEvaluator.evaluate(this.option.ui['display'], {
           'option': this.optionValues,
           'imageType': 'any'
         });

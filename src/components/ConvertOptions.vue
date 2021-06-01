@@ -84,20 +84,26 @@ export default {
       // TODO: Loading animation
       //console.log('r:', response);
 
-      me.options = response.options;
-
-
-
-      for (var i=0; i<me.options.length; i++) {
-        var option = me.options[i];
-        me.optionValues[option.id] = option.default;
+      var options = [];
+      for (var i=0; i<response.options.length; i++) {
+        if (response.options[i]['ui']) {
+          options.push(response.options[i]);
+        }
       }
-      for (var i=0; i<me.options.length; i++) {
-        var option = me.options[i];
+
+//console.log('options', me.options);
+
+
+      for (var i=0; i<options.length; i++) {
+        var option = options[i];
+        me.optionValues[option.id] = option.schema.default;
+      }
+      for (var i=0; i<options.length; i++) {
+        var option = options[i];
         if (option['ui']['default']) {
           //console.log(option['ui']['default'])
           me.optionValues[option.id] = ExpressionEvaluator.evaluate(
-            option['ui']['default'],
+            option['schema']['default'],
             {
               'option': me.optionValues,
               'imageType': 'jpeg'
@@ -105,14 +111,16 @@ export default {
           );
         }
       }
+
+      /*
       for (var i=0; i<me.options.length; i++) {
         var option = me.options[i];
         if (option['ui']['help-text']) {
           option['ui']['help-text'] = SimpleMarkdown.md2html(option['ui']['help-text']);
         }
-      }
-      for (var i=0; i<me.options.length; i++) {
-        var option = me.options[i];
+      }*/
+      for (var i=0; i<options.length; i++) {
+        var option = options[i];
         //console.log('option:', option);
         if (!option['ui']['links']) {
           option['ui']['links'] = [];
@@ -125,6 +133,8 @@ export default {
           ]
         )
       }
+
+      me.options = options;
 
 
 
