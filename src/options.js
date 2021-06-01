@@ -6,9 +6,9 @@ export default [
             "description": "Set encoding for the webp. If you choose \"auto\", webp-convert will convert to both lossy and lossless and pick the smallest result",
             "default": "auto",
             "enum": [
+                "auto",
                 "lossy",
-                "lossless",
-                "auto"
+                "lossless"
             ],
             "type": [
                 "string"
@@ -16,16 +16,6 @@ export default [
         },
         "ui": {
             "component": "select",
-            "options": [
-                "auto",
-                "lossy",
-                "lossless"
-            ],
-            "optionLabels": {
-                "auto": "Auto",
-                "lossy": "Lossy",
-                "lossless": "Lossless"
-            },
             "links": [
                 [
                     "Guide",
@@ -35,9 +25,9 @@ export default [
         },
         "sensitive": false,
         "options": [
+            "auto",
             "lossy",
-            "lossless",
-            "auto"
+            "lossless"
         ]
     },
     {
@@ -93,6 +83,7 @@ export default [
         },
         "ui": {
             "component": "checkbox",
+            "advanced": true,
             "links": [
                 [
                     "Guide",
@@ -219,14 +210,7 @@ export default [
                 "exif",
                 "icc",
                 "xmp"
-            ],
-            "optionLabels": {
-                "all": "All",
-                "none": "None",
-                "exif": "Exif",
-                "icc": "ICC",
-                "xmp": "XMP"
-            }
+            ]
         },
         "sensitive": false,
         "options": null
@@ -244,7 +228,8 @@ export default [
             "maximum": 6
         },
         "ui": {
-            "component": "input"
+            "component": "input",
+            "advanced": true
         }
     },
     {
@@ -259,6 +244,7 @@ export default [
         },
         "ui": {
             "component": "checkbox",
+            "advanced": true,
             "links": [
                 [
                     "Ctrl.blog",
@@ -278,7 +264,8 @@ export default [
             ]
         },
         "ui": {
-            "component": "checkbox"
+            "component": "checkbox",
+            "advanced": true
         }
     },
     {
@@ -293,6 +280,7 @@ export default [
         },
         "ui": {
             "component": "checkbox",
+            "advanced": true,
             "display": {
                 "function": "and",
                 "args": [
@@ -347,6 +335,7 @@ export default [
         },
         "ui": {
             "component": "select",
+            "advanced": true,
             "options": [
                 "none",
                 "default",

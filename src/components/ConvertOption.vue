@@ -45,7 +45,19 @@ export default {
     Toggle,
     ConvertOptionMenu
   },
-  props: ['option', 'modelValue', 'disabled', 'optionValues'],
+  props: {
+    'option': {
+      type: Object
+    },
+    'modelValue': {},
+    'optionValues': {
+      type: Object
+    },
+    'show': {
+      type: Boolean,
+      default: true,
+    },
+  },
   methods: {
     emitChange() {
       this.$emit('update:modelValue', this.modelValue);
@@ -54,6 +66,12 @@ export default {
   computed: {
     enabled() {
       //var displayExpr = this.option.ui['display'];
+      /*if (this.option.ui['advanced']) {
+        return false;
+      }*/
+      if (this.show == false) {
+        return false;
+      }
       if ((this.option.ui) && (this.option.ui['display'])) {
         //console.log('condition', displayExpr);
         return ExpressionEvaluator.evaluate(this.option.ui['display'], {

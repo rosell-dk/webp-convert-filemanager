@@ -2,17 +2,11 @@
   {{
     optionValues
   }}<br>
-<!--
-  <div class="view">
-    <label>View</label>
-    <VueMultiselect :options="[1, 0]" v-model="view" :customLabel="viewLabel" placeholder="" :allowEmpty="false" :searchable="false" selectLabel="" deselectLabel="" selectedLabel=""/>
-  </div>-->
-  <div class="view">
-    <!--<label>View</label>-->
-    <button v-text="advancedView ? 'Switch to simple view' : 'Switch to advanced view'" @click="advancedView = !advancedView"></button>
+  <div class="view-select">
+    <button v-tooltip="'Swich between advanced view (all available options) and simple view (most used options)'" v-text="advancedView ? 'Hide advanced options' : 'Show advanced options'" @click="advancedView = !advancedView"></button>
   </div>
   <div class="table-table convert-options">
-    <ConvertOption v-for="option in options" :option="option" :optionValues="optionValues" v-model="optionValues[option.id]" :disabled="true"/>
+    <ConvertOption v-for="option in options" :option="option" :optionValues="optionValues" v-model="optionValues[option.id]" :show="!option['ui']['advanced'] || advancedView"/>
     <div>
       <div><label>Converter</label></div>
       <div>
@@ -34,7 +28,7 @@ import SimpleMarkdown from '../classes/SimpleMarkdown.js'
 export default {
   name: 'ConvertOptions',
   components: {
-    SelectBox, HelpIcon, ConvertOption, VueMultiselect
+    SelectBox, HelpIcon, ConvertOption
   },
   props: {
     item: Object
@@ -270,7 +264,7 @@ alert('h')
 </script>
 
 <style scoped>
-  .view {
+  .view-select {
     display: block;
     text-align: right;
   }
