@@ -1,7 +1,16 @@
 <template>
   {{
     optionValues
-  }}
+  }}<br>
+<!--
+  <div class="view">
+    <label>View</label>
+    <VueMultiselect :options="[1, 0]" v-model="view" :customLabel="viewLabel" placeholder="" :allowEmpty="false" :searchable="false" selectLabel="" deselectLabel="" selectedLabel=""/>
+  </div>-->
+  <div class="view">
+    <!--<label>View</label>-->
+    <button v-text="advancedView ? 'Switch to simple view' : 'Switch to advanced view'" @click="advancedView = !advancedView"></button>
+  </div>
   <div class="table-table convert-options">
     <ConvertOption v-for="option in options" :option="option" :optionValues="optionValues" v-model="optionValues[option.id]" :disabled="true"/>
     <div>
@@ -14,6 +23,7 @@
 </template>
 
 <script>
+import VueMultiselect from 'vue-multiselect'
 import Poster from '../classes/Poster.js'
 import SelectBox from './standard/SelectBox.vue'
 import HelpIcon from './HelpIcon.vue'
@@ -24,7 +34,7 @@ import SimpleMarkdown from '../classes/SimpleMarkdown.js'
 export default {
   name: 'ConvertOptions',
   components: {
-    SelectBox, HelpIcon, ConvertOption
+    SelectBox, HelpIcon, ConvertOption, VueMultiselect
   },
   props: {
     item: Object
@@ -43,6 +53,7 @@ export default {
   },
   data() {
     return {
+      advancedView: true,
       // Global "constants"
       converters: [
         {id: 'cwebp', name: 'cwebp'},
@@ -250,11 +261,25 @@ alert('h')
     },
     converterSupports(optionName) {
       return this.optionSupported(optionName, this.converter);
+    },
+    viewLabel(value) {
+      return (value == 0) ? 'View all options' : 'Simple view';
     }
-
   }
 }
 </script>
 
 <style scoped>
+  .view {
+    display: block;
+    text-align: right;
+  }
+  .view *:first-child {
+    display: inline-block;
+    margin-right: 10px;
+  }
+  .view *:last-child {
+    width: 200px;
+    display: inline-block;
+  }
 </style>
