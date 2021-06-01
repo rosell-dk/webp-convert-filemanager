@@ -10,6 +10,7 @@
     "build-copy": "npm run build && npm run copy"
   },
   "dependencies": {
+    "@vueform/slider": "^1.0.5",
     "splitpanes": "^3.0.4",
     "v-tooltip": "^4.0.0-alpha.1",
     "vue": "^3.0.11",

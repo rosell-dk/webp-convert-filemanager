@@ -2,9 +2,6 @@
   {{
     optionValues
   }}<br>
-  <div class="view-select">
-    <button v-tooltip="'Swich between advanced view (all available options) and simple view (most used options)'" v-text="advancedView ? 'Hide advanced options' : 'Show advanced options'" @click="advancedView = !advancedView"></button>
-  </div>
   <div class="table-table convert-options">
     <ConvertOption v-for="option in options" :option="option" :optionValues="optionValues" v-model="optionValues[option.id]" :show="!option['ui']['advanced'] || advancedView"/>
     <div>
@@ -14,10 +11,12 @@
       </div>
     </div>
   </div>
+  <div class="view-select">
+    <button v-tooltip="'Swich between advanced view (all available options) and simple view (most used options)'" v-text="advancedView ? 'Hide advanced options' : 'Show advanced options'" @click="advancedView = !advancedView"></button>
+  </div>
 </template>
 
 <script>
-import VueMultiselect from 'vue-multiselect'
 import Poster from '../classes/Poster.js'
 import SelectBox from './standard/SelectBox.vue'
 import HelpIcon from './HelpIcon.vue'
@@ -47,7 +46,7 @@ export default {
   },
   data() {
     return {
-      advancedView: true,
+      advancedView: false,
       // Global "constants"
       converters: [
         {id: 'cwebp', name: 'cwebp'},

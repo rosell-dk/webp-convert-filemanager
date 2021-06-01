@@ -10,6 +10,7 @@
         <div v-if="option.ui.component == 'checkbox'"><Toggle :height="20" :width="40" v-model="modelValue"/></div>
         <InputOption v-if="option.ui.component == 'input'" v-model="modelValue" :option="option"/>
         <SelectOption v-if="option.ui.component == 'select'" v-model="modelValue" :option="option"/>
+        <SliderOption v-if="option.ui.component == 'slider'" v-model="modelValue" :option="option"/>
         <template v-if="option.ui.component == 'multi-select'">
           <MultiSelectOption v-if="option.id != 'metadata'" v-model="modelValue" :option="option"/>
           <MetadataOption v-if="option.id == 'metadata'" v-model="modelValue" :option="option"/>
@@ -29,8 +30,8 @@ import MetadataOption from './option-types/MetadataOption.vue'
 //import VueToggles from 'vue-toggles'
 import Toggle from './standard/Toggle.vue'
 
-
 import SelectOption from './option-types/SelectOption.vue'
+import SliderOption from './option-types/SliderOption.vue'
 import ExpressionEvaluator from '../classes/ExpressionEvaluator.js'
 
 export default {
@@ -43,6 +44,7 @@ export default {
     MultiSelectOption,
     MetadataOption,
     Toggle,
+    SliderOption,
     ConvertOptionMenu
   },
   props: {

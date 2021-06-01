@@ -2,6 +2,10 @@
 took and modified code from here:
 https://github.com/juliandreas/vue-toggles
 https://vue-toggles.netlify.app/
+
+For further improvement inspiration, look here:
+https://thomaslombart.com/how-to-build-reusable-and-accessible-switch-vue/
+I for example like the disabled state look
 -->
 <template>
   <span

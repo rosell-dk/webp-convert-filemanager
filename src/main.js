@@ -19,6 +19,10 @@ import VTooltip from 'v-tooltip'
 //import VTooltip from 'v-tooltip'
 //Vue.use(VTooltip)
 
+// npm install vue-slider-component@next --save
+// npm uninstall vue-slider-component
+// npm install -S @vueform/slider         ~32kb increase
+
 //VTooltip.options.defaultHtml = true;
 const wcfm = createApp(WCFM);
 wcfm.use(VTooltip, {

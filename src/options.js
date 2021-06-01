@@ -55,7 +55,7 @@ export default [
             ]
         },
         "ui": {
-            "component": "input",
+            "component": "slider",
             "display": {
                 "function": "notEquals",
                 "args": [
@@ -118,7 +118,7 @@ export default [
             "maximum": 100
         },
         "ui": {
-            "component": "input",
+            "component": "slider",
             "links": [
                 [
                     "Guide",
@@ -170,7 +170,7 @@ export default [
             "maximum": 100
         },
         "ui": {
-            "component": "input",
+            "component": "slider",
             "links": [
                 [
                     "Guide",
@@ -228,7 +228,7 @@ export default [
             "maximum": 6
         },
         "ui": {
-            "component": "input",
+            "component": "slider",
             "advanced": true
         }
     },
@@ -433,7 +433,6 @@ export default [
         "sensitive": false
     }
 ]
-
 
 
   /*
