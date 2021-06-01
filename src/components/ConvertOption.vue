@@ -6,7 +6,8 @@
         <ConvertOptionMenu v-if="option.schema['description']" :option="option" />
       </div>
       <div :change="emitChange()">
-        <div v-if="option.ui.component == 'checkbox'"><input type="checkbox" v-model="modelValue" /></div>
+        <!--<div v-if="option.ui.component == 'checkbox'"><input type="checkbox" v-model="modelValue" /></div>-->
+        <div v-if="option.ui.component == 'checkbox'"><Toggle :height="20" :width="40" v-model="modelValue"/></div>
         <InputOption v-if="option.ui.component == 'input'" v-model="modelValue" :option="option"/>
         <SelectOption v-if="option.ui.component == 'select'" v-model="modelValue" :option="option"/>
         <template v-if="option.ui.component == 'multi-select'">
@@ -25,6 +26,9 @@ import ConvertOptionMenu from './ConvertOptionMenu.vue'
 import InputOption from './option-types/InputOption.vue'
 import MultiSelectOption from './option-types/MultiSelectOption.vue'
 import MetadataOption from './option-types/MetadataOption.vue'
+//import VueToggles from 'vue-toggles'
+import Toggle from './standard/Toggle.vue'
+
 
 import SelectOption from './option-types/SelectOption.vue'
 import ExpressionEvaluator from '../classes/ExpressionEvaluator.js'
@@ -32,7 +36,14 @@ import ExpressionEvaluator from '../classes/ExpressionEvaluator.js'
 export default {
   name: 'ConvertOption',
   components: {
-    SelectBox, HelpIcon, InputOption, SelectOption, MultiSelectOption, MetadataOption, ConvertOptionMenu
+    SelectBox,
+    HelpIcon,
+    InputOption,
+    SelectOption,
+    MultiSelectOption,
+    MetadataOption,
+    Toggle,
+    ConvertOptionMenu
   },
   props: ['option', 'modelValue', 'disabled', 'optionValues'],
   methods: {
