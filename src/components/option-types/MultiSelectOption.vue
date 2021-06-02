@@ -9,7 +9,9 @@
     :preserve-search="false"
     :preselect-first="false"
     :searchable="false"
+    :allowEmpty="true"
     @update:model-value="onLocalChange"
+    placeholder=""
   >
     <!--
     placeholder="Pick some"

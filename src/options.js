@@ -317,7 +317,89 @@ export default [
       },
       "ui": null,
       "sensitive": false
-  }
+  },
+  {
+         "id": "try-cwebp",
+         "schema": {
+             "title": "Try plain cwebp command",
+             "description": "If set, the converter will try executing \"cwebp -version\". In case it succeeds, and the version is higher than those working cwebps found using other methods, the conversion will be done by executing this cwebp.",
+             "type": [
+                 "boolean"
+             ],
+             "default": true
+         },
+         "ui": {
+             "component": "checkbox",
+             "advanced": true
+         }
+     },
+     {
+         "id": "try-discovering-cwebp",
+         "schema": {
+             "title": "Try discovering cwebp binary",
+             "description": "If set, the converter will try to discover installed cwebp binaries using a \"which -a cwebp\" command, or in case that fails, a \"whereis -b cwebp\" command. These commands will find cwebp binaries residing in PATH",
+             "type": [
+                 "boolean"
+             ],
+             "default": true
+         },
+         "ui": {
+             "component": "checkbox",
+             "advanced": true
+         }
+     },
+     {
+         "id": "try-common-system-paths",
+         "schema": {
+             "title": "Try locating cwebp in common system paths",
+             "description": "If set, the converter will look for a cwebp binaries residing in common system locations such as \"\/usr\/bin\/cwebp\". If such exist, it is assumed that they are valid cwebp binaries. A version check will be run on the binaries found (they are executed with the \"-version\" flag. The cwebp with the highest version found using this method and the other enabled methods will be used for the actual conversion.Note: All methods for discovering cwebp binaries are per default enabled. You can save a few microseconds by disabling some, but it is probably not worth it, as your setup will then become less resilient to system changes.",
+             "type": [
+                 "boolean"
+             ],
+             "default": true
+         },
+         "ui": {
+             "component": "checkbox",
+             "advanced": true
+         }
+     },
+     {
+         "id": "try-supplied-binary-for-os",
+         "schema": {
+             "title": "Try locating cwebp in common system paths",
+             "description": "If set, the converter will try use a precompiled cwebp binary that comes with webp-convert. But only if it has a higher version that those found by other methods. As the library knows the versions of its cwebps, no additional time is spent executing them with the \"-version\" parameter. The binaries are hash-checked before executed. The library btw. comes with several versions of precompiled cwebps because they have different dependencies - some works on some systems and others on others.",
+             "type": [
+                 "boolean"
+             ],
+             "default": true
+         },
+         "ui": {
+             "component": "checkbox",
+             "advanced": true
+         }
+     },
+     {
+         "id": "skip-these-precompiled-binaries",
+         "schema": {
+             "title": "Skip these precompiled binaries",
+             "description": "",
+             "type": [
+                 "string"
+             ],
+             "default": ""
+         },
+         "ui": {
+             "component": "multi-select",
+             "advanced": true,
+             "options": [
+                 "cwebp-120-linux-x86-64",
+                 "cwebp-110-linux-x86-64",
+                 "cwebp-103-linux-x86-64-static",
+                 "cwebp-061-linux-x86-64"
+             ]
+         },
+         "sensitive": false
+     }
 ]
 
 
