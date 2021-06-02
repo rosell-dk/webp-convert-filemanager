@@ -16,6 +16,7 @@
     @update:model-value="onLocalChange"
     selectLabel=""
     deselectLabel=""
+    :allowEmpty="false"
   />
 </template>
 
