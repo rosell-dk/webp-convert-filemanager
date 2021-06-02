@@ -33,6 +33,7 @@ import Toggle from './standard/Toggle.vue'
 import SelectOption from './option-types/SelectOption.vue'
 import SliderOption from './option-types/SliderOption.vue'
 import ExpressionEvaluator from '../classes/ExpressionEvaluator.js'
+import ExpressionParser from '../classes/ExpressionParser.js'
 
 export default {
   name: 'ConvertOption',
@@ -74,12 +75,23 @@ export default {
       if (this.show == false) {
         return false;
       }
+      /*
       if ((this.option.ui) && (this.option.ui['display'])) {
         //console.log('condition', displayExpr);
         return ExpressionEvaluator.evaluate(this.option.ui['display'], {
           'option': this.optionValues,
           'imageType': 'any'
         });
+      }*/
+      if ((this.option.ui) && (this.option.ui['display'])) {
+        //console.log('condition', displayExpr);
+        return ExpressionEvaluator.evaluate(
+          ExpressionParser.parseString(this.option.ui['display']),
+          {
+            'option': this.optionValues,
+            'imageType': 'any'
+          }
+        );
       }
       return true;
     }

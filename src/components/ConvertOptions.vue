@@ -22,6 +22,7 @@ import SelectBox from './standard/SelectBox.vue'
 import HelpIcon from './HelpIcon.vue'
 import ConvertOption from './ConvertOption.vue'
 import ExpressionEvaluator from '../classes/ExpressionEvaluator.js'
+import ExpressionParser from '../classes/ExpressionParser.js'
 import SimpleMarkdown from '../classes/SimpleMarkdown.js'
 
 export default {
@@ -83,6 +84,9 @@ export default {
   mounted() {
     var me = this;
 
+    ExpressionParser.parseString("notEquals(state('option', 'encoding'), 'lossy')");
+
+
     Poster.post('conversion-settings', {folder: ''}, function(response) {
       //me.item = response;
       // TODO: Loading animation
@@ -102,19 +106,21 @@ export default {
         var option = options[i];
         me.optionValues[option.id] = option.schema.default;
       }
+
+      /*
       for (var i=0; i<options.length; i++) {
         var option = options[i];
+        var expression = '';
         if (option['ui']['default']) {
-          //console.log(option['ui']['default'])
           me.optionValues[option.id] = ExpressionEvaluator.evaluate(
-            option['schema']['default'],
+            ExpressionParser.parseString(option['ui']['default']),
             {
               'option': me.optionValues,
               'imageType': 'jpeg'
             }
           );
         }
-      }
+      }*/
 
       /*
       for (var i=0; i<me.options.length; i++) {
