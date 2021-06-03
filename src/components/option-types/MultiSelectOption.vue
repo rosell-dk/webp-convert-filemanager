@@ -50,6 +50,7 @@ export default {
       // for some reason, arr is a Proxy with an empty element in it.
       // remove empty elements...
       arr = arr.filter(function (word) { return word != '' });
+      this.valueAsArray = arr;
     },
     onLocalChange() {
       this.$emit('update:modelValue', this.valueAsArray.join(','));

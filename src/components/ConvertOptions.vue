@@ -120,7 +120,7 @@ export default {
             }
           );
         }
-      }*/
+      }
 
       /*
       for (var i=0; i<me.options.length; i++) {

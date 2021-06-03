@@ -145,10 +145,11 @@ export default {
   li.multiselect__element {
     margin-left: 0px;
   }
+  /*
   div .multiselect__option--selected.multiselect__option--highlight,
   div .multiselect__option--selected.multiselect__option--highlight:after {
     background: #41b883;
-  }
+  }*/
   div .multiselect__tag {
     margin-bottom: 0;
     padding-bottom: 3px;
