@@ -1,5 +1,5 @@
 export const FUNCTION_CALL = -1;
-export const PRIMITIVE = -4;
+export const LITERAL = -4;
 export const OPERATOR = -3;
 export const VARIABLE = -5;
 export const LEFT_PAREN = -6;
@@ -21,10 +21,14 @@ export class JSExprParser {
   [
       [[ FUNCTION_CALL, 'isTrue' ],
       [[ LEFT_PAREN, '(' ],
-      [[ PRIMITIVE, 6 ],
-      [[ PRIMITIVE, true ],
+      [[ LITERAL, 6 ],
+      [[ LITERAL, true ],
       [[ RIGHT_PAREN, ')' ],
   ]
+
+  ECMA spec:
+  https://tc39.es/ecma262/#sec-punctuators
+  Look in chapter 12
 
     */
 
@@ -48,19 +52,29 @@ export class JSExprParser {
       [FUNCTION_CALL, /^([a-zA-Z_]+)(\()/],
 
       //operators: +, -, *, /, %, &, |, ^, !, &&, ||, =, !=, ==, !==, ===, >, <, >=, >=
+      // TODO: *=, |=, <<, etc (see https://github.com/lydell/js-tokens#punctuator)
       [OPERATOR, /^([\&]{1,2}|[\|]{1,2}|[\=]{2,3}|[\!][\=]{0,2}|[\>\<][\=]{0,1}|[\+\-\*\/\%\|\^])/],
 
       // boolean
-      [PRIMITIVE, /^(true|false)/, a => (a == 'true')],
+      [LITERAL, /^(true|false)/, a => (a == 'true')],
+
+      // null
+      [LITERAL, /^(null)/, a => null],
+
+      // undefined
+      [LITERAL, /^(undefined)/, a => undefined],
+
+      // NaN
+      [LITERAL, /^(NaN)/, a => NaN],
 
       // number
-      [PRIMITIVE, /^([-+]{0,1}(?:(?:[0-9]+[.][0-9]+)|(?:[0-9]+)))/, a => parseFloat(a)],
+      [LITERAL, /^([-+]{0,1}(?:(?:[0-9]+[.][0-9]+)|(?:[0-9]+)))/, a => parseFloat(a)],
 
       // string (single quotes)
-      [PRIMITIVE, /^'((?:(\\')|[^'])*)'/],
+      [LITERAL, /^'((?:(\\')|[^'])*)'/],
 
       // string (double quotes)
-      [PRIMITIVE, /^"((?:(\\")|[^"])*)"/],
+      [LITERAL, /^"((?:(\\")|[^"])*)"/],
 
       // variable
       [VARIABLE, /^([a-zA-Z_]+)/],
@@ -83,8 +97,11 @@ export class JSExprParser {
       // ternary
       [TERNARY, /^([\?])/],
 
-      // colon (part of ternary expression)
+      // colon (part of ternary expression or )
       [COLON, /^([\:])/],
+
+      // TODO:
+      // Object literals, array litterals
     ]
 
     var i=0;
@@ -127,7 +144,89 @@ export class JSExprParser {
     //return ExpressionParser.parseTokens(tokens);
   }
 
-  static parse(tokens) {
+  static precendence = [
+    '+',
+    '*'
+  ];
 
+  static infix = [
+    '+',
+    '*'
+  ];
+
+  static isInfix(token) {
+    return (JSExprParser.indexOf(token[1]) > -1);
+  }
+
+  static getPrecedence(token) {
+    return return JSExprParser.precendenceHash(token[1]);
+  }
+
+  static associativity(token) {
+    // TODO: implement.
+    // https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Operators/Operator_Precedence
+    return 'left';
+  }
+
+  static precendenceHash = {};
+
+  /**
+   *  Generate parse tree based on precedence
+   */
+  static parse1(tokens, lhs, minPrecedence, pointer = 0) {
+
+    let lookahead = tokens[pointer + 1];
+
+
+    let op = lookahead[1];
+    let precendence = JSExprParser.precendenceHash[op];
+    let rhs = lookahead[2];
+    console.log(op, precendence);
+
+    while (JSExprParser.isInfix(lookahead) && JSExprParser.getPrecedence(token) >= minPrecedence) {
+
+    }
+    // https://en.wikipedia.org/wiki/Operator-precedence_parser
+    /*
+    parse_expression()
+    return parse_expression_1(parse_primary(), 0)
+  parse_expression_1(lhs, min_precedence)
+    lookahead := peek next token
+    while lookahead is a binary operator whose precedence is >= min_precedence
+        op := lookahead
+        advance to next token
+        rhs := parse_primary ()
+        lookahead := peek next token
+        while lookahead is a binary operator whose precedence is greater
+                 than op's, or a right-associative operator
+                 whose precedence is equal to op's
+            rhs := parse_expression_1 (rhs, min_precedence + 1)
+            lookahead := peek next token
+        lhs := the result of applying op with operands lhs and rhs
+    return lhs
+    */
+
+
+  }
+
+
+  static parse(s) {
+    return JSExprParser.parseTokens(
+      JSExprParser.tokenize(s)
+    )
+  }
+
+  /**
+   *  Generate parse tree based on precedence
+   */
+  static parseTokens(tokens) {
+    JSExprParser.precendence.forEach(function(op, precendence) {
+      JSExprParser.precendenceHash[op] = precendence;
+    })
+    return JSExprParser.parse1(tokens, tokens[1], -1);
+    // https://en.wikipedia.org/wiki/Operator-precedence_parser
+    /*
+    return parse_expression_1(parse_primary(), 0)
+    */
   }
 }
