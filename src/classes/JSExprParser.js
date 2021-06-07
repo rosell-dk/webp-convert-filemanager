@@ -155,11 +155,11 @@ export class JSExprParser {
   ];
 
   static isInfix(token) {
-    return (JSExprParser.indexOf(token[1]) > -1);
+    return (JSExprParser.infix.indexOf(token[1]) > -1);
   }
 
   static getPrecedence(token) {
-    return return JSExprParser.precendenceHash(token[1]);
+    return JSExprParser.precendenceHash[token[1]];
   }
 
   static associativity(token) {
@@ -170,26 +170,67 @@ export class JSExprParser {
 
   static precendenceHash = {};
 
+  static pointer = 0;
+
   /**
    *  Generate parse tree based on precedence
+   *
    */
-  static parse1(tokens, lhs, minPrecedence, pointer = 0) {
+  static parse1(tokens, lhs, minPrecedence) {
 
-    let lookahead = tokens[pointer + 1];
+    // NO, it seems it is not necessary to create tree after all.
+    // We can convert to RPN without making tree.
+    // Check out "tokensToRpn" method in ExpressionParser - we can base our
+    // code on that code.
+    // (ternary will have to be added)
+
+    console.log('parse1');
+    console.log('lhs:', lhs[1]);
+    console.log('current:', tokens[JSExprParser.pointer][1]);
+
+    let lookahead = tokens[JSExprParser.pointer + 1];
+
+    while (
+      (JSExprParser.pointer<tokens.length) &&
+      JSExprParser.isInfix(lookahead) &&
+      (JSExprParser.getPrecedence(lookahead) >= minPrecedence)
+    ) {
+
+      console.log('lookahead:', lookahead[1])
 
 
-    let op = lookahead[1];
-    let precendence = JSExprParser.precendenceHash[op];
-    let rhs = lookahead[2];
-    console.log(op, precendence);
+      let op = lookahead;
+      JSExprParser.pointer++;
 
-    while (JSExprParser.isInfix(lookahead) && JSExprParser.getPrecedence(token) >= minPrecedence) {
+      if (JSExprParser.pointer+2 < tokens.length) {
+        let rhs = tokens[JSExprParser.pointer + 1];
+        console.log('rhs:', rhs[1])
+        JSExprParser.pointer++;
+
+        lookahead = tokens[JSExprParser.pointer + 1];
+
+        console.log('look:', lookahead[1])
+
+        while (
+          (JSExprParser.pointer<tokens.length) &&
+          JSExprParser.isInfix(lookahead) &&
+          (JSExprParser.getPrecedence(lookahead) > JSExprParser.getPrecedence(op))
+        ) {
+          console.log('entering inner loop')
+          rhs = JSExprParser.parse1(tokens, rhs, minPrecedence+1, JSExprParser.pointer+3)
+
+          JSExprParser.pointer++;
+          lookahead = tokens[JSExprParser.pointer];
+        }
+        lhs = {left: lhs, op: op, right: rhs};
+        //console.log(op, precendence);
+      }
 
     }
+    return lhs;
+
     // https://en.wikipedia.org/wiki/Operator-precedence_parser
     /*
-    parse_expression()
-    return parse_expression_1(parse_primary(), 0)
   parse_expression_1(lhs, min_precedence)
     lookahead := peek next token
     while lookahead is a binary operator whose precedence is >= min_precedence
@@ -211,6 +252,7 @@ export class JSExprParser {
 
 
   static parse(s) {
+    console.log('tokens', JSExprParser.tokenize(s));
     return JSExprParser.parseTokens(
       JSExprParser.tokenize(s)
     )
@@ -222,8 +264,9 @@ export class JSExprParser {
   static parseTokens(tokens) {
     JSExprParser.precendence.forEach(function(op, precendence) {
       JSExprParser.precendenceHash[op] = precendence;
-    })
-    return JSExprParser.parse1(tokens, tokens[1], -1);
+    });
+    JSExprParser.pointer = 0;
+    return JSExprParser.parse1(tokens, tokens[0], -1);
     // https://en.wikipedia.org/wiki/Operator-precedence_parser
     /*
     return parse_expression_1(parse_primary(), 0)
