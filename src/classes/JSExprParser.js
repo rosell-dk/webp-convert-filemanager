@@ -144,22 +144,43 @@ export class JSExprParser {
     //return ExpressionParser.parseTokens(tokens);
   }
 
+  // https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Operators/Operator_Precedence
   static precendence = [
+    '<',
     '+',
-    '*'
+    '*',
+    '/',
+    '!'
   ];
 
   static infix = [
     '+',
-    '*'
+    '*',
+    '<',
+  ];
+
+  static prefix = [
+    '!',
   ];
 
   static isInfix(token) {
     return (JSExprParser.infix.indexOf(token[1]) > -1);
   }
 
+  static isInfix1(token) {
+    return (JSExprParser.infix.indexOf(token) > -1);
+  }
+
+  static isPrefix(token) {
+    return (JSExprParser.prefix.indexOf(token) > -1);
+  }
+
   static getPrecedence(token) {
     return JSExprParser.precendenceHash[token[1]];
+  }
+
+  static getPrecedence1(token) {
+    return JSExprParser.precendenceHash[token];
   }
 
   static associativity(token) {
@@ -258,13 +279,16 @@ export class JSExprParser {
     )
   }
 
+  static createPrecendenceHash(tokens) {
+    JSExprParser.precendence.forEach(function(op, precendence) {
+      JSExprParser.precendenceHash[op] = precendence;
+    });
+  }
+
   /**
    *  Generate parse tree based on precedence
    */
   static parseTokens(tokens) {
-    JSExprParser.precendence.forEach(function(op, precendence) {
-      JSExprParser.precendenceHash[op] = precendence;
-    });
     JSExprParser.pointer = 0;
     return JSExprParser.parse1(tokens, tokens[0], -1);
     // https://en.wikipedia.org/wiki/Operator-precedence_parser
@@ -272,4 +296,95 @@ export class JSExprParser {
     return parse_expression_1(parse_primary(), 0)
     */
   }
+
+  /**
+   *  Reorder tokens to create reverse polish notation
+   *
+   */
+  static stringToRpn(s) {
+    let tokens = JSExprParser.tokenize(s);
+
+    // Strip off token meta
+    tokens = tokens.map(function(a) {return a[1]});
+
+
+    return JSExprParser.tokensToRpn(tokens);
+    // https://en.wikipedia.org/wiki/Operator-precedence_parser
+    /*
+    return parse_expression_1(parse_primary(), 0)
+    */
+  }
+
+  /**
+   *  Reorder tokens to create reverse polish notation
+   *
+   */
+  static tokensToRpn(tokens) {
+    console.log(tokens);
+    JSExprParser.createPrecendenceHash();
+
+    loop1:
+    for (let pointer=0; pointer<tokens.length; pointer++) {
+      let token = tokens[pointer];
+      if (JSExprParser.isInfix1(token) || JSExprParser.isPrefix(token)) {
+        let precedence = JSExprParser.getPrecedence1(token);
+
+
+        let delta = 0;
+        let nextToken = '';
+
+
+        loop2:
+        //for (let delta=pointer+1; delta<tokens.length; delta++) {
+
+        while (delta+pointer<tokens.length-1) {
+          nextToken = tokens[pointer+delta+1];
+          //console.log('next:', nextToken, 'delta:', delta);
+          if (!(JSExprParser.isInfix1(nextToken) || JSExprParser.isPrefix(nextToken))) {
+            delta++;
+            continue loop2;
+          }
+
+          if (precedence < JSExprParser.getPrecedence1(nextToken)) {
+            delta++;
+            continue loop2;
+          }
+          break;
+        }
+        //console.log(delta);
+        if (delta > 0 ) {
+          console.log('moving:', token, delta, nextToken);
+
+          // delete
+          let deleted = tokens.splice(pointer, 1);
+console.log('deleted', deleted[0]);
+          // insert
+          tokens.splice(pointer+delta, 0, deleted[0]);
+          console.log('after move:', tokens);
+
+          // move pointer one back, because we have just deleted the token at the place,
+          // so the next token is now at pointer
+          pointer--;
+        }
+
+
+        /*
+        for (let delta=pointer+1; delta<tokens.length; delta++) {
+          let nextToken = tokens[delta];
+          console.log('2', nextToken, JSExprParser.getPrecedence1(nextToken))
+          if (JSExprParser.isInfix1(nextToken)) {
+            console.log('HELLE', precedence, )
+          }
+        }*/
+
+//        console.log(token);
+      }
+    }
+    return tokens;
+    // https://en.wikipedia.org/wiki/Operator-precedence_parser
+    /*
+    return parse_expression_1(parse_primary(), 0)
+    */
+  }
+
 }
