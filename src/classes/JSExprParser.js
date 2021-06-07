@@ -387,4 +387,32 @@ console.log('deleted', deleted[0]);
     */
   }
 
+  /**
+   *
+   *
+   */
+  static evaluateRpn(rpnTokens) {
+    let stack = [];
+    let a,b;
+    for (let i=0; i<rpnTokens.length; i++) {
+      let token = rpnTokens[i];
+      switch (token) {
+        case '+':
+          a=stack.pop();
+          b=stack.pop();
+          stack.push(a+b);
+          break;
+        case '*':
+          a=stack.pop();
+          b=stack.pop();
+          stack.push(a*b);
+          break;
+        default:
+          stack.push(token)
+      }
+    }
+    console.log('result', stack[0]);
+    return stack[0];
+  }
+
 }
