@@ -1,4 +1,5 @@
 export const FUNCTION_CALL = -1;
+export const FUNCTION_CALL_NO_ARGS = -2;
 export const LITERAL = -4;
 export const VARIABLE = -5;
 export const LEFT_PAREN = -6;
@@ -47,7 +48,10 @@ export class JSExprParser {
     // PS: The token value will be set to the first match
     var regExes = [
 
-      // function start
+      // function call without arguments
+      [FUNCTION_CALL_NO_ARGS, /^([a-zA-Z_]+)\(\)/],
+
+      // function call
       [FUNCTION_CALL, /^([a-zA-Z_]+)(\()/],
 
       //operators: +, -, *, /, %, &, |, ^, !, &&, ||, =, !=, ==, !==, ===, >, <, >=, >=, **, ??, ?, <<, >>, >>>, ~ and comma (,)
@@ -125,6 +129,7 @@ export class JSExprParser {
         if (re.test(meal)) {
           var result = re.exec(meal);
           if (result != null) {
+            //console.log('regex result:', result);
             let wholeMatch = result[0];
             let tokenValue = result[1];
             let eat = wholeMatch.length;
@@ -138,6 +143,7 @@ export class JSExprParser {
             if (arr[2]) {
               tokenValue = arr[2](tokenValue);
             }
+            //console.log('got:' + tokenValue + '(type:' + arr[0] + '). meal is now:' + meal);
             tokens.push([arr[0], tokenValue]);
             continue mainloop;
           }
@@ -175,6 +181,14 @@ export class JSExprParser {
   ];
 
   static ops = {
+    ',': (a,b) => {
+      if (a.forEach) {
+        a.push(b);
+        return a;
+      } else {
+        return [a,b];
+      }
+    },
     '??': (a, b) => a ?? b,
     '||': (a, b) => a || b,
     '&&': (a, b) => a && b,
@@ -199,8 +213,16 @@ export class JSExprParser {
     '%': (a, b) => a % b,
     '**': (a, b) => a ** b,
     '!': (a) => !a,
-    '~': (a) => ~a
+    '~': (a) => ~a,
   };
+
+  static functions = {
+    'inArray': (arr, value) => b.inArray(a),
+  }
+
+  static addFunction(functionName, f) {
+    JSExprParser.functions[functionName] = f;
+  }
 
   static isInfix(token) {
     return (token[0] == INFIX_OP);
@@ -210,8 +232,28 @@ export class JSExprParser {
     return (token[0] == PREFIX_OP);
   }
 
+  static isOperator(token) {
+    return ((token[0] == INFIX_OP) || (token[0] == PREFIX_OP));
+  }
+
+  static isFunctionCall(token) {
+    return ((token[0] == FUNCTION_CALL) || (token[0] == FUNCTION_CALL_NO_ARGS));
+  }
+
+  static isOperatorOrFunctionCall(token) {
+    return JSExprParser.isOperator(token) || JSExprParser.isFunctionCall(token);
+  }
+
   static getPrecedence(token) {
-    return JSExprParser.precendenceHash[token[1]];
+    switch (token[0]) {
+      case FUNCTION_CALL:
+        return 100;
+      case INFIX_OP:
+      case PREFIX_OP:
+        return JSExprParser.precendenceHash[token[1]];
+      case LITERAL:
+        return -1
+    }
   }
 
   static isRightAssociative(token) {
@@ -273,7 +315,8 @@ export class JSExprParser {
    *
    */
   static tokensToRpn(tokens) {
-    //console.log(tokens);
+    //console.log('tokensToRpn', tokens.map(function(a) {return a[1]}));
+    //console.log('tokensToRpn', tokens);
     JSExprParser.createPrecendenceHash();
 
 
@@ -282,10 +325,10 @@ export class JSExprParser {
     loop1:
     for (let pointer=0; pointer<tokens.length; pointer++) {
       let token = tokens[pointer];
-      //console.log('token:', token);
+      console.log('token:', token);
 
       // Move operators right. [1,'+',2] => [1, 2, '+']'
-      if (JSExprParser.isInfix(token) || JSExprParser.isPrefix(token)) {
+      if (JSExprParser.isOperatorOrFunctionCall(token)) {
         let precedence = JSExprParser.getPrecedence(token);
 
 
@@ -310,9 +353,8 @@ export class JSExprParser {
 
         loop2:
         for (delta=0; (pointer+delta)<tokens.length-1; delta++) {
-        //while (delta+pointer<tokens.length-1) {
           nextToken = tokens[pointer+delta+1];
-          //console.log('examining:', nextToken, 'parenDepth:', parenDepth);
+          console.log('examining:', nextToken, 'parenDepth:', parenDepth);
           if (nextToken[1] == ')') {
             parenDepth--;
             if (parenDepth < 0) {
@@ -331,10 +373,14 @@ export class JSExprParser {
           if (nextToken == undefined) {
             console.log('Warning: ran too long. This should not happen');
             break;
-          } else if (!(JSExprParser.isInfix(nextToken) || JSExprParser.isPrefix(nextToken))) {
+          }
+
+          if (!JSExprParser.isOperatorOrFunctionCall(nextToken)) {
+            console.log(nextToken[0] + ' is not op, neather function call');
             continue;
           }
           let precendenceNext = JSExprParser.getPrecedence(nextToken);
+          console.log('precedences:', precedence, precendenceNext)
 
           if (precedence < precendenceNext) {
             continue;
@@ -353,17 +399,16 @@ export class JSExprParser {
         }
 
         if (delta > 0 ) {
-          //console.log('moving:', token[1], "after", nextToken[1], "delta:", delta);
+          console.log('moving:', token[1], "after", nextToken[1], "delta:", delta);
 
           // delete
           let deleted = tokens.splice(pointer, 1);
-          //console.log('tokensMoved:', tokensMoved, typeof tokensMoved)
           tokensMoved.push(deleted[0]);
 
           //console.log('deleted', deleted[0]);
           // insert
           tokens.splice(pointer+delta, 0, deleted[0]);
-          //console.log('after move:', tokens.map(function(a) {return a[1]}));
+          console.log('after move:', tokens.map(function(a) {return a[1]}));
 
           // move pointer one back, because we have just deleted the token at the place,
           // so the next token is now at pointer
@@ -384,6 +429,7 @@ export class JSExprParser {
    *
    */
   static evaluateRpn(rpnTokens) {
+    console.log('evaluateRpn', rpnTokens);
     //console.log('evaluateRpn', rpnTokens.map(function(a) {return a[1]}));
     let stack = [];
     let a,b;
@@ -404,10 +450,24 @@ export class JSExprParser {
         let result = JSExprParser.ops[tokenValue](a);
         stack.push(result);
         //console.log('Performed prefix op:', a, tokenValue, 'result:', result, 'stack:', stack);
-      }
+      } else if (JSExprParser.isFunctionCall(token)) {
+        let functionName = token[1];
+        if (token[0] == FUNCTION_CALL_NO_ARGS) {
+          stack.push(JSExprParser.functions[functionName]());
+        } else {
+          let popped = stack.pop();
+          let arr = [];
+          if (Array.isArray(popped)) {
+            arr = popped;
+          } else {
+            arr.push(popped);
+          }
+          stack.push(JSExprParser.functions[functionName](... arr));
 
+        }
+      }
     }
-    //console.log('result', stack);
+    console.log('result', stack);
     return stack[0];
   }
 
