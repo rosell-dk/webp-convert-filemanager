@@ -1,5 +1,5 @@
 
-import { JSExprParser, FUNCTION_CALL, LITERAL, OPERATOR, VARIABLE, LEFT_PAREN, RIGHT_PAREN, DOT, PROPERTY_ACCESSOR_LEFT, PROPERTY_ACCESSOR_RIGHT, TERNARY, COLON }  from './classes/JSExprParser.js'
+import { JSExprParser, FUNCTION_CALL, LITERAL, OPERATOR, VARIABLE, LEFT_PAREN, RIGHT_PAREN, DOT, PROPERTY_ACCESSOR_LEFT, PROPERTY_ACCESSOR_RIGHT }  from './classes/JSExprParser.js'
 
 //console.log(JSExprParser.tokenize('equals(6,true)'));
 
@@ -7,6 +7,11 @@ import { JSExprParser, FUNCTION_CALL, LITERAL, OPERATOR, VARIABLE, LEFT_PAREN, R
 function testTokenizeResult(s, expectedResult) {
   var result = JSExprParser.tokenize(s);
   if (JSON.stringify(result) !== JSON.stringify(expectedResult)) {
+    throw new Error(
+      'TOKENIZER TEST FAILED on "' + s + '"' +
+      'expected: ' + JSON.stringify(expectedResult) + '. ' +
+      'got: ' + JSON.stringify(result)
+    );
     console.log('TEST FAILED');
     console.log('expect: ' + JSON.stringify(expectedResult));
     console.log('result: ' + JSON.stringify(result));
@@ -16,7 +21,8 @@ function testTokenizeResultNot(s, expectedResult) {
 }
 
 function testRpnResult(s, expectedResult) {
-  let result = JSExprParser.stringToRpn(s);
+  let tokens = JSExprParser.stringToRpn(s);
+  let result = tokens.map(function(a) {return a[1]}); // strip off token type
   if (JSON.stringify(result) !== JSON.stringify(expectedResult)) {
     throw new Error(
       'RPN TEST FAILED. ' +
@@ -31,7 +37,7 @@ function testEval(s, expectedResult) {
   let result = JSExprParser.evaluateRpn(rpn);
   if (result != expectedResult) {
     throw new Error(
-      'EVAL TEST FAILED. ' +
+      'EVAL TEST FAILED ' +
       'expected: ' + JSON.stringify(expectedResult) + '. ' +
       'got: ' + JSON.stringify(result)
     );
@@ -67,24 +73,44 @@ testTokenizeResult('doit(3)', [[FUNCTION_CALL,'doit'],[LEFT_PAREN,'('],[LITERAL,
 testTokenizeResult('name', [[VARIABLE,'name']]);
 testTokenizeResult('name.firstName', [[VARIABLE,'name'],[DOT,'.'],[VARIABLE,'firstName']]);
 testTokenizeResult('name["firstName"]', [[VARIABLE,'name'],[PROPERTY_ACCESSOR_LEFT,'['],[LITERAL,'firstName'],[PROPERTY_ACCESSOR_RIGHT,']']]);
-testTokenizeResult('?', [[TERNARY, '?']]);
-testTokenizeResult(':', [[COLON, ':']]);
+testTokenizeResult('?', [[OPERATOR, '?']]);
+testTokenizeResult('!', [[OPERATOR, '!']]);
+//testTokenizeResult(':', [[COLON, ':']]);
 testTokenizeResult('null', [[LITERAL, null]]);
 testTokenizeResult('undefined', [[LITERAL, undefined]]);
 testTokenizeResult('NaN', [[LITERAL, NaN]]);
 
 
-/*
 testRpnResult('1+2', [1,2,'+']);
 testRpnResult('1+(2+3)*4', [1,2,3,'+',4,'*','+']);
-*/
-//testRpnResult('1+2-3', [1,2,'+',3,'-']);    // left-right associativity
+testRpnResult('1+2-3', [1,2,'+',3,'-']);    // left-right associativity
 testRpnResult('1**2**3', [1,2,3,'**','**']);    // right-left associativity
+testRpnResult('!true', [true,'!']);    // right-left associativity
 
-//testRpnResult('(1>2<3)>=4', [1,2,3,'<','>',4,'>=']);    // right-left associativity
 
-//testEval('1+(2+3)*4', 21);
-//testEval('2**3**2', 21);
+testEval('1+(2+3)*4', 21);
+testEval('2*3*2', 12);
+testEval('2**3', 8);
+testEval('3%2', 1);
+testEval('4/2', 2);
+testEval('6/3%2', 0);
+testEval('true==false', false);
+testEval('true!=false', true);
+testEval('true===true', true);
+testEval('8===8===true', true);
+testEval('true!==true', false);
+testEval('null??2', 2);
+testEval('true||false&&true', true);
+testEval('2|1', 3);
+testEval('2&1', 0);
+testEval('12^9', 5);
+
+testEval('2<<1', 4);
+testEval('2>>1', 1);
+testEval('2>>>1', 1);
+testEval('2>2', false);
+testEval('2>=2', true);
+testEval('2**3**2', 512);
 
 //console.log(JSExprParser.parse('1+2*3'));
 //let rpn = JSExprParser.stringToRpn('1+(2+3)*4')

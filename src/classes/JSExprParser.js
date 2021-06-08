@@ -7,8 +7,6 @@ export const RIGHT_PAREN = -7;
 export const DOT = -8;
 export const PROPERTY_ACCESSOR_LEFT = -9;
 export const PROPERTY_ACCESSOR_RIGHT = -10;
-export const TERNARY = -11;
-export const COLON = -12;
 
 export class JSExprParser {
 
@@ -51,9 +49,9 @@ export class JSExprParser {
       // function start
       [FUNCTION_CALL, /^([a-zA-Z_]+)(\()/],
 
-      //operators: +, -, *, /, %, &, |, ^, !, &&, ||, =, !=, ==, !==, ===, >, <, >=, >=, **
+      //operators: +, -, *, /, %, &, |, ^, !, &&, ||, =, !=, ==, !==, ===, >, <, >=, >=, **, ??, ?, <<, >>, >>>
       // TODO: *=, |=, <<, etc (see https://github.com/lydell/js-tokens#punctuator)
-      [OPERATOR, /^([\*]{1,2}|[\&]{1,2}|[\|]{1,2}|[\=]{2,3}|[\!][\=]{0,2}|[\>\<][\=]{0,1}|[\+\-\/\%\|\^])/],
+      [OPERATOR, /^([\<]{2}|[\>]{2,3}|[\*]{1,2}|[\?]{1,2}|[\&]{1,2}|[\|]{1,2}|[\=]{2,3}|[\!][\=]{0,2}|[\>\<][\=]|[\+\-\/\%\|\^\>\<\=])/],
 
       // boolean
       [LITERAL, /^(true|false)/, a => (a == 'true')],
@@ -95,10 +93,10 @@ export class JSExprParser {
       [PROPERTY_ACCESSOR_RIGHT, /^([\]])/],
 
       // ternary
-      [TERNARY, /^([\?])/],
+      //[TERNARY, /^([\?])/],
 
       // colon (part of ternary expression or )
-      [COLON, /^([\:])/],
+      //[COLON, /^([\:])/],
 
       // TODO:
       // Object literals, array litterals
@@ -190,23 +188,48 @@ export class JSExprParser {
     '!', '~'
   ];
 
+  static ops = {
+    '??': (a, b) => a ?? b,
+    '||': (a, b) => a || b,
+    '&&': (a, b) => a && b,
+    '|': (a, b) => a | b,
+    '^': (a, b) => a ^ b,
+    '&': (a, b) => a & b,
+    '==': (a, b) => a == b,
+    '!=': (a, b) => a != b,
+    '===': (a, b) => a === b,
+    '!==': (a, b) => a !== b,
+    '<': (a, b) => a < b,
+    '>': (a, b) => a > b,
+    '<=': (a, b) => a <= b,
+    '>=': (a, b) => a >= b,
+    '<<': (a, b) => a << b,
+    '>>': (a, b) => a >> b,
+    '>>>': (a, b) => a >>> b,
+    '+': (a, b) => a + b,
+    '-': (a, b) => a - b,
+    '*': (a, b) => a * b,
+    '/': (a, b) => a / b,
+    '%': (a, b) => a % b,
+    '**': (a, b) => a ** b,
+  };
 
   static isInfix(token) {
-    return (JSExprParser.infix.indexOf(token) > -1);
+    return (JSExprParser.infix.indexOf(token[1]) > -1);
   }
 
   static isPrefix(token) {
-    return (JSExprParser.prefix.indexOf(token) > -1);
+    return (JSExprParser.prefix.indexOf(token[1]) > -1);
   }
 
   static getPrecedence(token) {
-    return JSExprParser.precendenceHash[token];
+    return JSExprParser.precendenceHash[token[1]];
   }
 
   static isRightAssociative(token) {
     // TODO: implement.
     // https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Operators/Operator_Precedence
-    return JSExprParser.rightAssociative.indexOf(token) > -1;
+    return JSExprParser.rightAssociative.indexOf(token[1]) > -1;
   }
 
   static precendenceHash = {};
@@ -243,7 +266,7 @@ export class JSExprParser {
     let tokens = JSExprParser.tokenize(s);
 
     // Strip off token meta
-    tokens = tokens.map(function(a) {return a[1]});
+    //tokens = tokens.map(function(a) {return a[1]});
 
 
     return JSExprParser.tokensToRpn(tokens);
@@ -258,7 +281,7 @@ export class JSExprParser {
    *
    */
   static tokensToRpn(tokens) {
-    console.log(tokens);
+    //console.log(tokens);
     JSExprParser.createPrecendenceHash();
 
 
@@ -267,7 +290,7 @@ export class JSExprParser {
     loop1:
     for (let pointer=0; pointer<tokens.length; pointer++) {
       let token = tokens[pointer];
-      console.log('token:', token);
+      //console.log('token:', token);
 
       // Move operators right. [1,'+',2] => [1, 2, '+']'
       if (JSExprParser.isInfix(token) || JSExprParser.isPrefix(token)) {
@@ -297,15 +320,15 @@ export class JSExprParser {
         for (delta=0; (pointer+delta)<tokens.length-1; delta++) {
         //while (delta+pointer<tokens.length-1) {
           nextToken = tokens[pointer+delta+1];
-          console.log('examining:', nextToken, 'parenDepth:', parenDepth);
-          if (nextToken == ')') {
+          //console.log('examining:', nextToken, 'parenDepth:', parenDepth);
+          if (nextToken[1] == ')') {
             parenDepth--;
             if (parenDepth < 0) {
               break;
             } else {
               continue;
             }
-          } else if (nextToken == '(') {
+          } else if (nextToken[1] == '(') {
             parenDepth++;
             continue;
           }
@@ -338,17 +361,17 @@ export class JSExprParser {
         }
         //console.log(delta);
         if (delta > 0 ) {
-          console.log('moving:', token, "after", nextToken, "delta:", delta);
+          //console.log('moving:', token[1], "after", nextToken[1], "delta:", delta);
 
           // delete
           let deleted = tokens.splice(pointer, 1);
-          console.log('tokensMoved:', tokensMoved, typeof tokensMoved)
-          tokensMoved.push(deleted);
+          //console.log('tokensMoved:', tokensMoved, typeof tokensMoved)
+          tokensMoved.push(deleted[0]);
 
           //console.log('deleted', deleted[0]);
           // insert
           tokens.splice(pointer+delta, 0, deleted[0]);
-          console.log('after move:', tokens);
+          //console.log('after move:', tokens.map(function(a) {return a[1]}));
 
           // move pointer one back, because we have just deleted the token at the place,
           // so the next token is now at pointer
@@ -372,8 +395,8 @@ export class JSExprParser {
     }
 
     // remove paren
-    tokens = tokens.filter(a => !((a=='(')||(a==')')));
-    console.log('parens removed:', tokens);
+    tokens = tokens.filter(a => !((a[1]=='(')||(a[1]==')')));
+    //console.log('parens removed:', tokens.map(function(a) {return a[1]}));
 
     return tokens;
     // https://en.wikipedia.org/wiki/Operator-precedence_parser
@@ -387,31 +410,23 @@ export class JSExprParser {
    *
    */
   static evaluateRpn(rpnTokens) {
-    console.log('evaluateRpn', rpnTokens);
+    console.log('evaluateRpn', rpnTokens.map(function(a) {return a[1]}));
     let stack = [];
     let a,b;
     for (let i=0; i<rpnTokens.length; i++) {
       let token = rpnTokens[i];
-      switch (token) {
-        case '+':
-          a=stack.pop();
-          b=stack.pop();
-          stack.push(a+b);
-          break;
-        case '-':
-          a=stack.pop();
-          b=stack.pop();
-          console.log(a, 'minus', b);
-          stack.push(a-b);
-          break;
-        case '*':
-          a=stack.pop();
-          b=stack.pop();
-          stack.push(a*b);
-          break;
-        default:
-          stack.push(token)
+      let tokenType = token[0];
+      let tokenValue = token[1];
+      if (JSExprParser.isInfix(token)) {
+        b=stack.pop();
+        a=stack.pop();
+        let result = JSExprParser.ops[tokenValue](a, b);
+        stack.push(result);
+        console.log('Performed infix op:', a, b, tokenValue, 'result:', result, 'stack:', stack);
+      } else if (tokenType == LITERAL){
+        stack.push(tokenValue)
       }
+
     }
     console.log('result', stack);
     return stack[0];
