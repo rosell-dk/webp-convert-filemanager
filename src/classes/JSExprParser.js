@@ -49,7 +49,7 @@ export class JSExprParser {
     var regExes = [
 
       // function call without arguments
-      [FUNCTION_CALL_NO_ARGS, /^([a-zA-Z_]+)\(\)/],
+      [FUNCTION_CALL_NO_ARGS, /^([a-zA-Z_]+)\(\s*\)/],
 
       // function call
       [FUNCTION_CALL, /^([a-zA-Z_]+)(\()/],

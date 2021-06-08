@@ -102,6 +102,7 @@ function runTests() {
   testTokenizeResult('true-1', [[LITERAL,true],[INFIX_OP, '-'],[LITERAL, 1]]);
   testTokenizeResult('7*4', [[LITERAL,7],[INFIX_OP, '*'],[LITERAL, 4]]);
   testTokenizeResult('7&&&4', [[LITERAL,7],[INFIX_OP, '&&'],[INFIX_OP, '&'],[LITERAL, 4]]);
+  testTokenizeResult('doit( )', [[FUNCTION_CALL_NO_ARGS, 'doit']]);
 
 
   testRpnResult('1+2', [1,2,'+']);
