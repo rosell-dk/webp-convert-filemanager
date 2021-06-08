@@ -49,9 +49,9 @@ export class JSExprParser {
       // function start
       [FUNCTION_CALL, /^([a-zA-Z_]+)(\()/],
 
-      //operators: +, -, *, /, %, &, |, ^, !, &&, ||, =, !=, ==, !==, ===, >, <, >=, >=, **, ??, ?, <<, >>, >>>
+      //operators: +, -, *, /, %, &, |, ^, !, &&, ||, =, !=, ==, !==, ===, >, <, >=, >=, **, ??, ?, <<, >>, >>>, ~
       // TODO: *=, |=, <<, etc (see https://github.com/lydell/js-tokens#punctuator)
-      [OPERATOR, /^([\<]{2}|[\>]{2,3}|[\*]{1,2}|[\?]{1,2}|[\&]{1,2}|[\|]{1,2}|[\=]{2,3}|[\!][\=]{0,2}|[\>\<][\=]|[\+\-\/\%\|\^\>\<\=])/],
+      [OPERATOR, /^([\<]{2}|[\>]{2,3}|[\*]{1,2}|[\?]{1,2}|[\&]{1,2}|[\|]{1,2}|[\=]{2,3}|[\!][\=]{0,2}|[\>\<][\=]|[\+\-\/\%\|\^\>\<\=\~])/],
 
       // boolean
       [LITERAL, /^(true|false)/, a => (a == 'true')],
@@ -212,6 +212,8 @@ export class JSExprParser {
     '/': (a, b) => a / b,
     '%': (a, b) => a % b,
     '**': (a, b) => a ** b,
+    '!': (a) => !a,
+    '~': (a) => ~a
   };
 
   static isInfix(token) {
@@ -417,14 +419,19 @@ export class JSExprParser {
       let token = rpnTokens[i];
       let tokenType = token[0];
       let tokenValue = token[1];
-      if (JSExprParser.isInfix(token)) {
+      if (tokenType == LITERAL) {
+        stack.push(tokenValue)
+      } else if (JSExprParser.isInfix(token)) {
         b=stack.pop();
         a=stack.pop();
         let result = JSExprParser.ops[tokenValue](a, b);
         stack.push(result);
         console.log('Performed infix op:', a, b, tokenValue, 'result:', result, 'stack:', stack);
-      } else if (tokenType == LITERAL){
-        stack.push(tokenValue)
+      } else if (JSExprParser.isPrefix(token)) {
+        a=stack.pop();
+        let result = JSExprParser.ops[tokenValue](a);
+        stack.push(result);
+        console.log('Performed prefix op:', a, tokenValue, 'result:', result, 'stack:', stack);
       }
 
     }

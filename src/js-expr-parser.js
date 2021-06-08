@@ -75,6 +75,7 @@ testTokenizeResult('name.firstName', [[VARIABLE,'name'],[DOT,'.'],[VARIABLE,'fir
 testTokenizeResult('name["firstName"]', [[VARIABLE,'name'],[PROPERTY_ACCESSOR_LEFT,'['],[LITERAL,'firstName'],[PROPERTY_ACCESSOR_RIGHT,']']]);
 testTokenizeResult('?', [[OPERATOR, '?']]);
 testTokenizeResult('!', [[OPERATOR, '!']]);
+testTokenizeResult('~', [[OPERATOR, '~']]);
 //testTokenizeResult(':', [[COLON, ':']]);
 testTokenizeResult('null', [[LITERAL, null]]);
 testTokenizeResult('undefined', [[LITERAL, undefined]]);
@@ -87,7 +88,7 @@ testRpnResult('1+2-3', [1,2,'+',3,'-']);    // left-right associativity
 testRpnResult('1**2**3', [1,2,3,'**','**']);    // right-left associativity
 testRpnResult('!true', [true,'!']);    // right-left associativity
 
-
+/*
 testEval('1+(2+3)*4', 21);
 testEval('2*3*2', 12);
 testEval('2**3', 8);
@@ -111,6 +112,9 @@ testEval('2>>>1', 1);
 testEval('2>2', false);
 testEval('2>=2', true);
 testEval('2**3**2', 512);
+*/
+testEval('!false', true);
+testEval('~1', -2);
 
 //console.log(JSExprParser.parse('1+2*3'));
 //let rpn = JSExprParser.stringToRpn('1+(2+3)*4')
