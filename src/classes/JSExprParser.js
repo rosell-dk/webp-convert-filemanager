@@ -323,9 +323,13 @@ export class JSExprParser {
     console.log(tokens);
     JSExprParser.createPrecendenceHash();
 
+    let tokensMoved = 0;
     loop1:
     for (let pointer=0; pointer<tokens.length; pointer++) {
       let token = tokens[pointer];
+      console.log('token:', token);
+
+      // Move operators right. [1,'+',2] => [1, 2, '+']'
       if (JSExprParser.isInfix1(token) || JSExprParser.isPrefix(token)) {
         let precedence = JSExprParser.getPrecedence1(token);
 
@@ -334,33 +338,58 @@ export class JSExprParser {
         let nextToken = '';
 
 
-        loop2:
-        //for (let delta=pointer+1; delta<tokens.length; delta++) {
+        // - Do not move past operators with lower precedence, but move past operators
+        //     with highter precendence.
+        //     ie: 1+2*3=4. First + must be moved past the *, but not past the =.
+        // - Do not move past more closing paren than opening paren. And when opening paren
+        //     > closing, move past it all.
+        //     ie: (1+2)*3. Plus is only moved to closing paren
+        //     ie: (1+(2=3)*4)*5. Plus is moved after 4 - passing the "="
 
-        while (delta+pointer<tokens.length-1) {
+        let parenDepth = 0;
+
+        loop2:
+        for (delta=0; (pointer+delta)<tokens.length-1; delta++) {
+        //while (delta+pointer<tokens.length-1) {
           nextToken = tokens[pointer+delta+1];
-          //console.log('next:', nextToken, 'delta:', delta);
-          if (!(JSExprParser.isInfix1(nextToken) || JSExprParser.isPrefix(nextToken))) {
-            delta++;
-            continue loop2;
+          console.log('examining:', nextToken, 'parenDepth:', parenDepth);
+          if (nextToken == ')') {
+            parenDepth--;
+            if (parenDepth < 0) {
+              break;
+            } else {
+              continue;
+            }
+          } else if (nextToken == '(') {
+            parenDepth++;
+            continue;
+          }
+          if (parenDepth>0) {
+            continue;
           }
 
-          if (precedence < JSExprParser.getPrecedence1(nextToken)) {
-            delta++;
-            continue loop2;
+          if (nextToken == undefined) {
+            console.log('Warning: ran too long. This should not happen');
+            break;
+          } else if (!(JSExprParser.isInfix1(nextToken) || JSExprParser.isPrefix(nextToken))) {
+            continue;
+          } else if (precedence < JSExprParser.getPrecedence1(nextToken)) {
+            continue;
           }
           break;
         }
         //console.log(delta);
         if (delta > 0 ) {
-          console.log('moving:', token, delta, nextToken);
+          console.log('moving:', token, "after", nextToken, "delta:", delta);
 
           // delete
           let deleted = tokens.splice(pointer, 1);
-console.log('deleted', deleted[0]);
+          //console.log('deleted', deleted[0]);
           // insert
           tokens.splice(pointer+delta, 0, deleted[0]);
           console.log('after move:', tokens);
+
+          tokensMoved++;
 
           // move pointer one back, because we have just deleted the token at the place,
           // so the next token is now at pointer
@@ -379,7 +408,14 @@ console.log('deleted', deleted[0]);
 
 //        console.log(token);
       }
+
+
     }
+
+    // remove paren
+    tokens = tokens.filter(a => !((a=='(')||(a==')')));
+    console.log('parens removed:', tokens);
+
     return tokens;
     // https://en.wikipedia.org/wiki/Operator-precedence_parser
     /*
