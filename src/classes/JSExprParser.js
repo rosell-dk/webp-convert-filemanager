@@ -247,6 +247,7 @@ export class JSExprParser {
   static getPrecedence(token) {
     switch (token[0]) {
       case FUNCTION_CALL:
+      case FUNCTION_CALL_NO_ARGS:
         return 100;
       case INFIX_OP:
       case PREFIX_OP:
@@ -325,7 +326,7 @@ export class JSExprParser {
     loop1:
     for (let pointer=0; pointer<tokens.length; pointer++) {
       let token = tokens[pointer];
-      console.log('token:', token);
+      //console.log('token:', token);
 
       // Move operators right. [1,'+',2] => [1, 2, '+']'
       if (JSExprParser.isOperatorOrFunctionCall(token)) {
@@ -354,7 +355,7 @@ export class JSExprParser {
         loop2:
         for (delta=0; (pointer+delta)<tokens.length-1; delta++) {
           nextToken = tokens[pointer+delta+1];
-          console.log('examining:', nextToken, 'parenDepth:', parenDepth);
+          //console.log('examining:', nextToken, 'parenDepth:', parenDepth);
           if (nextToken[1] == ')') {
             parenDepth--;
             if (parenDepth < 0) {
@@ -376,11 +377,10 @@ export class JSExprParser {
           }
 
           if (!JSExprParser.isOperatorOrFunctionCall(nextToken)) {
-            console.log(nextToken[0] + ' is not op, neather function call');
             continue;
           }
           let precendenceNext = JSExprParser.getPrecedence(nextToken);
-          console.log('precedences:', precedence, precendenceNext)
+          //console.log('precedences:', precedence, precendenceNext)
 
           if (precedence < precendenceNext) {
             continue;
@@ -399,7 +399,7 @@ export class JSExprParser {
         }
 
         if (delta > 0 ) {
-          console.log('moving:', token[1], "after", nextToken[1], "delta:", delta);
+          //console.log('moving:', token[1], "after", nextToken[1], "delta:", delta);
 
           // delete
           let deleted = tokens.splice(pointer, 1);
@@ -408,7 +408,7 @@ export class JSExprParser {
           //console.log('deleted', deleted[0]);
           // insert
           tokens.splice(pointer+delta, 0, deleted[0]);
-          console.log('after move:', tokens.map(function(a) {return a[1]}));
+          //console.log('after move:', tokens.map(function(a) {return a[1]}));
 
           // move pointer one back, because we have just deleted the token at the place,
           // so the next token is now at pointer
@@ -429,7 +429,7 @@ export class JSExprParser {
    *
    */
   static evaluateRpn(rpnTokens) {
-    console.log('evaluateRpn', rpnTokens);
+    //console.log('evaluateRpn', rpnTokens);
     //console.log('evaluateRpn', rpnTokens.map(function(a) {return a[1]}));
     let stack = [];
     let a,b;
@@ -467,7 +467,7 @@ export class JSExprParser {
         }
       }
     }
-    console.log('result', stack);
+    //console.log('result', stack);
     return stack[0];
   }
 

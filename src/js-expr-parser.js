@@ -51,17 +51,7 @@ function testEval(s, expectedResult) {
 }
 
 function runTests() {
-//  testRpnResult('doit(3)', [3,'doit']);
-//  testRpnResult('doit()', ['doit']);
-  testRpnResult('7+doit()', ['doit', 7, '+']);
-  return;
 
-  //JSExprParser.addFunction('seven', () => 7);
-  //testEval('seven()', 7);
-  //testEval('7+seven()', 14);
-
-
-  /*
   // literals
   testTokenizeResult('""', [[LITERAL,'']]);
   testTokenizeResult('null', [[LITERAL, null]]);
@@ -100,7 +90,7 @@ function runTests() {
 
   testTokenizeResult('(', [[LEFT_PAREN,'(']]);
   testTokenizeResult(')', [[RIGHT_PAREN,')']]);
-  */
+
   testTokenizeResult('doit()', [[FUNCTION_CALL_NO_ARGS, 'doit']]);
 
   testTokenizeResult('doit(3)', [[FUNCTION_CALL,'doit'],[LEFT_PAREN,'('],[LITERAL,3],[RIGHT_PAREN, ')']]);
@@ -122,6 +112,10 @@ function runTests() {
   //testRpnResult('!true', [true,'!']);    // right-left associativity
   testRpnResult('!(true)', [true,'!']);    // right-left associativity
   //testRpnResult('doit(3)', [3,'doit']);
+  testRpnResult('doit(3)', [3,'doit']);
+  testRpnResult('doit()', ['doit']);
+  testRpnResult('7+doit(8)', [7, 8, 'doit', '+']);
+  testRpnResult('7+doit()', [7, 'doit', '+']);
 
   testEval('1,2', [1,2]);
   testEval('1,2,3', [1,2,3]);
@@ -151,13 +145,18 @@ function runTests() {
 
   testEval('!false', true);
   testEval('~1', -2);
+
   JSExprParser.addFunction('equals', (a, b) => (a==b));
   testEval('equals(1,3)', false);
   testEval('equals(1,1)', true);
 
-  //JSExprParser.addFunction('double', (a) => a*2);
-  //testEval('double(3)', 6);
-  //testEval('3+double(3)', 9);
+  JSExprParser.addFunction('double', (a) => a*2);
+  testEval('double(3)', 6);
+  testEval('3+double(3)', 9);
+
+  JSExprParser.addFunction('seven', () => 7);
+  testEval('seven()', 7);
+  testEval('7+seven()', 14);
 
 
 
