@@ -50,12 +50,12 @@ export class JSExprParser {
       // function start
       [FUNCTION_CALL, /^([a-zA-Z_]+)(\()/],
 
-      //operators: +, -, *, /, %, &, |, ^, !, &&, ||, =, !=, ==, !==, ===, >, <, >=, >=, **, ??, ?, <<, >>, >>>, ~
+      //operators: +, -, *, /, %, &, |, ^, !, &&, ||, =, !=, ==, !==, ===, >, <, >=, >=, **, ??, ?, <<, >>, >>>, ~ and comma (,)
       // TODO: *=, |=, <<, etc (see https://github.com/lydell/js-tokens#punctuator)
       //[OPERATOR, /^([\<]{2}|[\>]{2,3}|[\*]{1,2}|[\?]{1,2}|[\&]{1,2}|[\|]{1,2}|[\=]{2,3}|[\!][\=]{0,2}|[\>\<][\=]|[\+\-\/\%\|\^\>\<\=\~])/],
 
       // infix operator
-      [INFIX_OP, /^([\<]{2}|[\>]{2,3}|[\*]{1,2}|[\?]{1,2}|[\&]{1,2}|[\|]{1,2}|[\=]{2,3}|[\!][\=]{1,2}|[\>\<][\=]|[\+\-\/\%\|\^\>\<\=])/],
+      [INFIX_OP, /^([\<]{2}|[\>]{2,3}|[\*]{1,2}|[\?]{1,2}|[\&]{1,2}|[\|]{1,2}|[\=]{2,3}|[\!][\=]{1,2}|[\>\<][\=]|[\+\-\/\%\|\^\>\<\=\,])/],
 
       // prefix operator
       [PREFIX_OP, /^([\!\~])/],
@@ -384,7 +384,7 @@ export class JSExprParser {
    *
    */
   static evaluateRpn(rpnTokens) {
-    console.log('evaluateRpn', rpnTokens.map(function(a) {return a[1]}));
+    //console.log('evaluateRpn', rpnTokens.map(function(a) {return a[1]}));
     let stack = [];
     let a,b;
     for (let i=0; i<rpnTokens.length; i++) {
@@ -398,16 +398,16 @@ export class JSExprParser {
         a=stack.pop();
         let result = JSExprParser.ops[tokenValue](a, b);
         stack.push(result);
-        console.log('Performed infix op:', a, b, tokenValue, 'result:', result, 'stack:', stack);
+        //console.log('Performed infix op:', a, b, tokenValue, 'result:', result, 'stack:', stack);
       } else if (JSExprParser.isPrefix(token)) {
         a=stack.pop();
         let result = JSExprParser.ops[tokenValue](a);
         stack.push(result);
-        console.log('Performed prefix op:', a, tokenValue, 'result:', result, 'stack:', stack);
+        //console.log('Performed prefix op:', a, tokenValue, 'result:', result, 'stack:', stack);
       }
 
     }
-    console.log('result', stack);
+    //console.log('result', stack);
     return stack[0];
   }
 

@@ -44,42 +44,53 @@ function testEval(s, expectedResult) {
   }
 }
 
-testTokenizeResult('true+1', [[LITERAL,true],[INFIX_OP, '+'],[LITERAL, 1]]);
-testTokenizeResult('true-1', [[LITERAL,true],[INFIX_OP, '-'],[LITERAL, 1]]);
-testTokenizeResult('7*4', [[LITERAL,7],[INFIX_OP, '*'],[LITERAL, 4]]);
-testTokenizeResult('7/4', [[LITERAL,7],[INFIX_OP, '/'],[LITERAL, 4]]);
-testTokenizeResult('7%4', [[LITERAL,7],[INFIX_OP, '%'],[LITERAL, 4]]);
-testTokenizeResult('7&4', [[LITERAL,7],[INFIX_OP, '&'],[LITERAL, 4]]);
-testTokenizeResult('7|4', [[LITERAL,7],[INFIX_OP, '|'],[LITERAL, 4]]);
-testTokenizeResult('7^4', [[LITERAL,7],[INFIX_OP, '^'],[LITERAL, 4]]);
-testTokenizeResult('7&&4', [[LITERAL,7],[INFIX_OP, '&&'],[LITERAL, 4]]);
-testTokenizeResult('7&&&4', [[LITERAL,7],[INFIX_OP, '&&'],[INFIX_OP, '&'],[LITERAL, 4]]);
-testTokenizeResult('7==4', [[LITERAL,7],[INFIX_OP, '=='],[LITERAL, 4]]);
-testTokenizeResult('7===4', [[LITERAL,7],[INFIX_OP, '==='],[LITERAL, 4]]);
-testTokenizeResultNot('7=4', [[LITERAL,7],[INFIX_OP, '='],[LITERAL, 4]]);
-testTokenizeResult('7!=4', [[LITERAL,7],[INFIX_OP, '!='],[LITERAL, 4]]);
-testTokenizeResult('7!==4', [[LITERAL,7],[INFIX_OP, '!=='],[LITERAL, 4]]);
-testTokenizeResult('7!4', [[LITERAL,7],[PREFIX_OP, '!'],[LITERAL, 4]]);
-testTokenizeResult('7>4', [[LITERAL,7],[INFIX_OP, '>'],[LITERAL, 4]]);
-testTokenizeResult('7>=4', [[LITERAL,7],[INFIX_OP, '>='],[LITERAL, 4]]);
-testTokenizeResult('7<4', [[LITERAL,7],[INFIX_OP, '<'],[LITERAL, 4]]);
-testTokenizeResult('7<=4', [[LITERAL,7],[INFIX_OP, '<='],[LITERAL, 4]]);
-testTokenizeResult('7**4', [[LITERAL,7],[INFIX_OP, '**'],[LITERAL, 4]]);
-testTokenizeResult('"hello"', [[LITERAL,'hello']]);
+// literals
 testTokenizeResult('""', [[LITERAL,'']]);
+testTokenizeResult('null', [[LITERAL, null]]);
+testTokenizeResult('undefined', [[LITERAL, undefined]]);
+testTokenizeResult('NaN', [[LITERAL, NaN]]);
+testTokenizeResult('"hello"', [[LITERAL,'hello']]);
+testTokenizeResult('7', [[LITERAL, 7]]);
+
+// operations
+testTokenizeResult('!', [[PREFIX_OP, '!']]);
+testTokenizeResult('~', [[PREFIX_OP, '~']]);
+testTokenizeResult(',', [[INFIX_OP, ',']]);
+testTokenizeResult('??', [[INFIX_OP, '??']]);
+testTokenizeResult('||', [[INFIX_OP, '||']]);
+testTokenizeResult('&&', [[INFIX_OP, '&&']]);
+testTokenizeResult('|', [[INFIX_OP, '|']]);
+testTokenizeResult('^', [[INFIX_OP, '^']]);
+testTokenizeResult('&', [[INFIX_OP, '&']]);
+testTokenizeResult('==', [[INFIX_OP, '==']]);
+testTokenizeResult('!=', [[INFIX_OP, '!=']]);
+testTokenizeResult('===', [[INFIX_OP, '===']]);
+testTokenizeResult('<', [[INFIX_OP, '<']]);
+testTokenizeResult('>', [[INFIX_OP, '>']]);
+testTokenizeResult('<=', [[INFIX_OP, '<=']]);
+testTokenizeResult('>=', [[INFIX_OP, '>=']]);
+testTokenizeResult('>>', [[INFIX_OP, '>>']]);
+testTokenizeResult('<<', [[INFIX_OP, '<<']]);
+testTokenizeResult('>>>', [[INFIX_OP, '>>>']]);
+testTokenizeResult('+', [[INFIX_OP, '+']]);
+testTokenizeResult('-', [[INFIX_OP, '-']]);
+testTokenizeResult('*', [[INFIX_OP, '*']]);
+testTokenizeResult('/', [[INFIX_OP, '/']]);
+testTokenizeResult('%', [[INFIX_OP, '%']]);
+testTokenizeResult('**', [[INFIX_OP, '**']]);
+testTokenizeResult('**', [[INFIX_OP, '**']]);
+
 testTokenizeResult('(', [[LEFT_PAREN,'(']]);
 testTokenizeResult(')', [[RIGHT_PAREN,')']]);
 testTokenizeResult('doit(3)', [[FUNCTION_CALL,'doit'],[LEFT_PAREN,'('],[LITERAL,3],[RIGHT_PAREN, ')']]);
 testTokenizeResult('name', [[VARIABLE,'name']]);
 testTokenizeResult('name.firstName', [[VARIABLE,'name'],[DOT,'.'],[VARIABLE,'firstName']]);
 testTokenizeResult('name["firstName"]', [[VARIABLE,'name'],[PROPERTY_ACCESSOR_LEFT,'['],[LITERAL,'firstName'],[PROPERTY_ACCESSOR_RIGHT,']']]);
-testTokenizeResult('?', [[INFIX_OP, '?']]);
-testTokenizeResult('!', [[PREFIX_OP, '!']]);
-testTokenizeResult('~', [[PREFIX_OP, '~']]);
 //testTokenizeResult(':', [[COLON, ':']]);
-testTokenizeResult('null', [[LITERAL, null]]);
-testTokenizeResult('undefined', [[LITERAL, undefined]]);
-testTokenizeResult('NaN', [[LITERAL, NaN]]);
+testTokenizeResult('true+1', [[LITERAL,true],[INFIX_OP, '+'],[LITERAL, 1]]);
+testTokenizeResult('true-1', [[LITERAL,true],[INFIX_OP, '-'],[LITERAL, 1]]);
+testTokenizeResult('7*4', [[LITERAL,7],[INFIX_OP, '*'],[LITERAL, 4]]);
+testTokenizeResult('7&&&4', [[LITERAL,7],[INFIX_OP, '&&'],[INFIX_OP, '&'],[LITERAL, 4]]);
 
 
 testRpnResult('1+2', [1,2,'+']);
