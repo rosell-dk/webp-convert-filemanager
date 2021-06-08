@@ -1,12 +1,13 @@
 export const FUNCTION_CALL = -1;
 export const LITERAL = -4;
-export const OPERATOR = -3;
 export const VARIABLE = -5;
 export const LEFT_PAREN = -6;
 export const RIGHT_PAREN = -7;
 export const DOT = -8;
 export const PROPERTY_ACCESSOR_LEFT = -9;
 export const PROPERTY_ACCESSOR_RIGHT = -10;
+export const INFIX_OP = -11;
+export const PREFIX_OP = -12;
 
 export class JSExprParser {
 
@@ -51,7 +52,13 @@ export class JSExprParser {
 
       //operators: +, -, *, /, %, &, |, ^, !, &&, ||, =, !=, ==, !==, ===, >, <, >=, >=, **, ??, ?, <<, >>, >>>, ~
       // TODO: *=, |=, <<, etc (see https://github.com/lydell/js-tokens#punctuator)
-      [OPERATOR, /^([\<]{2}|[\>]{2,3}|[\*]{1,2}|[\?]{1,2}|[\&]{1,2}|[\|]{1,2}|[\=]{2,3}|[\!][\=]{0,2}|[\>\<][\=]|[\+\-\/\%\|\^\>\<\=\~])/],
+      //[OPERATOR, /^([\<]{2}|[\>]{2,3}|[\*]{1,2}|[\?]{1,2}|[\&]{1,2}|[\|]{1,2}|[\=]{2,3}|[\!][\=]{0,2}|[\>\<][\=]|[\+\-\/\%\|\^\>\<\=\~])/],
+
+      // infix operator
+      [INFIX_OP, /^([\<]{2}|[\>]{2,3}|[\*]{1,2}|[\?]{1,2}|[\&]{1,2}|[\|]{1,2}|[\=]{2,3}|[\!][\=]{1,2}|[\>\<][\=]|[\+\-\/\%\|\^\>\<\=])/],
+
+      // prefix operator
+      [PREFIX_OP, /^([\!\~])/],
 
       // boolean
       [LITERAL, /^(true|false)/, a => (a == 'true')],
@@ -150,7 +157,7 @@ export class JSExprParser {
     '||',
     '&&',
     '|',
-    '^',  // xor
+    '^',
     '&',
     ['==', '!=', '===', '!=='],
     ['<', '>', '<=', '>='],
@@ -159,27 +166,6 @@ export class JSExprParser {
     ['*', '/', '%'],
     '**',
     ['!', '~']  // todo: unary negation and unary plus
-  ];
-
-  static infix = [
-    ',',
-    '?',
-    '??',
-    '||',
-    '&&',
-    '|',
-    '^',
-    '&',
-    '==', '!=', '===', '!==',
-    '<', '>', '<=', '>=',
-    '<<', '>>', '>>>',
-    '+', '-',
-    '*', '/', '%',
-    '**',
-  ];
-
-  static prefix = [
-    '!', '~'
   ];
 
   static rightAssociative = [
@@ -217,11 +203,11 @@ export class JSExprParser {
   };
 
   static isInfix(token) {
-    return (JSExprParser.infix.indexOf(token[1]) > -1);
+    return (token[0] == INFIX_OP);
   }
 
   static isPrefix(token) {
-    return (JSExprParser.prefix.indexOf(token[1]) > -1);
+    return (token[0] == PREFIX_OP);
   }
 
   static getPrecedence(token) {
@@ -234,9 +220,13 @@ export class JSExprParser {
     return JSExprParser.rightAssociative.indexOf(token[1]) > -1;
   }
 
-  static precendenceHash = {};
+  static precendenceHash = null;
 
   static createPrecendenceHash(tokens) {
+    if (JSExprParser.precendenceHash !== null) {
+      return;
+    }
+    JSExprParser.precendenceHash = {};
     JSExprParser.precendence.forEach(function(op, precendence) {
       if (op.forEach) {
         op.forEach(function(op) {
@@ -361,7 +351,7 @@ export class JSExprParser {
 
           break;
         }
-        //console.log(delta);
+
         if (delta > 0 ) {
           //console.log('moving:', token[1], "after", nextToken[1], "delta:", delta);
 
@@ -379,21 +369,7 @@ export class JSExprParser {
           // so the next token is now at pointer
           pointer--;
         }
-
-
-        /*
-        for (let delta=pointer+1; delta<tokens.length; delta++) {
-          let nextToken = tokens[delta];
-          console.log('2', nextToken, JSExprParser.getPrecedence(nextToken))
-          if (JSExprParser.isInfix(nextToken)) {
-            console.log('HELLE', precedence, )
-          }
-        }*/
-
-//        console.log(token);
       }
-
-
     }
 
     // remove paren
@@ -401,10 +377,6 @@ export class JSExprParser {
     //console.log('parens removed:', tokens.map(function(a) {return a[1]}));
 
     return tokens;
-    // https://en.wikipedia.org/wiki/Operator-precedence_parser
-    /*
-    return parse_expression_1(parse_primary(), 0)
-    */
   }
 
   /**

@@ -1,5 +1,5 @@
 
-import { JSExprParser, FUNCTION_CALL, LITERAL, OPERATOR, VARIABLE, LEFT_PAREN, RIGHT_PAREN, DOT, PROPERTY_ACCESSOR_LEFT, PROPERTY_ACCESSOR_RIGHT }  from './classes/JSExprParser.js'
+import { JSExprParser, FUNCTION_CALL, LITERAL, INFIX_OP, PREFIX_OP, VARIABLE, LEFT_PAREN, RIGHT_PAREN, DOT, PROPERTY_ACCESSOR_LEFT, PROPERTY_ACCESSOR_RIGHT }  from './classes/JSExprParser.js'
 
 //console.log(JSExprParser.tokenize('equals(6,true)'));
 
@@ -44,27 +44,27 @@ function testEval(s, expectedResult) {
   }
 }
 
-testTokenizeResult('true+1', [[LITERAL,true],[OPERATOR, '+'],[LITERAL, 1]]);
-testTokenizeResult('true-1', [[LITERAL,true],[OPERATOR, '-'],[LITERAL, 1]]);
-testTokenizeResult('7*4', [[LITERAL,7],[OPERATOR, '*'],[LITERAL, 4]]);
-testTokenizeResult('7/4', [[LITERAL,7],[OPERATOR, '/'],[LITERAL, 4]]);
-testTokenizeResult('7%4', [[LITERAL,7],[OPERATOR, '%'],[LITERAL, 4]]);
-testTokenizeResult('7&4', [[LITERAL,7],[OPERATOR, '&'],[LITERAL, 4]]);
-testTokenizeResult('7|4', [[LITERAL,7],[OPERATOR, '|'],[LITERAL, 4]]);
-testTokenizeResult('7^4', [[LITERAL,7],[OPERATOR, '^'],[LITERAL, 4]]);
-testTokenizeResult('7&&4', [[LITERAL,7],[OPERATOR, '&&'],[LITERAL, 4]]);
-testTokenizeResult('7&&&4', [[LITERAL,7],[OPERATOR, '&&'],[OPERATOR, '&'],[LITERAL, 4]]);
-testTokenizeResult('7==4', [[LITERAL,7],[OPERATOR, '=='],[LITERAL, 4]]);
-testTokenizeResult('7===4', [[LITERAL,7],[OPERATOR, '==='],[LITERAL, 4]]);
-testTokenizeResultNot('7=4', [[LITERAL,7],[OPERATOR, '='],[LITERAL, 4]]);
-testTokenizeResult('7!=4', [[LITERAL,7],[OPERATOR, '!='],[LITERAL, 4]]);
-testTokenizeResult('7!==4', [[LITERAL,7],[OPERATOR, '!=='],[LITERAL, 4]]);
-testTokenizeResult('7!4', [[LITERAL,7],[OPERATOR, '!'],[LITERAL, 4]]);
-testTokenizeResult('7>4', [[LITERAL,7],[OPERATOR, '>'],[LITERAL, 4]]);
-testTokenizeResult('7>=4', [[LITERAL,7],[OPERATOR, '>='],[LITERAL, 4]]);
-testTokenizeResult('7<4', [[LITERAL,7],[OPERATOR, '<'],[LITERAL, 4]]);
-testTokenizeResult('7<=4', [[LITERAL,7],[OPERATOR, '<='],[LITERAL, 4]]);
-testTokenizeResult('7**4', [[LITERAL,7],[OPERATOR, '**'],[LITERAL, 4]]);
+testTokenizeResult('true+1', [[LITERAL,true],[INFIX_OP, '+'],[LITERAL, 1]]);
+testTokenizeResult('true-1', [[LITERAL,true],[INFIX_OP, '-'],[LITERAL, 1]]);
+testTokenizeResult('7*4', [[LITERAL,7],[INFIX_OP, '*'],[LITERAL, 4]]);
+testTokenizeResult('7/4', [[LITERAL,7],[INFIX_OP, '/'],[LITERAL, 4]]);
+testTokenizeResult('7%4', [[LITERAL,7],[INFIX_OP, '%'],[LITERAL, 4]]);
+testTokenizeResult('7&4', [[LITERAL,7],[INFIX_OP, '&'],[LITERAL, 4]]);
+testTokenizeResult('7|4', [[LITERAL,7],[INFIX_OP, '|'],[LITERAL, 4]]);
+testTokenizeResult('7^4', [[LITERAL,7],[INFIX_OP, '^'],[LITERAL, 4]]);
+testTokenizeResult('7&&4', [[LITERAL,7],[INFIX_OP, '&&'],[LITERAL, 4]]);
+testTokenizeResult('7&&&4', [[LITERAL,7],[INFIX_OP, '&&'],[INFIX_OP, '&'],[LITERAL, 4]]);
+testTokenizeResult('7==4', [[LITERAL,7],[INFIX_OP, '=='],[LITERAL, 4]]);
+testTokenizeResult('7===4', [[LITERAL,7],[INFIX_OP, '==='],[LITERAL, 4]]);
+testTokenizeResultNot('7=4', [[LITERAL,7],[INFIX_OP, '='],[LITERAL, 4]]);
+testTokenizeResult('7!=4', [[LITERAL,7],[INFIX_OP, '!='],[LITERAL, 4]]);
+testTokenizeResult('7!==4', [[LITERAL,7],[INFIX_OP, '!=='],[LITERAL, 4]]);
+testTokenizeResult('7!4', [[LITERAL,7],[PREFIX_OP, '!'],[LITERAL, 4]]);
+testTokenizeResult('7>4', [[LITERAL,7],[INFIX_OP, '>'],[LITERAL, 4]]);
+testTokenizeResult('7>=4', [[LITERAL,7],[INFIX_OP, '>='],[LITERAL, 4]]);
+testTokenizeResult('7<4', [[LITERAL,7],[INFIX_OP, '<'],[LITERAL, 4]]);
+testTokenizeResult('7<=4', [[LITERAL,7],[INFIX_OP, '<='],[LITERAL, 4]]);
+testTokenizeResult('7**4', [[LITERAL,7],[INFIX_OP, '**'],[LITERAL, 4]]);
 testTokenizeResult('"hello"', [[LITERAL,'hello']]);
 testTokenizeResult('""', [[LITERAL,'']]);
 testTokenizeResult('(', [[LEFT_PAREN,'(']]);
@@ -73,9 +73,9 @@ testTokenizeResult('doit(3)', [[FUNCTION_CALL,'doit'],[LEFT_PAREN,'('],[LITERAL,
 testTokenizeResult('name', [[VARIABLE,'name']]);
 testTokenizeResult('name.firstName', [[VARIABLE,'name'],[DOT,'.'],[VARIABLE,'firstName']]);
 testTokenizeResult('name["firstName"]', [[VARIABLE,'name'],[PROPERTY_ACCESSOR_LEFT,'['],[LITERAL,'firstName'],[PROPERTY_ACCESSOR_RIGHT,']']]);
-testTokenizeResult('?', [[OPERATOR, '?']]);
-testTokenizeResult('!', [[OPERATOR, '!']]);
-testTokenizeResult('~', [[OPERATOR, '~']]);
+testTokenizeResult('?', [[INFIX_OP, '?']]);
+testTokenizeResult('!', [[PREFIX_OP, '!']]);
+testTokenizeResult('~', [[PREFIX_OP, '~']]);
 //testTokenizeResult(':', [[COLON, ':']]);
 testTokenizeResult('null', [[LITERAL, null]]);
 testTokenizeResult('undefined', [[LITERAL, undefined]]);
@@ -88,7 +88,7 @@ testRpnResult('1+2-3', [1,2,'+',3,'-']);    // left-right associativity
 testRpnResult('1**2**3', [1,2,3,'**','**']);    // right-left associativity
 testRpnResult('!true', [true,'!']);    // right-left associativity
 
-/*
+
 testEval('1+(2+3)*4', 21);
 testEval('2*3*2', 12);
 testEval('2**3', 8);
@@ -112,7 +112,7 @@ testEval('2>>>1', 1);
 testEval('2>2', false);
 testEval('2>=2', true);
 testEval('2**3**2', 512);
-*/
+
 testEval('!false', true);
 testEval('~1', -2);
 
@@ -131,7 +131,7 @@ testEval('~1', -2);
 //console.log(JSExprParser.stringToRpn('1*2+3!'));  // 1 2 * 3 +
 
 //testTokenizeResult("'hello'", [[LITERAL,'hello']]);
-//testTokenizeResult('"hello"=="world"', [[LITERAL,'hello'], [OPERATOR, '=='], [LITERAL, 'world']]);
+//testTokenizeResult('"hello"=="world"', [[LITERAL,'hello'], [INFIX_OP, '=='], [LITERAL, 'world']]);
 //testTokenizeResult('i', [[VARIABLE,'i']]);
 
 //console.log(JSExprParser.tokenize('true+1'));
