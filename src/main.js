@@ -3,8 +3,14 @@ import WCFM from './WCFM.vue'
 import './index.css'
 import './tables.css'
 import 'v-tooltip/dist/v-tooltip.css'
-import convertOptions from './options.js'
+import optionsSchema from './options-schema.js'
+import optionsUI from './options-ui.js'
+import converterOptions from './options.js'
 import VTooltip from 'v-tooltip'
+
+//import './play.js'
+//import './js-expr-parser.js'
+
 
 //console.log('options!', convertOptions);
 
@@ -62,7 +68,10 @@ if (!window["wcfmoptions"]) {
             {id: 'ewww', name: 'ewww'},
             {id: 'gd', name: 'gd'},
           ],
-          options: convertOptions,
+          //options: convertOptions,
+          optionsSchema: optionsSchema,
+          optionsUI: optionsUI,
+          options: converterOptions,
           supportedStandardOptions: {
             encoding: ['cwebp', 'vips', 'imagick', 'gmagick', 'imagemagick', 'graphicsmagick', 'ffmpeg', 'wpc'],
             method: ['cwebp', 'imagick', 'gmagick', 'imagemagick', 'graphicsmagick', 'ffmpeg', 'wpc'],

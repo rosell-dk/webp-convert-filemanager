@@ -7,9 +7,10 @@
       </div>
       <multipane-resizer></multipane-resizer>
       <div class="pane" :style="{ flexGrow: 1 }">
-        <ConvertOptions />
+        <AutoUI :ui="ui" :schema="schema" :modelValue="data"/>
+        <!--<ConvertOptions />
         <hr/>
-        <InfoPane :info="selectedInfo" />
+        <InfoPane :info="selectedInfo" />-->
       </div>
     </multipane>
   </div>
@@ -37,6 +38,7 @@ import InfoPane from './components/InfoPane.vue'
 
 import Multipane from './components/standard/multipane.vue';
 import MultipaneResizer from './components/standard/multipane-resizer.vue';
+import AutoUI from './autoui/AutoUI.vue';
 
 //import Pane from './components/pane.vue';
 //import Splitpanes from './components/splitpanes.vue';
@@ -49,7 +51,8 @@ export default {
     ConvertOptions,
     FileTree,
     InfoPane,
-    Multipane, MultipaneResizer
+    Multipane, MultipaneResizer,
+    AutoUI
     //Splitpanes, Pane
   },
   methods: {
@@ -69,6 +72,31 @@ export default {
       me.item = response;
       // TODO: Loading animation
       //console.log('r:', response);
+
+      // see https://github.com/rosell-dk/vue3-webpconvert-filemanager/issues/3
+      /*
+      me.ui = {
+        //'component': 'slider',
+        //'property': 'quality',
+        'component': 'group',
+        'title': 'Options',
+        'sub-components': [
+          {
+            'component': 'slider',
+            'property': 'quality',
+          }
+        ]
+      }*/
+
+      me.ui = {
+        'component': 'slider',
+        'property': 'quality',
+      }
+
+      me.data.quality = 77;
+      me.data.quality = 79;
+      //me.data = {'quality': 78};
+
     });
   },
   data() {
@@ -76,7 +104,25 @@ export default {
       selectedPath: null,
       selectedItem: null,
       item: {},
-      selectedInfo: {}
+      selectedInfo: {},
+      ui: {},
+      schema: {
+        "title": 'Options',
+        "type": ['object'],
+        "properties": {
+          "quality": {
+              "title": "Quality",
+              "description": "aeouht aeu",
+              "type": ["integer"],
+              "default": 50,
+              "maximum": 100,
+              "minimum": 0
+          },
+        }
+      },
+      data: {
+        quality: 40
+      }
     }
   },
   provide() {
