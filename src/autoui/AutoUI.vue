@@ -1,12 +1,4 @@
 <template>
-<!--
-  <h3>ui</h3>
-  {{ ui }}
-  <h3>data</h3>
-
-  <h3>schema</h3>
-  {{ schema }}-->
-  {{ modelValue }}
   <div class="autoui">
     <AutoComponent :ui="ui" :schema="schema" :modelValue="modelValue" @componentDataChange="onComponentDataChange"/>
   </div>

@@ -7,6 +7,7 @@
       </div>
       <multipane-resizer></multipane-resizer>
       <div class="pane" :style="{ flexGrow: 1 }">
+        {{ data }}
         <AutoUI :ui="ui" :schema="schema" :modelValue="data"/>
         <!--<ConvertOptions />
         <hr/>
@@ -86,6 +87,9 @@ export default {
           {
             'component': 'slider',
             'property': 'alpha-quality',
+            'links': [
+              ['Ctrl.blog', 'https://www.ctrl.blog/entry/webp-sharp-yuv.html'],
+            ]
           },
         ]
       }

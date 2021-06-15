@@ -1,18 +1,20 @@
 <template>
-  <div>
-    <!--<pre>
-Local: {{ localModel }}
-Global: {{ modelValue }}
-</pre>-->
-    <div>
-      <label>{{componentSchema?.title}}</label>
-      <HelpIcon v-if="componentSchema?.['description']" :schema="componentSchema" />
+  <transition name="fade">
+    <div class="auto-component">
+      <div>
+        <div v-if="ui.component != 'group'">
+          <label>{{componentSchema?.title}}</label>
+          <HelpIcon v-if="componentSchema?.['description']" :schema="componentSchema" :ui="ui"/>
+        </div>
+        <div :class="'component-' + ui.component">
+          <Slider v-if="ui.component == 'slider'" v-model="localModel" :schema="componentSchema"/>
+          <Group v-if="ui.component == 'group'" v-model="localModel" :schema="componentSchema" :ui="ui">
+            <AutoComponent v-for="sub in ui['sub-components']" :ui="sub" :schema="schema" :modelValue="modelValue" @componentDataChange="onComponentDataChange"/>
+          </Group>
+        </div>
+      </div>
     </div>
-    <Slider v-if="ui.component == 'slider'" v-model="localModel" :schema="componentSchema"/>
-    <Group v-if="ui.component == 'group'" v-model="localModel" :schema="componentSchema" :ui="ui">
-      <AutoComponent v-for="sub in ui['sub-components']" :ui="sub" :schema="schema" :modelValue="modelValue" @componentDataChange="onComponentDataChange"/>
-    </Group>
-  </div>
+  </transition>
 </template>
 
 <script>
@@ -98,5 +100,67 @@ export default {
 }
 </script>
 
-<style scoped>
+<style type="sass" scoped>
+/* The following CSS uses nesting (future standard compliant).
+   You must use "PostCSS Nesting" package to compile to current standard
+ */
+
+/* PS: The parent has "table-table" class, which means that
+       this component has "display: table-row */
+.auto-component {
+
+   & input.method {
+     width: 40px;
+   }
+}
+
+.auto-component {
+  display: table;
+  width: 100%;
+
+  & > * {
+    display: table-row;
+
+    & > * {
+      display: table-cell;
+      padding: 5px 20px 5px 0;
+    }
+
+    & > div:first-child {
+      min-width: 210px;
+      vertical-align: top;
+      padding-top: 10px;
+    }
+    & > div:last-child {
+      width: 100%;
+      box-sizing: border-box;
+      /*& * {
+        box-sizing: border-box;
+        width: 100%;
+      }*/
+    }
+  }
+}
+
+.fade-enter-active {
+  transition: all 1s;
+  opacity: 0;
+  transform: scale(0);
+  transform: translateX(30px);
+}
+.fade-enter-to {
+  opacity: 1;
+  transform: translateX(0px);
+  transform: scale(1);
+}
+
+.fade-leave-active {
+  transition: all 1s;
+  opacity: 1;
+  /*transform: scale(1) translateX(0px);*/
+}
+.fade-leave-to {
+  opacity: 0;
+  /*transform: scale(0.9) translateX(30px);*/
+}
 </style>
