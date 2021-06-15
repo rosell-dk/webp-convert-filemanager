@@ -4,12 +4,14 @@
   }}<br>
   <div class="table-table convert-options">
     <ConvertOption v-for="option in options" :option="option" :optionValues="optionValues" v-model="optionValues[option.id]" :show="!option['ui']['advanced'] || advancedView"/>
+    <!--
     <div>
       <div><label>Converter</label></div>
       <div>
         <SelectBox v-model="converter" :options="converters" optionsLabel="name" optionsKey="id" placeholder="Select converter" />
       </div>
     </div>
+  -->
   </div>
   <div class="view-select">
     <button v-tooltip="'Swich between advanced view (all available options) and simple view (most used options)'" v-text="advancedView ? 'Hide advanced options' : 'Show advanced options'" @click="advancedView = !advancedView"></button>
@@ -21,8 +23,7 @@ import Poster from '../classes/Poster.js'
 import SelectBox from './standard/SelectBox.vue'
 import HelpIcon from './HelpIcon.vue'
 import ConvertOption from './ConvertOption.vue'
-import ExpressionEvaluator from '../classes/ExpressionEvaluator.js'
-import ExpressionParser from '../classes/ExpressionParser.js'
+import JsExpression from '@rosell/js-expression'
 import SimpleMarkdown from '../classes/SimpleMarkdown.js'
 
 export default {
@@ -84,7 +85,8 @@ export default {
   mounted() {
     var me = this;
 
-    ExpressionParser.parseString("notEquals(state('option', 'encoding'), 'lossy')");
+    let e = new JsExpression("1+1");
+    console.log('EVAL:' + e.evaluate());
 
 
     Poster.post('conversion-settings', {folder: ''}, function(response) {
@@ -146,7 +148,12 @@ export default {
 
       me.options = options;
 
-
+      let globalContext = {
+        option: me.optionValues,
+        imageType: 'any'
+      };
+      console.log('globalContext', globalContext);
+      JsExpression.setGlobalContext(globalContext);
 
       if (response.supportedStandardOptions) {
         var supportedStandardOptions = response.supportedStandardOptions;
@@ -254,16 +261,14 @@ alert('h')
       if (converter == 'ewww') return false;
       return true;
     },*/
+    /*
     optionSupported(optionName, converter) {
       var converter = this.converter;
       return this.supportedOptions[optionName].find(function(el) {return el == converter})
     },
     converterSupports(optionName) {
       return this.optionSupported(optionName, this.converter);
-    },
-    viewLabel(value) {
-      return (value == 0) ? 'View all options' : 'Simple view';
-    }
+    },*/
   }
 }
 </script>

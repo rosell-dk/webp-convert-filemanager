@@ -32,8 +32,8 @@ import Toggle from './standard/Toggle.vue'
 
 import SelectOption from './option-types/SelectOption.vue'
 import SliderOption from './option-types/SliderOption.vue'
-import ExpressionEvaluator from '../classes/ExpressionEvaluator.js'
-import ExpressionParser from '../classes/ExpressionParser.js'
+
+import JsExpression from '@rosell/js-expression'
 
 export default {
   name: 'ConvertOption',
@@ -66,6 +66,11 @@ export default {
       this.$emit('update:modelValue', this.modelValue);
     }
   },
+  mounted() {
+    if ((this.option.ui) && (this.option.ui['display'])) {
+      this.displayExpr = new JsExpression(this.option.ui['display']);
+    }
+  },
   computed: {
     enabled() {
       //var displayExpr = this.option.ui['display'];
@@ -83,22 +88,29 @@ export default {
           'imageType': 'any'
         });
       }*/
+      if (this.displayExpr) {
+        return this.displayExpr.evaluate()
+      }
       if ((this.option.ui) && (this.option.ui['display'])) {
         //console.log('condition', displayExpr);
+        //let e = new JsExpression(this.option.ui['display']);
+        //return e.evaluate()
+/*
         return ExpressionEvaluator.evaluate(
           ExpressionParser.parseString(this.option.ui['display']),
           {
             'option': this.optionValues,
             'imageType': 'any'
           }
-        );
+        );*/
       }
       return true;
     }
   },
   data() {
     return {
-      attrName: 'width'
+      attrName: 'width',
+      displayExpr: null
     }
   }
 }

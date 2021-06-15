@@ -58,7 +58,7 @@ export default [
         },
         "ui": {
             "component": "slider",
-            "display": "notEquals(state('option', 'encoding'), 'lossless')"
+            "display": "option.encoding != 'lossless'"
         }
     },
     {
@@ -80,7 +80,7 @@ export default [
                     "https:\/\/github.com\/rosell-dk\/webp-convert\/blob\/master\/docs\/v2.0\/converting\/introduction-for-converting.md#preventing-unnecessarily-high-quality-setting-for-low-quality-jpegs"
                 ]
             ],
-            "display": "notEquals(state('option', 'encoding'), 'lossless')"
+            "display": "option.encoding != 'lossless'"
         }
     },
     {
@@ -103,7 +103,7 @@ export default [
                     "https:\/\/github.com\/rosell-dk\/webp-convert\/blob\/master\/docs\/v2.0\/converting\/introduction-for-converting.md#alpha-quality"
                 ]
             ],
-            "display": "and(notEquals(state('option','encoding'),'lossless'),notEquals(state('imageType'),'jpeg'))"
+            "display": "(option.encoding != 'lossless') && (imageType!='jpeg')"
         }
     },
     {
@@ -126,7 +126,7 @@ export default [
                     "https:\/\/github.com\/rosell-dk\/webp-convert\/blob\/master\/docs\/v2.0\/converting\/introduction-for-converting.md#near-lossless"
                 ]
             ],
-            "display": "notEquals(state('option', 'encoding'), 'lossy')"
+            "display": "option.encoding != 'lossy'"
         }
     },
     {
@@ -217,7 +217,7 @@ export default [
         "ui": {
             "component": "checkbox",
             "advanced": true,
-            "display": "and(notEquals(state('option','encoding'),'lossless'),gt(state('option','method'),2))"
+            "display": "(option.encoding != 'lossless') && (option.method>2)"
         }
     },
     {
@@ -396,7 +396,7 @@ export default [
                 "cwebp-103-linux-x86-64-static",
                 "cwebp-061-linux-x86-64"
             ],
-            "display": "notEquals(state('option', 'try-supplied-binary-for-os'), false)"
+            "display": "option['try-supplied-binary-for-os'] == true",
         },
         "sensitive": false
     },
@@ -516,7 +516,7 @@ export default [
       "component": "checkbox",
       "label": "Try supplied binary for OS",
       "help-text": "help me!",
-      "display": {
+      "display2": {
         'function': 'inArray',
         'args': [
           {
@@ -535,7 +535,7 @@ export default [
     "ui": {
       "component": "input",
       "label": "Skip these precompiled binaries",
-      "display": {
+      "display2": {
         'function': 'and',
         'args': [
           {
