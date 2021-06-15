@@ -4,6 +4,10 @@
 Local: {{ localModel }}
 Global: {{ modelValue }}
 </pre>-->
+    <div>
+      <label>{{componentSchema?.title}}</label>
+      <HelpIcon v-if="componentSchema?.['description']" :schema="componentSchema" />
+    </div>
     <Slider v-if="ui.component == 'slider'" v-model="localModel" :schema="componentSchema"/>
     <Group v-if="ui.component == 'group'" v-model="localModel" :schema="componentSchema" :ui="ui">
       <AutoComponent v-for="sub in ui['sub-components']" :ui="sub" :schema="schema" :modelValue="modelValue" @componentDataChange="onComponentDataChange"/>
@@ -14,11 +18,12 @@ Global: {{ modelValue }}
 <script>
 import Group from './components/Group.vue'
 import Slider from './components/Slider.vue'
+import HelpIcon from './HelpIcon.vue'
 
 export default {
   name: 'AutoComponent',
   components: {
-    Group, Slider
+    Group, Slider, HelpIcon
   },
   props: {
     ui: Object,
