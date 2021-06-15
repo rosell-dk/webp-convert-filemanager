@@ -42,7 +42,7 @@ export default {
     optionSupported(optionName, converter) {
     },
     onComponentDataChange(obj) {
-      //console.log('CHANGE!', val);
+      //console.log('CHANGE!', obj);
       this.modelValue[obj.property] = obj.value;
     }
   }

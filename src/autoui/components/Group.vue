@@ -1,18 +1,6 @@
 <template>
   <div class="group">
-    <!--
-    <Slider
-      v-model="modelValue"
-      @update:model-value="onLocalChange"
-      :min="schema.minimum"
-      :max="schema.maximum"
-    />
-  -->
     <h3>{{ ui ? ui.title : ''}}</h3>
-    GROUP
-    val:{{ modelValue }}<br>
-    schema:{{ schema }}<br>
-    ui:{{ ui }}<br>
     <slot></slot>
   </div>
 </template>

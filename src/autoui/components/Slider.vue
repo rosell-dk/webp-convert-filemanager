@@ -1,16 +1,11 @@
 <template>
   <div class="slider">
-
     <VueSlider
       v-model="modelValue"
       @update:model-value="onLocalChange"
+      :min="schema.minimum"
+      :max="schema.maximum"
     />
-    :min="schema.minimum"
-    :max="schema.maximum"
-
-    SLIDER
-    {{ modelValue }}
-    schema: {{ schema }}
   </div>
 </template>
 

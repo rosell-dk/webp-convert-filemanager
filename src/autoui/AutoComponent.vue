@@ -1,12 +1,12 @@
 <template>
   <div>
-    <pre>
+    <!--<pre>
 Local: {{ localModel }}
 Global: {{ modelValue }}
-    </pre>
+</pre>-->
     <Slider v-if="ui.component == 'slider'" v-model="localModel" :schema="componentSchema"/>
     <Group v-if="ui.component == 'group'" v-model="localModel" :schema="componentSchema" :ui="ui">
-      <AutoComponent v-for="sub in ui['sub-components']" :ui="sub" :schema="schema" :modelValue="modelValue"/>
+      <AutoComponent v-for="sub in ui['sub-components']" :ui="sub" :schema="schema" :modelValue="modelValue" @componentDataChange="onComponentDataChange"/>
     </Group>
   </div>
 </template>
@@ -25,22 +25,23 @@ export default {
     modelValue: {},
     schema: Object
   },
-  emits: ['update:modelValue', 'componentDataChange'],
+  emits: ['componentDataChange'],
   watch: {
     modelValue(newValue, oldValue) {
       console.log('model watch');
       this.updateLocalModel(newValue);
     },
-    schema() {
-      console.log('schema watch');
+    ui() {
+      console.log('ui watch');
       this.updateLocalModel(this.modelValue);
     },
+    schema() {
+      console.log('schema watch');
+      //this.updateLocalModel(this.modelValue);
+    },
     localModel(newValue) {
-      console.log('local watch');
+      //console.log('local watch');
       this.$emit('componentDataChange', {value:this.localModel, property:this.ui.property});
-
-      //this.modelValue['quality'] = newValue;
-      //this.$emit('update:modelValue', this.selectedOption[this.optionsKey]);
     }
 
   },
@@ -74,14 +75,20 @@ export default {
     this.updateLocalModel(this.modelValue);
   },
   methods: {
-
     updateLocalModel(modelValue) {
+      console.log('updateLocalModel:', modelValue, this.ui)
       if (this.ui.hasOwnProperty('property')) {
         if (modelValue.hasOwnProperty(this.ui.property)) {
+          console.log('updating to:', modelValue[this.ui.property])
           this.localModel = modelValue[this.ui.property];
         }
       }
+    },
+    onComponentDataChange(obj) {
+      //console.log('SUBCHANGE!', obj);
+      this.$emit('componentDataChange', obj);
     }
+
   }
 }
 </script>

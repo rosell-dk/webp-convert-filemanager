@@ -74,24 +74,26 @@ export default {
       //console.log('r:', response);
 
       // see https://github.com/rosell-dk/vue3-webpconvert-filemanager/issues/3
-      /*
+
       me.ui = {
-        //'component': 'slider',
-        //'property': 'quality',
         'component': 'group',
         'title': 'Options',
         'sub-components': [
           {
             'component': 'slider',
             'property': 'quality',
-          }
+          },
+          {
+            'component': 'slider',
+            'property': 'alpha-quality',
+          },
         ]
-      }*/
+      }
 
-      me.ui = {
+      /*me.ui = {
         'component': 'slider',
         'property': 'quality',
-      }
+      }*/
 
       me.data.quality = 77;
       me.data.quality = 79;
@@ -118,10 +120,19 @@ export default {
               "maximum": 100,
               "minimum": 0
           },
+          "alpha-quality": {
+              "title": "Alpha quality",
+              "description": "aeouht aeu",
+              "type": ["integer"],
+              "default": 75,
+              "maximum": 100,
+              "minimum": 0
+          },
         }
       },
       data: {
-        quality: 40
+        quality: 40,
+        'alpha-quality': 65
       }
     }
   },
