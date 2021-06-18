@@ -35,7 +35,7 @@ export default {
     },
     onComponentDataChange(obj) {
       //console.log('CHANGE!', obj);
-      this.modelValue[obj.property] = obj.value;
+      this.modelValue[obj['data-property']] = obj.value;
     }
   }
 }

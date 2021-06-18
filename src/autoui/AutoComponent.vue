@@ -7,6 +7,7 @@
           <HelpIcon v-if="componentSchema?.['description']" :schema="componentSchema" :ui="ui"/>
         </div>
         <div :class="'component-' + ui.component">
+          <Toggle v-if="ui.component == 'checkbox'" v-model="localModel" :height="20" :width="40"/>
           <Slider v-if="ui.component == 'slider'" v-model="localModel" :schema="componentSchema"/>
           <Group v-if="ui.component == 'group'" v-model="localModel" :schema="componentSchema" :ui="ui">
             <AutoComponent v-for="sub in ui['sub-components']" :ui="sub" :schema="schema" :modelValue="modelValue" @componentDataChange="onComponentDataChange"/>
@@ -20,6 +21,7 @@
 <script>
 import Group from './components/Group.vue'
 import Slider from './components/Slider.vue'
+import Toggle from './components/Toggle.vue'
 import HelpIcon from './HelpIcon.vue'
 
 import JsExpression from '@rosell/js-expression'
@@ -27,7 +29,8 @@ import JsExpression from '@rosell/js-expression'
 export default {
   name: 'AutoComponent',
   components: {
-    Group, Slider, HelpIcon
+    Group, Slider, Toggle,
+    HelpIcon
   },
   props: {
     ui: Object,
@@ -55,16 +58,16 @@ export default {
     },
     localModel(newValue) {
       //console.log('local watch');
-      this.$emit('componentDataChange', {value:this.localModel, property:this.ui.property});
+      this.$emit('componentDataChange', {value:this.localModel, 'data-property':this.ui['data-property']});
     }
 
   },
   computed: {
     componentSchema() {
-      if (this.ui.hasOwnProperty('property')) {
+      if (this.ui.hasOwnProperty('data-property')) {
         if (this.schema.hasOwnProperty('properties')) {
-          if (this.schema.properties.hasOwnProperty(this.ui.property)) {
-            return this.schema.properties[this.ui.property];
+          if (this.schema.properties.hasOwnProperty(this.ui['data-property'])) {
+            return this.schema.properties[this.ui['data-property']];
           }
         }
       }
@@ -101,16 +104,15 @@ export default {
 
     if (this?.ui.display) {
       this.displayExpr = new JsExpression(this.ui.display);
-      console.log('ya')
     }
   },
   methods: {
     updateLocalModel(modelValue) {
       //console.log('updateLocalModel:', modelValue, this.ui)
-      if (this.ui.hasOwnProperty('property')) {
-        if (modelValue.hasOwnProperty(this.ui.property)) {
+      if (this.ui.hasOwnProperty('data-property')) {
+        if (modelValue.hasOwnProperty(this.ui['data-property'])) {
           //console.log('updating to:', modelValue[this.ui.property])
-          this.localModel = modelValue[this.ui.property];
+          this.localModel = modelValue[this.ui['data-property']];
         }
       }
     },

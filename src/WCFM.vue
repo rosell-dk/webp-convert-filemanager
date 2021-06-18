@@ -83,15 +83,26 @@ export default {
         'sub-components': [
           {
             'component': 'slider',
-            'property': 'quality',
+            'data-property': 'quality',
           },
           {
             'component': 'slider',
-            'property': 'alpha-quality',
+            'data-property': 'alpha-quality',
             'links': [
               ['Ctrl.blog', 'https://www.ctrl.blog/entry/webp-sharp-yuv.html'],
             ],
             'display': "option.quality > 80"
+          },
+          {
+            "component": "checkbox",
+            'data-property': 'auto-limit',
+            "advanced": true,
+            "links": [
+                [
+                    "Guide",
+                    "https:\/\/github.com\/rosell-dk\/webp-convert\/blob\/master\/docs\/v2.0\/converting\/introduction-for-converting.md#preventing-unnecessarily-high-quality-setting-for-low-quality-jpegs"
+                ]
+            ],
           },
         ]
       }
@@ -105,7 +116,7 @@ export default {
 
       /*me.ui = {
         'component': 'slider',
-        'property': 'quality',
+        'data-property': 'quality',
       }*/
 
       me.data.quality = 77;
@@ -126,26 +137,34 @@ export default {
         "type": ['object'],
         "properties": {
           "quality": {
-              "title": "Quality",
-              "description": "aeouht aeu",
-              "type": ["integer"],
-              "default": 50,
-              "maximum": 100,
-              "minimum": 0
+            "title": "Quality",
+            "description": "aeouht aeu",
+            "type": ["integer"],
+            "default": 50,
+            "maximum": 100,
+            "minimum": 0
           },
           "alpha-quality": {
-              "title": "Alpha quality",
-              "description": "aeouht aeu",
-              "type": ["integer"],
-              "default": 75,
-              "maximum": 100,
-              "minimum": 0
+            "title": "Alpha quality",
+            "description": "aeouht aeu",
+            "type": ["integer"],
+            "default": 75,
+            "maximum": 100,
+            "minimum": 0
           },
+          "auto-limit": {
+            "title": "Auto-limit",
+            "description": "Enable this option to prevent an unnecessarily high quality setting for low quality jpegs. You really should enable this.",
+            "type": ["boolean"],
+            "default": true
+          }
+
         }
       },
       data: {
         quality: 40,
-        'alpha-quality': 65
+        'alpha-quality': 65,
+        'auto-limit': true,
       }
     }
   },

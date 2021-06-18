@@ -60,11 +60,11 @@ export default {
     },
     width: {
       type: [Number, String],
-      default: 40,
+      default: 75,
     },
     height: {
       type: [Number, String],
-      default: 20,
+      default: 25,
     },
     uncheckedBg: {
       type: String,
