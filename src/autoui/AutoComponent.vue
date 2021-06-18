@@ -1,6 +1,6 @@
 <template>
   <transition name="fade">
-    <div class="auto-component">
+    <div class="auto-component" v-if="enabled">
       <div>
         <div v-if="ui.component != 'group'">
           <label>{{componentSchema?.title}}</label>
@@ -22,6 +22,8 @@ import Group from './components/Group.vue'
 import Slider from './components/Slider.vue'
 import HelpIcon from './HelpIcon.vue'
 
+import JsExpression from '@rosell/js-expression'
+
 export default {
   name: 'AutoComponent',
   components: {
@@ -30,20 +32,25 @@ export default {
   props: {
     ui: Object,
     modelValue: {},
-    schema: Object
+    schema: Object,
+    show: {
+      type: Boolean,
+      default: true,
+    },
+
   },
   emits: ['componentDataChange'],
   watch: {
     modelValue(newValue, oldValue) {
-      console.log('model watch');
+      //console.log('model watch');
       this.updateLocalModel(newValue);
     },
     ui() {
-      console.log('ui watch');
+      //console.log('ui watch');
       this.updateLocalModel(this.modelValue);
     },
     schema() {
-      console.log('schema watch');
+      //console.log('schema watch');
       //this.updateLocalModel(this.modelValue);
     },
     localModel(newValue) {
@@ -62,7 +69,17 @@ export default {
         }
       }
       return null;
-    },/*
+    },
+    enabled() {
+      if (this.show == false) {
+        return false;
+      }
+      if (this.displayExpr) {
+        return this.displayExpr.evaluate()
+      }
+      return true;
+    }
+    /*
     componentModel() {
       if (this.ui.hasOwnProperty('property')) {
         if (this.modelValue.hasOwnProperty(this.ui.property)) {
@@ -74,19 +91,25 @@ export default {
   },
   data() {
     return {
-      localModel: ''
+      localModel: '',
+      displayExpr: null
     }
   },
   mounted() {
     console.log('mounted:', this.modelValue);
     this.updateLocalModel(this.modelValue);
+
+    if (this?.ui.display) {
+      this.displayExpr = new JsExpression(this.ui.display);
+      console.log('ya')
+    }
   },
   methods: {
     updateLocalModel(modelValue) {
-      console.log('updateLocalModel:', modelValue, this.ui)
+      //console.log('updateLocalModel:', modelValue, this.ui)
       if (this.ui.hasOwnProperty('property')) {
         if (modelValue.hasOwnProperty(this.ui.property)) {
-          console.log('updating to:', modelValue[this.ui.property])
+          //console.log('updating to:', modelValue[this.ui.property])
           this.localModel = modelValue[this.ui.property];
         }
       }

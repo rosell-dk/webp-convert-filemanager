@@ -41,6 +41,7 @@ import Multipane from './components/standard/multipane.vue';
 import MultipaneResizer from './components/standard/multipane-resizer.vue';
 import AutoUI from './autoui/AutoUI.vue';
 
+import JsExpression from '@rosell/js-expression'
 //import Pane from './components/pane.vue';
 //import Splitpanes from './components/splitpanes.vue';
 
@@ -89,10 +90,18 @@ export default {
             'property': 'alpha-quality',
             'links': [
               ['Ctrl.blog', 'https://www.ctrl.blog/entry/webp-sharp-yuv.html'],
-            ]
+            ],
+            'display': "option.quality > 80"
           },
         ]
       }
+
+      let globalContext = {
+        option: me.data,
+        imageType: 'any'
+      };
+      console.log('globalContext', globalContext);
+      JsExpression.setGlobalContext(globalContext);
 
       /*me.ui = {
         'component': 'slider',
