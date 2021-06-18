@@ -1,9 +1,4 @@
 <template>
-
-  <!--<SelectBox v-model="modelValue" :options="options" optionsLabel="label" optionsKey="id"
-  placeholder="Select"
-  @update:model-value="onLocalChange"
-  />-->
   <VueMultiselect
     v-model="modelValue"
     :options="options"
@@ -54,14 +49,6 @@ export default {
         options = this.ui.options;
       }
       return options;
-      /*
-      for (var i=0; i<options.length; i++) {
-        var id = options[i];
-        result.push({'id':id, 'label':ui.optionLabels[id]});
-      }
-      console.log('result', result);
-      return result;
-      */
     }
   },
   mounted() {

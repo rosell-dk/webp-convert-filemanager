@@ -86,6 +86,10 @@ export default {
             'data-property': 'preset',
           },
           {
+            'component': 'input',
+            'data-property': 'command-line-options',
+          },
+          {
             'component': 'slider',
             'data-property': 'quality',
           },
@@ -176,6 +180,12 @@ export default {
             "description": "Enable this option to prevent an unnecessarily high quality setting for low quality jpegs. You really should enable this.",
             "type": ["boolean"],
             "default": true
+          },
+          "command-line-options": {
+            "title": "Command line options",
+            "description": "",
+            "type": ["string"],
+            "default": ""
           }
 
         }
@@ -184,6 +194,7 @@ export default {
         quality: 40,
         'alpha-quality': 65,
         'auto-limit': true,
+        "command-line-options": 'dyt'
       }
     }
   },
