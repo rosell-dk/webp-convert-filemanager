@@ -1,2 +1,3 @@
 # WebP Convert filemanager
-Work is in progress...
+
+This will become a frontend for webp-convert.
