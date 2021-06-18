@@ -82,6 +82,10 @@ export default {
         'title': 'Options',
         'sub-components': [
           {
+            'component': 'select',
+            'data-property': 'preset',
+          },
+          {
             'component': 'slider',
             'data-property': 'quality',
           },
@@ -136,6 +140,21 @@ export default {
         "title": 'Options',
         "type": ['object'],
         "properties": {
+          "preset": {
+            "title": "Preset",
+            "description": "Using a preset will set many of the other options to suit a particular type of source material. It even overrides them. It does however not override the quality option. \"none\" means that no preset will be set",
+            "enum": [
+                "none",
+                "default",
+                "photo",
+                "picture",
+                "drawing",
+                "icon",
+                "text"
+            ],
+            "type": ["string"],
+            "default": "none"
+          },
           "quality": {
             "title": "Quality",
             "description": "aeouht aeu",

@@ -9,6 +9,7 @@
         <div :class="'component-' + ui.component">
           <Toggle v-if="ui.component == 'checkbox'" v-model="localModel" :height="20" :width="40"/>
           <Slider v-if="ui.component == 'slider'" v-model="localModel" :schema="componentSchema"/>
+          <Select v-if="ui.component == 'select'" v-model="localModel" :schema="componentSchema"/>
           <Group v-if="ui.component == 'group'" v-model="localModel" :schema="componentSchema" :ui="ui">
             <AutoComponent v-for="sub in ui['sub-components']" :ui="sub" :schema="schema" :modelValue="modelValue" @componentDataChange="onComponentDataChange"/>
           </Group>
@@ -20,6 +21,7 @@
 
 <script>
 import Group from './components/Group.vue'
+import Select from './components/Select.vue'
 import Slider from './components/Slider.vue'
 import Toggle from './components/Toggle.vue'
 import HelpIcon from './HelpIcon.vue'
@@ -29,7 +31,7 @@ import JsExpression from '@rosell/js-expression'
 export default {
   name: 'AutoComponent',
   components: {
-    Group, Slider, Toggle,
+    Group, Select, Slider, Toggle,
     HelpIcon
   },
   props: {
