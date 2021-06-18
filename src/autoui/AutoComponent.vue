@@ -10,6 +10,9 @@
           <Toggle v-if="ui.component == 'checkbox'" v-model="localModel" :height="20" :width="40"/>
           <Slider v-if="ui.component == 'slider'" v-model="localModel" :schema="componentSchema"/>
           <Select v-if="ui.component == 'select'" v-model="localModel" :schema="componentSchema" :ui="ui" />
+          <div v-if="ui.component == 'multi-select'">
+            <MultiSelect v-model="localModel" :schema="componentSchema" :ui="ui"/>
+          </div>
           <Input v-if="ui.component == 'input'" v-model="localModel" :schema="componentSchema"/>
           <Group v-if="ui.component == 'group'" v-model="localModel" :schema="componentSchema" :ui="ui">
             <AutoComponent v-for="sub in ui['sub-components']" :ui="sub" :schema="schema" :modelValue="modelValue" @componentDataChange="onComponentDataChange"/>
@@ -23,6 +26,7 @@
 <script>
 import Group from './components/Group.vue'
 import Input from './components/Input.vue'
+import MultiSelect from './components/MultiSelect.vue'
 import Select from './components/Select.vue'
 import Slider from './components/Slider.vue'
 import Toggle from './components/Toggle.vue'
@@ -33,7 +37,7 @@ import JsExpression from '@rosell/js-expression'
 export default {
   name: 'AutoComponent',
   components: {
-    Group, Input, Select, Slider, Toggle,
+    Group, Input, MultiSelect, Select, Slider, Toggle,
     HelpIcon
   },
   props: {
@@ -103,7 +107,7 @@ export default {
     }
   },
   mounted() {
-    console.log('mounted:', this.modelValue);
+    //console.log('mounted:', this.modelValue);
     this.updateLocalModel(this.modelValue);
 
     if (this?.ui.display) {

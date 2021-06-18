@@ -39,10 +39,8 @@ export default {
   },
   computed: {
     options: function() {
-      var result = [];
-
       var options = [];
-      if (this.schema['enum']) {
+      if (this?.schema?.enum) {
         options = this.schema['enum'];
       }
       if (this?.ui?.options) {

@@ -82,6 +82,10 @@ export default {
         'title': 'Options',
         'sub-components': [
           {
+            'component': 'multi-select',
+            'data-property': 'skip-these-precompiled-binaries',
+          },
+          {
             'component': 'select',
             'data-property': 'preset',
           },
@@ -186,6 +190,20 @@ export default {
             "description": "",
             "type": ["string"],
             "default": ""
+          },
+          "skip-these-precompiled-binaries": {
+            "title": "Skip these precompiled binaries",
+            "description": "",
+            "enum": [
+              "cwebp-120-linux-x86-64",
+              "cwebp-110-linux-x86-64",
+              "cwebp-103-linux-x86-64-static",
+              "cwebp-061-linux-x86-64"
+            ],
+            "type": [
+                "string"
+            ],
+            "default": ""
           }
 
         }
@@ -194,7 +212,8 @@ export default {
         quality: 40,
         'alpha-quality': 65,
         'auto-limit': true,
-        "command-line-options": 'dyt'
+        "command-line-options": 'dyt',
+        'skip-these-precompiled-binaries': ''
       }
     }
   },
