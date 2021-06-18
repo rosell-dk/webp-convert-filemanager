@@ -1,6 +1,6 @@
 <template>
   <transition name="fade">
-    <div class="auto-component" v-if="enabled">
+    <div class="auto-component" v-if="enabled && ui.component">
       <div>
         <div v-if="ui.component != 'group'">
           <label>{{componentSchema?.title}}</label>
@@ -82,6 +82,11 @@ export default {
       return null;
     },
     enabled() {
+      if (this?.ui.advanced) {
+        // TODO: check advancedView. Maybe through the globalContext set in JSExpression?
+        //return false;
+      }
+
       if (this.show == false) {
         return false;
       }

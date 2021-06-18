@@ -1,6 +1,9 @@
 <template>
   <div class="autoui">
     <AutoComponent :ui="ui" :schema="schema" :modelValue="modelValue" @componentDataChange="onComponentDataChange"/>
+    <div class="view-select">
+      <button v-tooltip="'Swich between advanced view (all available options) and simple view (most used options)'" v-text="advancedView ? 'Hide advanced options' : 'Show advanced options'" @click="advancedView = !advancedView"></button>
+    </div>
   </div>
 </template>
 
@@ -22,8 +25,6 @@ export default {
   data() {
     return {
       advancedView: false,
-      options: [],
-      optionValues: {},
     }
   },
   mounted() {
@@ -31,8 +32,6 @@ export default {
     //this.modelValue = {'quality': 30};
   },
   methods: {
-    optionSupported(optionName, converter) {
-    },
     onComponentDataChange(obj) {
       //console.log('CHANGE!', obj);
       this.modelValue[obj['data-property']] = obj.value;

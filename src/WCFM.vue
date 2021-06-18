@@ -9,9 +9,9 @@
       <div class="pane" :style="{ flexGrow: 1 }">
         {{ data }}
         <AutoUI :ui="ui" :schema="schema" :modelValue="data"/>
-        <!--ConvertOptions
+        <!--<ConvertOptions />
         <hr/>
-        InfoPane :info="selectedInfo" -->
+        <InfoPane :info="selectedInfo"/>-->
       </div>
     </multipane>
   </div>
