@@ -15,7 +15,7 @@
           </div>
           <Input v-if="ui.component == 'input'" v-model="localModel" :schema="componentSchema"/>
           <Group v-if="ui.component == 'group'" v-model="localModel" :schema="componentSchema" :ui="ui">
-            <AutoComponent v-for="sub in ui['sub-components']" :ui="sub" :schema="schema" :modelValue="modelValue" @componentDataChange="onComponentDataChange"/>
+            <AutoComponent v-for="sub in ui['sub-components']" :ui="sub" :schema="schema" :modelValue="modelValue" :advancedView="advancedView" :expressionContext="expressionContext" @componentDataChange="onComponentDataChange"/>
           </Group>
         </div>
       </div>
@@ -44,11 +44,8 @@ export default {
     ui: Object,
     modelValue: {},
     schema: Object,
-    show: {
-      type: Boolean,
-      default: true,
-    },
-
+    advancedView: Boolean,
+    expressionContext: String,
   },
   emits: ['componentDataChange'],
   watch: {
@@ -85,13 +82,21 @@ export default {
       if (this?.ui.advanced) {
         // TODO: check advancedView. Maybe through the globalContext set in JSExpression?
         //return false;
+        //console.log('parent', this.$parent.data);
+
+    //    console.log(this.$parent.$parent.test);
+        if (!this.advancedView) {
+            return false;
+        }
+        //return this.$parent.advancedView;
       }
 
-      if (this.show == false) {
+      /*if (this.show == false) {
         return false;
-      }
+      }*/
       if (this.displayExpr) {
-        return this.displayExpr.evaluate()
+        //console.log('this.expressionContext', this.expressionContext);
+        return this.displayExpr.evaluate(this.expressionContext); // general | png
       }
       return true;
     }
@@ -108,7 +113,8 @@ export default {
   data() {
     return {
       localModel: '',
-      displayExpr: null
+      displayExpr: null,
+      test:'hej',
     }
   },
   mounted() {
@@ -161,13 +167,13 @@ export default {
 
     & > * {
       display: table-cell;
-      padding: 5px 20px 5px 0;
+      padding: 0px 0px 10px 0;
     }
 
     & > div:first-child {
       min-width: 210px;
       vertical-align: top;
-      padding-top: 10px;
+      padding-top: 0px; /*was: 10px*/
     }
     & > div:last-child {
       width: 100%;

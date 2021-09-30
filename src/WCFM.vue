@@ -1,16 +1,22 @@
 <template>
   <div class="wcfm">
     <SVGs />
+    <!--
+    <div class="pane" style="width:48%">
+      <FileTree :item="item" />
+    </div>-->
+    <!--<AutoUI :ui="ui" :schema="schema" :modelValue="data"/>-->
+    <!--<ConvertOptions />-->
     <multipane class="mainpanel" layout="vertical">
       <div class="pane" style="width:48%">
         <FileTree :item="item" />
       </div>
       <multipane-resizer></multipane-resizer>
       <div class="pane" :style="{ flexGrow: 1 }">
-        {{ data }}
-        <AutoUI :ui="ui" :schema="schema" :modelValue="data"/>
-        <!--<ConvertOptions />
-        <hr/>
+        <!--{{ data }}-->
+        <!--<AutoUI :ui="ui" :schema="schema" :modelValue="data"/>-->
+        <ConvertOptions2 />
+        <!--<hr/>
         <InfoPane :info="selectedInfo"/>-->
       </div>
     </multipane>
@@ -39,9 +45,8 @@ import InfoPane from './components/InfoPane.vue'
 
 import Multipane from './components/standard/multipane.vue';
 import MultipaneResizer from './components/standard/multipane-resizer.vue';
-import AutoUI from './autoui/AutoUI.vue';
+import ConvertOptions2 from './components/ConvertOptions2.vue';
 
-import JsExpression from '@rosell/js-expression'
 //import Pane from './components/pane.vue';
 //import Splitpanes from './components/splitpanes.vue';
 
@@ -51,10 +56,10 @@ export default {
   components: {
     SVGs,
     ConvertOptions,
+    ConvertOptions2,
     FileTree,
     InfoPane,
     Multipane, MultipaneResizer,
-    AutoUI
     //Splitpanes, Pane
   },
   methods: {
@@ -70,66 +75,6 @@ export default {
   },
   mounted() {
     var me = this;
-    Poster.post('conversion-settings', {folder: ''}, function(response) {
-      //me.item = response;
-      // TODO: Loading animation
-      //console.log('r:', response);
-
-      let components = [];
-      let schemaProperties = {};
-      let defaults = {}
-      for (var i=0; i<response.options.length; i++) {
-        let option = response.options[i];
-        if (option.ui) {
-          let componentUi = option.ui;
-          componentUi['data-property'] = option.id;
-          components.push(componentUi);
-        }
-        if (option.schema) {
-          let componentUi = option.schema;
-          schemaProperties[option.id] = option.schema;
-          components.push(componentUi);
-          if (option.schema.default) {
-            defaults[option.id] = option.schema.default;
-          }
-        }
-      }
-
-//console.log('options', me.options);
-      me.ui = {
-        'component': 'group',
-        'title': 'Options',
-        'sub-components': components
-      }
-
-      me.schema = {
-        "title": 'Options',
-        "type": ['object'],
-        "properties": schemaProperties
-      }
-
-      me.data = defaults;
-
-      let globalContext = {
-        option: me.data,
-        imageType: 'any'
-      };
-      console.log('globalContext', globalContext);
-      JsExpression.setGlobalContext(globalContext);
-
-      /*me.ui = {
-        'component': 'slider',
-        'data-property': 'quality',
-      }*/
-
-      //me.data.quality = 77;
-      //me.data.quality = 79;
-      /*
-      for (var i=0; i<options.length; i++) {
-        var option = options[i];
-        me.optionValues[option.id] = option.schema.default;
-      }*/
-    });
 
     Poster.post('get-tree', {folder: ''}, function(response) {
       me.item = response;
@@ -141,15 +86,18 @@ export default {
       selectedItem: null,
       item: {},
       selectedInfo: {},
-      ui: {},
-      schema: {},
-      data: {
-        quality: 40,
-        'alpha-quality': 65,
-        'auto-limit': true,
-        "command-line-options": 'dyt',
-        'skip-these-precompiled-binaries': ''
-      }
+      /*
+      convertOptions: {
+        ui: {},
+        schema: {},
+        data: {
+          quality: 40,
+          'alpha-quality': 65,
+          'auto-limit': true,
+          "command-line-options": 'dyt',
+          'skip-these-precompiled-binaries': ''
+        }
+      }*/
     }
   },
   provide() {

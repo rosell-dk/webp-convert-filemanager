@@ -1,35 +1,41 @@
 export default [
   {
-        "id": "encoding",
-        "schema": {
-            "title": "Encoding",
-            "description": "Set encoding for the webp. If you choose \"auto\", webp-convert will convert to both lossy and lossless and pick the smallest result",
-            "enum": [
-                "auto",
-                "lossy",
-                "lossless"
-            ],
-            "type": [
-                "string"
-            ],
-            "default": "auto"
-        },
-        "ui": {
-            "component": "select",
-            "links": [
-                [
-                    "Guide",
-                    "https:\/\/github.com\/rosell-dk\/webp-convert\/blob\/master\/docs\/v2.0\/converting\/introduction-for-converting.md#auto-selecting-between-losslesslossy-encoding"
-                ]
-            ]
-        },
-        "sensitive": false,
-        "options": [
-            "auto",
-            "lossy",
-            "lossless"
-        ]
-    },
+      "id": "encoding",
+      "schema": {
+          "title": "Encoding",
+          "description": "Set encoding for the webp. If you choose \"auto\", webp-convert will convert to both lossy and lossless and pick the smallest result",
+          "enum": [
+              "auto",
+              "lossy",
+              "lossless"
+          ],
+          "type": [
+              "string"
+          ],
+          "default": "auto"
+      },
+      "ui": {
+          "component": "select",
+          "links": [
+              [
+                  "Guide",
+                  "https:\/\/github.com\/rosell-dk\/webp-convert\/blob\/master\/docs\/v2.0\/converting\/introduction-for-converting.md#auto-selecting-between-losslesslossy-encoding"
+              ]
+          ]
+      },
+      "sensitive": false,
+      "options": [
+          "auto",
+          "lossy",
+          "lossless"
+      ],
+      "unsupportedBy": [
+          "ffmpeg",
+          "ewww",
+          "gd",
+          "stack"
+      ]
+  },
     {
         "id": "quality",
         "schema": {
@@ -59,7 +65,10 @@ export default [
         "ui": {
             "component": "slider",
             "display": "option.encoding != 'lossless'"
-        }
+        },
+        "unsupportedBy": [
+            "stack"
+        ]
     },
     {
         "id": "auto-limit",
@@ -81,7 +90,8 @@ export default [
                 ]
             ],
             "display": "option.encoding != 'lossless'"
-        }
+        },
+        "unsupportedBy": []
     },
     {
         "id": "alpha-quality",
@@ -104,13 +114,19 @@ export default [
                 ]
             ],
             "display": "(option.encoding != 'lossless') && (imageType!='jpeg')"
-        }
+        },
+        "unsupportedBy": [
+            "ffmpeg",
+            "ewww",
+            "gd",
+            "stack"
+        ]
     },
     {
         "id": "near-lossless",
         "schema": {
             "title": "\"Near lossless\" quality",
-            "description": "This option allows you to get impressively better compression for lossless encoding, with minimal impact on visual quality. The range is 0 (no preprocessing) to 100 (maximum preprocessing).",
+            "description": "This option allows you to get impressively better compression for lossless encoding, with minimal impact on visual quality. The range is 0 (maximum preprocessing) to 100 (no preprocessing).",
             "type": [
                 "integer"
             ],
@@ -127,7 +143,17 @@ export default [
                 ]
             ],
             "display": "option.encoding != 'lossy'"
-        }
+        },
+        "unsupportedBy": [
+            "imagick",
+            "gmagick",
+            "imagemagick",
+            "graphicsmagick",
+            "ffmpeg",
+            "ewww",
+            "gd",
+            "stack"
+        ]
     },
     {
         "id": "metadata",
@@ -149,7 +175,12 @@ export default [
                 "xmp"
             ]
         },
-        "sensitive": false
+        "sensitive": false,
+        "unsupportedBy": [
+            "ffmpeg",
+            "gd",
+            "stack"
+        ]
     },
     {
         "id": "method",
@@ -166,7 +197,12 @@ export default [
         "ui": {
             "component": "slider",
             "advanced": true
-        }
+        },
+        "unsupportedBy": [
+            "ewww",
+            "gd",
+            "stack"
+        ]
     },
     {
         "id": "sharp-yuv",
@@ -187,7 +223,13 @@ export default [
                     "https:\/\/www.ctrl.blog\/entry\/webp-sharp-yuv.html"
                 ]
             ]
-        }
+        },
+        "unsupportedBy": [
+            "ffmpeg",
+            "ewww",
+            "gd",
+            "stack"
+        ]
     },
     {
         "id": "auto-filter",
@@ -202,7 +244,14 @@ export default [
         "ui": {
             "component": "checkbox",
             "advanced": true
-        }
+        },
+        "unsupportedBy": [
+            "vips",
+            "ffmpeg",
+            "ewww",
+            "gd",
+            "stack"
+        ]
     },
     {
         "id": "low-memory",
@@ -218,7 +267,13 @@ export default [
             "component": "checkbox",
             "advanced": true,
             "display": "(option.encoding != 'lossless') && (option.method>2)"
-        }
+        },
+        "unsupportedBy": [
+            "ffmpeg",
+            "ewww",
+            "gd",
+            "stack"
+        ]
     },
     {
         "id": "preset",
@@ -249,6 +304,12 @@ export default [
             "drawing",
             "icon",
             "text"
+        ],
+        "unsupportedBy": [
+            "ffmpeg",
+            "ewww",
+            "gd",
+            "stack"
         ]
     },
     {
@@ -263,7 +324,18 @@ export default [
             "minimum": 0,
             "maximum": 100
         },
-        "ui": null
+        "ui": null,
+        "unsupportedBy": [
+            "vips",
+            "imagick",
+            "gmagick",
+            "imagemagick",
+            "graphicsmagick",
+            "ffmpeg",
+            "ewww",
+            "gd",
+            "stack"
+        ]
     },
     {
         "id": "skip",
@@ -273,7 +345,10 @@ export default [
             ],
             "default": false
         },
-        "ui": null
+        "ui": null,
+        "unsupportedBy": [
+            "stack"
+        ]
     },
     {
         "id": "log-call-arguments",
@@ -283,7 +358,8 @@ export default [
             ],
             "default": false
         },
-        "ui": null
+        "ui": null,
+        "unsupportedBy": []
     },
     {
         "id": "use-nice",
@@ -293,7 +369,16 @@ export default [
             ],
             "default": false
         },
-        "ui": null
+        "ui": null,
+        "unsupportedBy": [
+            "vips",
+            "imagick",
+            "gmagick",
+            "ffmpeg",
+            "ewww",
+            "gd",
+            "stack"
+        ]
     },
     {
         "id": "jpeg",
@@ -304,7 +389,8 @@ export default [
             "default": []
         },
         "ui": null,
-        "sensitive": false
+        "sensitive": false,
+        "unsupportedBy": []
     },
     {
         "id": "png",
@@ -315,122 +401,10 @@ export default [
             "default": []
         },
         "ui": null,
-        "sensitive": false
-    },
-    {
-        "id": "try-cwebp",
-        "schema": {
-            "title": "Try plain cwebp command",
-            "description": "If set, the converter will try executing \"cwebp -version\". In case it succeeds, and the version is higher than those working cwebps found using other methods, the conversion will be done by executing this cwebp.",
-            "type": [
-                "boolean"
-            ],
-            "default": true
-        },
-        "ui": {
-            "component": "checkbox",
-            "advanced": true
-        }
-    },
-    {
-        "id": "try-discovering-cwebp",
-        "schema": {
-            "title": "Try discovering cwebp binary",
-            "description": "If set, the converter will try to discover installed cwebp binaries using a \"which -a cwebp\" command, or in case that fails, a \"whereis -b cwebp\" command. These commands will find cwebp binaries residing in PATH",
-            "type": [
-                "boolean"
-            ],
-            "default": true
-        },
-        "ui": {
-            "component": "checkbox",
-            "advanced": true
-        }
-    },
-    {
-        "id": "try-common-system-paths",
-        "schema": {
-            "title": "Try locating cwebp in common system paths",
-            "description": "If set, the converter will look for a cwebp binaries residing in common system locations such as \"\/usr\/bin\/cwebp\". If such exist, it is assumed that they are valid cwebp binaries. A version check will be run on the binaries found (they are executed with the \"-version\" flag. The cwebp with the highest version found using this method and the other enabled methods will be used for the actual conversion.Note: All methods for discovering cwebp binaries are per default enabled. You can save a few microseconds by disabling some, but it is probably not worth it, as your setup will then become less resilient to system changes.",
-            "type": [
-                "boolean"
-            ],
-            "default": true
-        },
-        "ui": {
-            "component": "checkbox",
-            "advanced": true
-        }
-    },
-    {
-        "id": "try-supplied-binary-for-os",
-        "schema": {
-            "title": "Try precompiled cwebp binaries",
-            "description": "If set, the converter will try use a precompiled cwebp binary that comes with webp-convert. But only if it has a higher version that those found by other methods. As the library knows the versions of its bundled binaries, no additional time is spent executing them with the \"-version\" parameter. The binaries are hash-checked before executed. The library btw. comes with several versions of precompiled cwebps because they have different dependencies - some works on some systems and others on others.",
-            "type": [
-                "boolean"
-            ],
-            "default": true
-        },
-        "ui": {
-            "component": "checkbox",
-            "advanced": true
-        }
-    },
-    {
-        "id": "skip-these-precompiled-binaries",
-        "schema": {
-            "title": "Skip these precompiled binaries",
-            "description": "",
-            "type": [
-                "string"
-            ],
-            "default": ""
-        },
-        "ui": {
-            "component": "multi-select",
-            "advanced": true,
-            "options": [
-                "cwebp-120-linux-x86-64",
-                "cwebp-110-linux-x86-64",
-                "cwebp-103-linux-x86-64-static",
-                "cwebp-061-linux-x86-64"
-            ],
-            "display": "option['try-supplied-binary-for-os'] == true",
-        },
-        "sensitive": false
-    },
-    {
-        "id": "rel-path-to-precompiled-binaries",
-        "schema": {
-            "title": "Rel path to precompiled binaries",
-            "description": "",
-            "type": [
-                "string"
-            ],
-            "default": ".\/Binaries"
-        },
-        "ui": null,
-        "sensitive": true
-    },
-    {
-        "id": "command-line-options",
-        "schema": {
-            "title": "Command line options",
-            "description": "",
-            "type": [
-                "string"
-            ],
-            "default": ""
-        },
-        "ui": {
-            "component": "input",
-            "advanced": true
-        },
-        "sensitive": false
+        "sensitive": false,
+        "unsupportedBy": []
     }
 ]
-
 
   /*
   [

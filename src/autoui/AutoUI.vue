@@ -1,9 +1,9 @@
 <template>
   <div class="autoui">
-    <AutoComponent :ui="ui" :schema="schema" :modelValue="modelValue" @componentDataChange="onComponentDataChange"/>
-    <div class="view-select">
+    <div class="view-select" v-if="showAdvancedButton">
       <button v-tooltip="'Swich between advanced view (all available options) and simple view (most used options)'" v-text="advancedView ? 'Hide advanced options' : 'Show advanced options'" @click="advancedView = !advancedView"></button>
     </div>
+    <AutoComponent :ui="ui" :schema="schema" :modelValue="modelValue" :advancedView="advancedView" :expressionContext="expressionContext" @componentDataChange="onComponentDataChange"/>
   </div>
 </template>
 
@@ -17,14 +17,22 @@ export default {
   props: {
     schema: Object,
     ui: Object,
-    modelValue: {}
+    modelValue: {},
+    expressionContext: String,
+    advancedView: {
+      type: Boolean,
+      default: false
+    },
+    showAdvancedButton: {
+      type: Boolean,
+      default: true
+    }
   },
   computed: {
 
   },
   data() {
     return {
-      advancedView: false,
     }
   },
   mounted() {
@@ -41,6 +49,10 @@ export default {
 </script>
 
 <style scoped>
+  .autoui {
+    margin-top: 20px;
+  }
+
   .autoui-table {
     display: table;
 
@@ -73,6 +85,7 @@ export default {
   .view-select {
     display: block;
     text-align: right;
+    margin-bottom: -20px;
   }
   .view *:first-child {
     display: inline-block;
