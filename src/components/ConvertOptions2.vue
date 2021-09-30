@@ -162,14 +162,13 @@ export default {
         imageType: 'any',
         supported: function(optionId) {
             // Check if optionId is supported for the selected converter
-            
+
         },
       };
 
       let globalContextPNG = {
         option: me.png.data,
         imageType: 'png',
-        supported: supported,
         overriding: function(id) {
           //console.log('overriding?', id);
           //console.log(me.png.data.overrides);
