@@ -1,7 +1,7 @@
 <template>
   <div class="convert-options">
-    <p>General: {{ general.data }}</p>
-    <p>PNG: {{ png.data }}</p>
+    <!--<p>General: {{ general.data }}</p>
+    <p>PNG: {{ png.data }}</p>-->
 
     <AutoUI :ui="general.ui" :schema="schema" :modelValue="general.data" expressionContext="general"/>
     <AutoUI :ui="png.ui" :schema="schema" :modelValue="png.data" expressionContext="png" :advancedView="true" :showAdvancedButton="false"/>
@@ -17,8 +17,6 @@ export default {
   name: 'ConvertOptions2',
   components: {
     AutoUI
-  },
-  props: {
   },
   computed: {
   },
@@ -101,7 +99,7 @@ export default {
           let componentUi = option.schema;
           schemaProperties[option.id] = option.schema;
           components.push(componentUi);
-          if (option.schema.default) {
+          if (option.schema.default != undefined) {
             defaults[option.id] = option.schema.default;
             pngDefaults[option.id] = option.schema.default;
           }
@@ -207,7 +205,10 @@ export default {
 </script>
 
 <style scoped>
+/*
 .convert-options {
-  margin-right: 15px;
-}
+  height:100%;
+  overflow-y: auto;
+  padding:10px 20px;
+}*/
 </style>

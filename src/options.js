@@ -1,5 +1,52 @@
 export default [
   {
+            "id": "converter",
+            "schema": {
+                "title": "Converter",
+                "description": "Cwebp and vips are best. the *magick are nearly as good, but only recent versions supports near-lossless. for full discussion, check the guide",
+                "enum": [
+                    "cwebp",
+                    "vips",
+                    "imagick",
+                    "gmagick",
+                    "imagemagick",
+                    "graphicsmagick",
+                    "wpc",
+                    "ffmpeg",
+                    "ewww",
+                    "gd",
+                    "stack"
+                ],
+                "type": [
+                    "string"
+                ],
+                "default": "cwebp"
+            },
+            "ui": {
+                "component": "select",
+                "links": [
+                    [
+                        "Guide",
+                        "https:\/\/github.com\/rosell-dk\/webp-convert\/blob\/master\/docs\/v1.3\/converting\/converters.md"
+                    ]
+                ]
+            },
+            "sensitive": false,
+            "options": [
+                "cwebp",
+                "vips",
+                "imagick",
+                "gmagick",
+                "imagemagick",
+                "graphicsmagick",
+                "wpc",
+                "ffmpeg",
+                "ewww",
+                "gd",
+                "stack"
+            ]
+        },
+            {
       "id": "encoding",
       "schema": {
           "title": "Encoding",

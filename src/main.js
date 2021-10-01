@@ -62,17 +62,18 @@ if (!window["wcfmoptions"]) {
         break;
       case 'conversion-settings':
         var response = {
-          converters: [
+          /*converters: [
             {id: 'cwebp', name: 'cwebp'}, // TODO: Accept option definitions!
             {id: 'vips', name: 'vips'},
             {id: 'ewww', name: 'ewww'},
             {id: 'gd', name: 'gd'},
-          ],
+          ],*/
           //options: convertOptions,
-          optionsSchema: optionsSchema,
-          optionsUI: optionsUI,
+          //optionsSchema: optionsSchema,
+          //optionsUI: optionsUI,
           options: converterOptions,
-          supportedStandardOptions: {
+
+          /*supportedStandardOptions: {
             encoding: ['cwebp', 'vips', 'imagick', 'gmagick', 'imagemagick', 'graphicsmagick', 'ffmpeg', 'wpc'],
             method: ['cwebp', 'imagick', 'gmagick', 'imagemagick', 'graphicsmagick', 'ffmpeg', 'wpc'],
             nearLossless: ['cwebp', 'vips', 'wpc']
@@ -81,7 +82,7 @@ if (!window["wcfmoptions"]) {
             converter: 'cwebp',
             //encoding: 'lossless',
             //method: 3,
-          },
+          },*/
           systemStatus: {
             converterRequirements: {
               gd: {
@@ -108,6 +109,16 @@ if (!window["wcfmoptions"]) {
             },
             log: 'blah blah blah'
           }
+          break;
+        case 'convert':
+          var response = {
+            success: false,
+            msg: 'Image type could not be detected',
+          }
+          /*var response = {
+            success: true,
+            msg: '',
+          }*/
           break;
         default:
           var response = 'ok';

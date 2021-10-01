@@ -5,14 +5,16 @@
     "dev": "vite",
     "build": "vite build",
     "build2": "vite build  --base=",
-    "copy": "cp dist/_assets/index* /var/www/we/we0/wordpress/wp-content/plugins/webp-express/lib/wcfm/wcfm.js && cp dist/_assets/style* /var/www/we/we0/wordpress/wp-content/plugins/webp-express/lib/wcfm/style.css",
-    "copyold": "cp dist/_assets/index* /var/www/webp-express-tests/we0/plugins-moved/webp-express/lib/wcfm/wcfm.js && cp dist/_assets/style* /var/www/webp-express-tests/we0/plugins-moved/webp-express/lib/wcfm/style.css",
-    "build-copy": "npm run build && npm run copy"
+    "copymainjs": "cp dist/assets/index*.js /home/rosell/github/webp-express/lib/wcfm/wcfm.js",
+    "copyvendorjs": "rm /home/rosell/github/webp-express/lib/wcfm/vendor*.js || cp dist/assets/vendor*.js /home/rosell/github/webp-express/lib/wcfm",
+    "copycss": "cp dist/assets/index*.css /home/rosell/github/webp-express/lib/wcfm/style.css",
+    "copyassets": "npm run copymainjs && npm run copyvendorjs && npm run copycss",
+    "build-copy": "npm run build && npm run copyassets"
   },
   "dependencies": {
     "@rosell/js-expression": "^0.3.1",
     "@vueform/slider": "^1.0.5",
-    "splitpanes": "^3.0.4",
+    "splitpanes": "^3.0.6",
     "v-tooltip": "^4.0.0-alpha.1",
     "vue": "^3.0.11",
     "vue-multiselect": "^3.0.0-alpha.2"

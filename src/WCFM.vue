@@ -1,5 +1,5 @@
 <template>
-  <div class="wcfm">
+  <div class="wcfm" style="overflow:hidden">
     <SVGs />
     <!--
     <div class="pane" style="width:48%">
@@ -7,19 +7,52 @@
     </div>-->
     <!--<AutoUI :ui="ui" :schema="schema" :modelValue="data"/>-->
     <!--<ConvertOptions />-->
+    <splitpanes class="default-theme" style="position:absolute; top:0; left: 0">
+      <pane size="70" min-size="20" style="overflow-y: hidden; padding:0">
+        <splitpanes>
+          <pane size="30">
+            <div class="pane-content">
+              <div>
+                <FileTree :item="item" />
+              </div>
+            </div>
+          </pane>
+          <pane size="70" style="overflow-y: auto;">
+            <div class="pane-content">
+              <InfoPane :info="selectedInfo"/>
+            </div>
+          </pane>
+        </splitpanes>
+      </pane>
+      <pane size="30">
+        <splitpanes horizontal>
+          <pane size="80">
+            <div class="pane-content">
+              <ConvertOptions2 ref="convertOptions"/>
+            </div>
+          </pane>
+          <pane size="20" style="overflow-y: auto;">
+            <div class="pane-content">
+              <div>{{ $refs.convertOptions?.general?.data }}</div>
+            </div>
+          </pane>
+        </splitpanes>
+      </pane>
+    </splitpanes>
+    <!--
+    <InfoPane :info="selectedInfo"/>
     <multipane class="mainpanel" layout="vertical">
       <div class="pane" style="width:48%">
         <FileTree :item="item" />
       </div>
       <multipane-resizer></multipane-resizer>
       <div class="pane" :style="{ flexGrow: 1 }">
-        <!--{{ data }}-->
-        <!--<AutoUI :ui="ui" :schema="schema" :modelValue="data"/>-->
         <ConvertOptions2 />
-        <!--<hr/>
-        <InfoPane :info="selectedInfo"/>-->
       </div>
-    </multipane>
+    </multipane>-->
+    <!--{{ data }}-->
+    <!--<AutoUI :ui="ui" :schema="schema" :modelValue="data"/>-->
+
   </div>
 </template>
 <!--
@@ -36,6 +69,9 @@
 
 
 <script>
+import { Splitpanes, Pane } from 'splitpanes'
+import 'splitpanes/dist/splitpanes.css'
+
 import Poster from './classes/Poster.js'
 
 import SVGs from './components/SVGs.vue'
@@ -59,12 +95,16 @@ export default {
     ConvertOptions2,
     FileTree,
     InfoPane,
-    Multipane, MultipaneResizer,
-    //Splitpanes, Pane
+    //Multipane, MultipaneResizer,
+    Splitpanes, Pane
   },
   methods: {
     onConvertClick(path) {
-      alert(path);
+      var me = this;
+      Poster.post('convert', {path: path}, function(response) {
+        console.log('convert response:', response);
+      });
+//      alert(path);
     },
     displayInfo(path) { // called from FileItem.vue
       var me = this;
@@ -84,8 +124,9 @@ export default {
     return {
       selectedPath: null,
       selectedItem: null,
-      item: {},
+      item: {},     // the tree
       selectedInfo: {},
+      //convertOptions: {},
       /*
       convertOptions: {
         ui: {},
@@ -109,7 +150,20 @@ export default {
 </script>
 
 <style>
-/*
+  .splitpanes__pane {
+    background-color: white !important;
+    padding: 0px;
+    min-height: 80px;
+    box-shadow: inset 0 0 3px rgba(0,0,0,.2);
+  }
+  .pane-content {
+    height:100%;
+    overflow-y: auto;
+
+  }
+  .pane-content > *{
+    padding: 10px 20px;
+  }
   body, html {
     height: 100%;
     margin: 0;
