@@ -25,20 +25,43 @@
         </splitpanes>
       </pane>
       <pane size="30">
-        <splitpanes horizontal>
-          <pane size="80">
-            <div class="pane-content">
-              <ConvertOptions2 ref="convertOptions"/>
-            </div>
-          </pane>
+        <div class="pane-content">
+
+        </div>
+      </pane>
+          <!--
+          <splitpanes horizontal>
+            <pane size="80">
+            </pane>
+
           <pane size="20" style="overflow-y: auto;">
             <div class="pane-content">
-              <div>{{ $refs.convertOptions?.general?.data }}</div>
+              <div>{{ ConvertOptions }}</div>
+            </div>
+          </pane></splitpanes>-->
+
+
+    </splitpanes>
+    <Modal width="90%" height="90%">
+      <template v-slot:body>
+        <splitpanes class="default-theme" >
+          <pane size="30" min-size="20">
+            <div class="pane-content">
+              <div>
+                <ConvertOptions2 ref="convertOptions"/>
+              </div>
+            </div>
+          </pane>
+          <pane size="70" style="overflow-y: auto;">
+            <div class="pane-content">
+              <InfoPane :info="selectedInfo"/>
             </div>
           </pane>
         </splitpanes>
-      </pane>
-    </splitpanes>
+
+      </template>
+    </Modal>
+
     <!--
     <InfoPane :info="selectedInfo"/>
     <multipane class="mainpanel" layout="vertical">
@@ -55,18 +78,6 @@
 
   </div>
 </template>
-<!--
-<splitpanes style="height: 400px">
-  <pane min-size="20">1</pane>
-  <pane>
-    <splitpanes horizontal>
-      <pane>2</pane>
-      <pane>3</pane>
-    </splitpanes>
-  </pane>
-  <pane>5</pane>
-</splitpanes>-->
-
 
 <script>
 import { Splitpanes, Pane } from 'splitpanes'
@@ -79,8 +90,9 @@ import ConvertOptions from './components/ConvertOptions.vue'
 import FileTree from './components/FileTree.vue'
 import InfoPane from './components/InfoPane.vue'
 
-import Multipane from './components/standard/multipane.vue';
-import MultipaneResizer from './components/standard/multipane-resizer.vue';
+//import Multipane from './components/standard/multipane.vue';
+import Modal from './components/standard/Modal.vue';
+//import MultipaneResizer from './components/standard/multipane-resizer.vue';
 import ConvertOptions2 from './components/ConvertOptions2.vue';
 
 //import Pane from './components/pane.vue';
@@ -93,15 +105,18 @@ export default {
     SVGs,
     ConvertOptions,
     ConvertOptions2,
+    Modal,
     FileTree,
     InfoPane,
-    //Multipane, MultipaneResizer,
     Splitpanes, Pane
   },
   methods: {
     onConvertClick(path) {
       var me = this;
-      Poster.post('convert', {path: path}, function(response) {
+      let options = this.$refs.convertOptions?.general?.data;
+      let req = {path: path, convertOptions: options}
+      console.log(req);
+      Poster.post('convert', req, function(response) {
         console.log('convert response:', response);
       });
 //      alert(path);
@@ -171,6 +186,8 @@ export default {
   }*/
   .mainpanel, #webpconvert-filemanager {
     height: 100%;
+    min-height: 300px;
+    position: relative;
   }
   .mainpanel {
     min-height: 400px;

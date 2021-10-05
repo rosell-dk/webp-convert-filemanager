@@ -207,4 +207,19 @@ export default {
   opacity: 0;
   /*transform: scale(0.9) translateX(30px);*/
 }
+
+/* Hm, how to trigger the following when in split-pane with small width? */
+@media (max-width: 600px) {
+  .auto-component {
+    display: block;
+    & > * {
+      display: block;
+
+      & > * {
+        display: block;
+      }
+    }
+  }
+}
+
 </style>
