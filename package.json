@@ -6,7 +6,7 @@
     "build": "vite build",
     "build2": "vite build  --base=",
     "copymainjs": "cp dist/assets/index*.js /home/rosell/github/webp-express/lib/wcfm/wcfm.js",
-    "copyvendorjs": "rm /home/rosell/github/webp-express/lib/wcfm/vendor*.js || cp dist/assets/vendor*.js /home/rosell/github/webp-express/lib/wcfm",
+    "copyvendorjs": "rm -f /home/rosell/github/webp-express/lib/wcfm/vendor*.js && cp dist/assets/vendor*.js /home/rosell/github/webp-express/lib/wcfm",
     "copycss": "cp dist/assets/index*.css /home/rosell/github/webp-express/lib/wcfm/style.css",
     "copyassets": "npm run copymainjs && npm run copyvendorjs && npm run copycss",
     "build-copy": "npm run build && npm run copyassets"
