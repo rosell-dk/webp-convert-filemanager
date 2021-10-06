@@ -7,6 +7,7 @@ import optionsSchema from './options-schema.js'
 import optionsUI from './options-ui.js'
 import converterOptions from './options.js'
 import VTooltip from 'v-tooltip'
+import VueZoomer from 'vue-zoomer'
 
 //import './play.js'
 //import './js-expr-parser.js'
@@ -31,6 +32,7 @@ import VTooltip from 'v-tooltip'
 
 //VTooltip.options.defaultHtml = true;
 const wcfm = createApp(WCFM);
+wcfm.use(VueZoomer);
 wcfm.use(VTooltip, {
   defaultHtml: false,
 });

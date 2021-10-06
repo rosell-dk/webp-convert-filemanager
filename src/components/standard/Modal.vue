@@ -9,7 +9,6 @@
             default header
           </slot>
         </div>-->
-
         <div class="modal-body">
           <slot name="body">
             default body
@@ -47,9 +46,6 @@ export default {
 }
 </script>
 <style>
-#app {
-  padding: 1rem;
-}
 
 .modal-mask {
   position: fixed;
@@ -75,6 +71,7 @@ export default {
   border-radius: 2px;
   box-shadow: 0 2px 8px rgba(0, 0, 0, 0.33);
   font-family: Helvetica, Arial, sans-serif;
+  position: relative;
 }
 
 .modal-header h3 {

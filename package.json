@@ -17,7 +17,8 @@
     "splitpanes": "^3.0.6",
     "v-tooltip": "^4.0.0-alpha.1",
     "vue": "^3.0.11",
-    "vue-multiselect": "^3.0.0-alpha.2"
+    "vue-multiselect": "^3.0.0-alpha.2",
+    "vue-zoomer": "^0.4.0-beta.1"
   },
   "devDependencies": {
     "@vitejs/plugin-vue": "^1.2.2",

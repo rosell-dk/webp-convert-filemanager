@@ -39,22 +39,21 @@
               <div>{{ ConvertOptions }}</div>
             </div>
           </pane></splitpanes>-->
-
-
     </splitpanes>
     <Modal width="90%" height="90%">
       <template v-slot:body>
         <splitpanes class="default-theme" >
-          <pane size="30" min-size="20">
+          <pane size="40" min-size="20">
             <div class="pane-content">
               <div>
                 <ConvertOptions2 ref="convertOptions"/>
               </div>
             </div>
           </pane>
-          <pane size="70" style="overflow-y: auto;">
+          <pane size="60" style="overflow-y: auto;">
             <div class="pane-content">
-              <InfoPane :info="selectedInfo"/>
+              <!--<InfoPane :info="selectedInfo"/>-->
+              <Variants />
             </div>
           </pane>
         </splitpanes>
@@ -92,6 +91,7 @@ import InfoPane from './components/InfoPane.vue'
 
 //import Multipane from './components/standard/multipane.vue';
 import Modal from './components/standard/Modal.vue';
+import Variants from './components/Variants.vue';
 //import MultipaneResizer from './components/standard/multipane-resizer.vue';
 import ConvertOptions2 from './components/ConvertOptions2.vue';
 
@@ -105,6 +105,7 @@ export default {
     SVGs,
     ConvertOptions,
     ConvertOptions2,
+    Variants,
     Modal,
     FileTree,
     InfoPane,
