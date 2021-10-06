@@ -6,33 +6,32 @@
     </ul>
     <div class="zoom-slider">
       zoom
-      <Slider
-        v-model="zoom"
-        :min="1"
-        :max="8"
-        :width="100"
-        :step="-1"
-        :format="sliderFormat"
+      <ZoomSlider
+        v-model:zoom="zoom"
       />
     </div>
     <br><br>
     Zoom level is: {{ zoom }}<br>
     <button @click="changeImage()">Change image</button>
+    <div style="width:100%">
+      <ImageViewport :src="imageUrl" width="30%" v-model:zoom="zoom" />
+    </div>
     <div style="width:30%">
-      <ImageViewport ref="img1" :src="imageUrl" width="30%" v-model:zoom="zoom" />
+      <ImageViewport :src="imageUrl" width="30%" v-model:zoom="zoom" />
     </div>
   </div>
 </template>
 
 <script>
 import ImageViewport from './standard/ImageViewport.vue'
-import Slider from '@vueform/slider'
+import ZoomSlider from './ZoomSlider.vue'
+//import Slider from '@vueform/slider'
 
 export default {
   name: 'Variants',
   components: {
     ImageViewport,
-    Slider
+    ZoomSlider
   },
   props: {
   },
@@ -46,6 +45,7 @@ export default {
       } else {
         this.imageUrl = 'http://localhost:3000/src/assets/dummy.jpg';
       }
+      this.zoom = 1;
     }
 
   },
