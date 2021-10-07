@@ -1,32 +1,54 @@
 <template>
   <!--<img :src="src" :style="{width:width}"/>-->
-  <div ref="root">
+  <div ref="root" class="image-viewport" >
+    <!--
     Current scale: {{$refs.zoomer?.scale }}<br>
     Zoom: {{ zoom }}<br>
-    Container width: {{$refs.zoomer?.containerWidth }}<br>
+    TranslateX: {{$refs.zoomer?.translateX }} <br>
+    TranslateY: {{$refs.zoomer?.translateY }} <br>-->
+<!--
+    Current scale: {{$refs.zoomer?.scale }}<br>
+    Container width: {{$refs.zoomer?.containerWidth }} / {{$refs.root?.offsetWidth }} <br>
     Natural width: {{$refs.theimg?.naturalWidth }}<br>
-
-    <v-zoomer ref="zoomer" class="image-viewport" :maxScale="8" @resize="onResize">
+    Ratio: {{ ratio }} <br>
+    Container height: {{ height }} <br>
+-->
+    <v-zoomer
+      ref="zoomer"
+      class="zoomer"
+      :maxScale="8"
+      @resize="onResize"
+      :doubleClickToZoom="false"
+      :style="{height:height+'px'}"
+    >
       <img ref="theimg" :src="src" @load="onImgLoad">
     </v-zoomer>
+    <div class="zoom-slider">
+      <ZoomSlider
+        v-model:zoom="zoom"
+      />
+    </div>
   </div>
 
 </template>
 
 <script>
 import VueZoomer from 'vue-zoomer' // https://github.com/jarvisniu/vue-zoomer/tree/next
+import ZoomSlider from './ZoomSlider.vue'
 import { reactive } from 'vue';
 
 export default {
   name: 'ImageViewport',
   components: {
-    VueZoomer
+    VueZoomer,
+    ZoomSlider
   },
-  emits: ['update:zoom'],
+  emits: ['update:zoom', 'update:translateX', 'update:translateY'],
   props: {
     src: {
       type: String,
     },
+    /*
     width: {
       type: [Number, String],
       default: '95%',
@@ -34,8 +56,16 @@ export default {
     height: {
       type: [Number, String],
       default: '30px',
-    },
+    },*/
     zoom: {
+      type: Number,
+      default: 1,
+    },
+    translateX: {
+      type: Number,
+      default: 1,
+    },
+    translateY: {
       type: Number,
       default: 1,
     },
@@ -45,6 +75,7 @@ export default {
 //      hover: false
       ratio: 1,
       ro: null,
+      height: 300,
     }
   },
   watch: {
@@ -57,14 +88,40 @@ export default {
       //this.$refs.zoomer.scale = newValue / this.ratio;
       this.updateScale()
     },
+    translateX(newValue, oldValue) {
+      if (this.$refs.zoomer.translateX != newValue) {
+        this.$refs.zoomer.translateX = newValue;
+      }
+    },
+    translateY(newValue, oldValue) {
+      if (this.$refs.zoomer.translateY != newValue) {
+        this.$refs.zoomer.translateY = newValue;
+      }
+    },
   },
   methods: {
     onImgLoad() {
       //console.log('image ready', this.$refs.theimg.naturalWidth);
+      let imageRatio = this.$refs.theimg.naturalWidth / this.$refs.theimg.naturalHeight;
+      //let ratio = this.$refs.theimg.naturalWidth / this.$refs.zoomer?.containerWidth;
+
+      //let containerWidth = this.$refs.root?.offsetWidth;
+      let containerWidth = this.$refs.zoomer?.containerWidth;
+      let containerHeight = containerWidth / imageRatio;
+      if (containerHeight > 300) {
+        containerHeight = 300;
+      }
+      //let containerHeight = 300;
+      this.height = containerHeight;
+
       this.updateRatio();
     },
     updateRatio() {
-      this.ratio = this.$refs.theimg.naturalWidth / this.$refs.zoomer?.containerWidth;
+      //this.ratio = this.$refs.theimg.naturalWidth / this.$refs.zoomer?.containerWidth;
+      let ratioW = this.$refs.theimg.naturalWidth / this.$refs.zoomer?.containerWidth;
+      let ratioH = this.$refs.theimg.naturalHeight / this.$refs.zoomer?.containerHeight;
+      this.ratio = Math.max(ratioW, ratioH);
+      //this.ratio = this.$refs.zoomer?.containerWidth / this.$refs.theimg.naturalWidth;
       this.updateScale()
       //console.log('ratio:', this.ratio);
     },
@@ -73,6 +130,15 @@ export default {
     },
     onResize() {
       console.log('resize');
+    },
+    onDoubleTap() {
+      console.log('double tab');
+      if (this.$refs.zoomer.scale == 1) {
+        this.$emit('update:zoom', 1);
+      } else {
+        // zoom to fit
+        this.$emit('update:zoom', 1 / this.ratio);
+      }
     }
 
   },
@@ -86,6 +152,8 @@ export default {
     // https://v3.vuejs.org/api/basic-reactivity.html#isreactive
     //console.log('raw', toRaw(this.$refs.zoomer));
     this.ro = new ResizeObserver(this.onResize).observe(reactive(this.$refs.root))
+
+    this.$refs.zoomer.tapDetector.onDoubleTap(this.onDoubleTap)
 
     this.$watch(
       "$refs.zoomer.scale",
@@ -107,16 +175,21 @@ export default {
       }
     );
 
-    console.log('width:', this.$refs.zoomer);
-/*
     this.$watch(
-      "$refs.theimg.naturalWidth",
+      "$refs.zoomer.translateX",
       (newValue, oldValue) => {
-         //execute your code here
-         console.log('natural width change:', newValue);
-         //this.$emit('update:zoom', newValue);
+         this.$emit('update:translateX', newValue);
       }
-    );*/
+    );
+    this.$watch(
+      "$refs.zoomer.translateY",
+      (newValue, oldValue) => {
+         this.$emit('update:translateY', newValue);
+      }
+    );
+
+
+
   },
   beforeDestroy () {
     this.ro.unobserve(this.$refs.zoomer)
@@ -129,19 +202,27 @@ export default {
    You must use "PostCSS Nesting" package to compile to current standard
  */
 .image-viewport {
-  width: 100%;
-  height: 300px;
-  border: solid 1px silver;
-
-  & img {
-    vertical-align: top;
-    object-fit: contain;
+  & .zoomer {
     width: 100%;
-    height: 100%;
-    user-drag: none;
-    -webkit-user-drag: none;
-    -moz-user-drag: none;
+    /*height: 600px;*/
+    border: solid 1px silver;
+
+    & img {
+      vertical-align: top;
+      object-fit: contain;
+      width: 100%;
+      height: 100%;
+      user-drag: none;
+      -webkit-user-drag: none;
+      -moz-user-drag: none;
+    }
   }
+  & .zoom-slider {
+    margin-top:10px;
+    width: 100px;
+    float: right;
+  }
+
 }
 
 </style>

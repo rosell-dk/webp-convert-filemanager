@@ -1,6 +1,5 @@
 <template>
   <div class="zoom-slider">
-    zoom
     <Slider
       v-model="exp"
       :min="-4"
@@ -8,6 +7,7 @@
       :width="100"
       :step="-1"
       :format="sliderFormat"
+      tooltipPosition="bottom"
     />
   </div>
 </template>
@@ -64,6 +64,7 @@ export default {
 
 <style>
 .zoom-slider {
+  /*
   & .slider-tooltip {
     display: none;
   }
@@ -72,6 +73,6 @@ export default {
   }
   & .slider-active .slider-tooltip {
     display: block;
-  }
+  }*/
 }
 </style>

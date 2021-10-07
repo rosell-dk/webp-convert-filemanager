@@ -1,37 +1,41 @@
 <template>
   <div class="variants">
+    <button @click="changeImage()">Change image</button>
     <ul>
       <li>Original</li>
       <li>Existing conversion</li>
     </ul>
+    <!--
     <div class="zoom-slider">
-      zoom
       <ZoomSlider
         v-model:zoom="zoom"
       />
-    </div>
+    </div>-->
+    <!--
     <br><br>
     Zoom level is: {{ zoom }}<br>
-    <button @click="changeImage()">Change image</button>
-    <div style="width:100%">
-      <ImageViewport :src="imageUrl" width="30%" v-model:zoom="zoom" />
-    </div>
-    <div style="width:30%">
-      <ImageViewport :src="imageUrl" width="30%" v-model:zoom="zoom" />
+    TranslateX is: {{ translateX }}<br>
+    TranslateY is: {{ translateY }}<br>-->
+    <br><br>
+    <div class="images">
+      <div v-for="variant in variants">
+        {{ variant.title }}
+        <ImageViewport :src="imageUrl" v-model:zoom="zoom" v-model:translateX="translateX" v-model:translateY="translateY" />
+      </div>
     </div>
   </div>
 </template>
 
 <script>
 import ImageViewport from './standard/ImageViewport.vue'
-import ZoomSlider from './ZoomSlider.vue'
+//import ZoomSlider from './ZoomSlider.vue'
 //import Slider from '@vueform/slider'
 
 export default {
   name: 'Variants',
   components: {
     ImageViewport,
-    ZoomSlider
+    //ZoomSlider
   },
   props: {
   },
@@ -46,13 +50,26 @@ export default {
         this.imageUrl = 'http://localhost:3000/src/assets/dummy.jpg';
       }
       this.zoom = 1;
+      this.translateX = 0;
+      this.translateY = 0;
     }
 
   },
   data() {
     return {
       zoom: 1,
-      imageUrl: ''
+      translateX: 0,
+      translateY: 0,
+      imageUrl: '',
+      variants: [
+        {
+          'title': 'Original'
+        },
+        {
+          'title': 'Existing conversion'
+        }
+
+      ]
     }
   }
 }
@@ -63,15 +80,17 @@ export default {
    You must use "PostCSS Nesting" package to compile to current standard
  */
 .variants {
-  & .zoom-slider {
-    width: 100px;
-    float: right;
-  }
-  & * {
+  & .images {
+    & > div {
+      display: inline-block;
+      width: 48%;
+      margin-right:2%;
+    }
   }
 }
 </style>
 <style>
+/*
 .zoom-slider {
   & .slider-tooltip {
     display: none;
@@ -82,5 +101,5 @@ export default {
   & .slider-active .slider-tooltip {
     display: block;
   }
-}
+}*/
 </style>

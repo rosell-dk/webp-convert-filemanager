@@ -7,6 +7,23 @@
     </div>-->
     <!--<AutoUI :ui="ui" :schema="schema" :modelValue="data"/>-->
     <!--<ConvertOptions />-->
+
+    <splitpanes class="default-theme" style="position:absolute; top:0; left: 0">
+        <pane size="30">
+          <div class="pane-content">
+            <div>
+              <FileTree :item="item" />
+            </div>
+          </div>
+        </pane>
+        <pane size="70" style="overflow-y: auto;">
+          <div class="pane-content">
+            <Variants />
+          </div>
+        </pane>
+      </splitpanes>
+
+    <!--
     <splitpanes class="default-theme" style="position:absolute; top:0; left: 0">
       <pane size="70" min-size="20" style="overflow-y: hidden; padding:0">
         <splitpanes>
@@ -26,20 +43,12 @@
       </pane>
       <pane size="30">
         <div class="pane-content">
-
+          <Variants />
         </div>
       </pane>
-          <!--
-          <splitpanes horizontal>
-            <pane size="80">
-            </pane>
-
-          <pane size="20" style="overflow-y: auto;">
-            <div class="pane-content">
-              <div>{{ ConvertOptions }}</div>
-            </div>
-          </pane></splitpanes>-->
     </splitpanes>
+  -->
+    <!--
     <Modal width="90%" height="90%">
       <template v-slot:body>
         <splitpanes class="default-theme" >
@@ -52,14 +61,13 @@
           </pane>
           <pane size="60" style="overflow-y: auto;">
             <div class="pane-content">
-              <!--<InfoPane :info="selectedInfo"/>-->
+              <InfoPane :info="selectedInfo"/>
               <Variants />
             </div>
           </pane>
         </splitpanes>
-
       </template>
-    </Modal>
+    </Modal>-->
 
     <!--
     <InfoPane :info="selectedInfo"/>
