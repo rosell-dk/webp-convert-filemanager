@@ -107,6 +107,7 @@ export default {
 
     & .footer {
       font-style: italic;
+      margin-top:2px;
       & .select {
         float: right;
         & button {

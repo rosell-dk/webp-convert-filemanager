@@ -46,7 +46,6 @@
 <script>
 import VueZoomer from 'vue-zoomer' // https://github.com/jarvisniu/vue-zoomer/tree/next
 import ZoomSlider from './ZoomSlider.vue'
-import { reactive } from 'vue';
 
 export default {
   name: 'ImageViewport',
@@ -112,6 +111,9 @@ export default {
   },
   methods: {
     onImgLoad() {
+      this.updateContainerHeight();
+    },
+    updateContainerHeight() {
       //console.log('image ready', this.$refs.theimg.naturalWidth);
       let imageRatio = this.$refs.theimg.naturalWidth / this.$refs.theimg.naturalHeight;
       //let ratio = this.$refs.theimg.naturalWidth / this.$refs.zoomer?.containerWidth;
@@ -151,8 +153,9 @@ export default {
     },
     onResize() {
       //console.log('resize');
-      this.updateRatio();
-      this.updateScale()
+      //this.updateRatio();
+      //this.updateScale()
+      this.updateContainerHeight();
     },
     onDoubleTap() {
       //console.log('double tab');
@@ -175,7 +178,7 @@ export default {
     // https://v3.vuejs.org/api/basic-reactivity.html#isreactive
     //console.log('raw', toRaw(this.$refs.zoomer));
     if (window.ResizeObserver) {
-      this.ro = new ResizeObserver(this.onResize).observe(reactive(this.$refs.root))
+      this.ro = new ResizeObserver(this.onResize).observe(this.$refs.root)
     }
 
     this.$refs.zoomer.tapDetector.onDoubleTap(this.onDoubleTap)
