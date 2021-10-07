@@ -2,7 +2,7 @@
     <div class="variant">
       <div class="header">
         <div class="title">{{ variant.title }}</div>
-        <div class="size">{{ variant.size }} kb</div>
+        <div class="size">{{ filesize }} </div>
         <!--<div class="zoom">zoom: {{ Math.round(zoom*100) }}%</div>-->
       </div>
       <ImageViewport
@@ -50,6 +50,23 @@ export default {
       type: Object,
     },
 
+  },
+  computed: {
+    filesize: function() {
+      if (!this.variant?.size) {
+        return '';
+      }
+      let size = this.variant.size;
+      if (size < 1024) {
+        return size + ' bytes';
+      }
+      size /= 1024;
+      if (size < 1024) {
+        return Math.round(size*10)/10 + ' kb'
+      }
+      size /= 1024;
+      return Math.round(size*10)/10 + ' MB'
+    }
   },
   methods:{
     /*

@@ -115,20 +115,22 @@ export default {
     },
     updateContainerHeight() {
       //console.log('image ready', this.$refs.theimg.naturalWidth);
-      let imageRatio = this.$refs.theimg.naturalWidth / this.$refs.theimg.naturalHeight;
-      //let ratio = this.$refs.theimg.naturalWidth / this.$refs.zoomer?.containerWidth;
+      if (this.$refs?.theimg?.naturalWidth) {
+        let imageRatio = this.$refs.theimg.naturalWidth / this.$refs.theimg.naturalHeight;
+        //let ratio = this.$refs.theimg.naturalWidth / this.$refs.zoomer?.containerWidth;
 
-      //let containerWidth = this.$refs.root?.offsetWidth;
-      let containerWidth = this.$refs.zoomer?.containerWidth;
-      let containerHeight = containerWidth / imageRatio;
-      if (containerHeight > 300) {
-        containerHeight = 300;
+        //let containerWidth = this.$refs.root?.offsetWidth;
+        let containerWidth = this.$refs.zoomer?.containerWidth;
+        let containerHeight = containerWidth / imageRatio;
+        if (containerHeight > 300) {
+          containerHeight = 300;
+        }
+        //let containerHeight = 300;
+        this.height = containerHeight;
+
+        this.updateRatio();
+        this.updateScale()
       }
-      //let containerHeight = 300;
-      this.height = containerHeight;
-
-      this.updateRatio();
-      this.updateScale()
     },
     updateRatio() {
       //this.ratio = this.$refs.theimg.naturalWidth / this.$refs.zoomer?.containerWidth;

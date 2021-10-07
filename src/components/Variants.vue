@@ -84,7 +84,7 @@ export default {
         },
         {
           'title': 'Lossy, q:20',
-          'size': 832,
+          'size': 3500000,
           'url': 'http://localhost:3000/src/assets/dummy.jpg'
         }
 
