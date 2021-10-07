@@ -1,8 +1,8 @@
 <template>
-  <FileItem :item="item" @dblclick="toggle()" @click="toggle()"/>
+  <FileItem :item="item" @dblclick="toggle" @click="toggle" @select="onSelect"/>
   <ul class="tree" v-if="(item.children !== undefined) && item.isOpen">
     <li v-for="child in item.children">
-      <FileTree :item="child" />
+      <FileTree :item="child" @select="onSelect" />
     </li>
   </ul>
 </template>
@@ -16,12 +16,17 @@ export default {
   components: {
     FileItem
   },
+  emits: ['select'],
   props: {
     item: Object
   },
   methods: {
     toggle() {
       this.item.isOpen = !this.item.isOpen;
+    },
+    onSelect(c) {
+      //console.log('select received and transmitting');
+      this.$emit('select', c);
     }
   }
 }

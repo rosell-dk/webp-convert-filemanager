@@ -1,5 +1,5 @@
 <template>
-  <div class="fileitem" @mouseover="hover = true" @mouseleave="hover = false">
+  <div :class="{fileitem:true, selected: selected}" @mouseover="hover = true" @mouseleave="hover = false" @click="onClick">
     <p>
       <span v-if="item.isDir" class="foldUnfold" @click="this.$emit('foldUnfoldClick')">
         <svg v-if="item.isOpen" class="icon-fold"><use xlink:href="#icon-fold" /></svg>
@@ -8,30 +8,39 @@
       <svg v-if="item.isDir" class="icon-folder" @click="this.$emit('foldUnfoldClick')"><use xlink:href="#icon-folder" /></svg>
       <svg v-if="!item.isDir" class="icon-file"><use xlink:href="#icon-file" /></svg>
       {{ item.name }}
+      <!--
       <div class="buttons">
         <button v-if="hover" @click.stop="infoClick()">Info</button>
         <button v-if="hover" @click.stop="convertClick()" v-html="(item.isConverted ? 'Reconvert' : 'Convert')" ></button>
-      </div>
+      </div>-->
     </p>
   </div>
 </template>
 
 <script>
-import Poster from '../classes/Poster.js'
+//import Poster from '../classes/Poster.js'
 
 export default {
   name: 'FileItem',
-  emits: ['foldUnfoldClick'],
+  emits: ['foldUnfoldClick', 'select'],
   props: {
     item: Object
   },
   data() {
     return {
-      hover: false
+      hover: false,
+      selected: false,
     }
   },
   inject: ['wcfm'],
   methods: {
+    onClick() {
+      if (!this.item.isDir) {
+        this.selected = true;
+        this.$emit('select', this);
+
+      }
+    },
     getWCFM() {
       return this.wcfm;
     },
@@ -44,6 +53,7 @@ export default {
         }
         node = node.$parent;
       }
+      path.pop();
       return path.reverse().join('/');
     },
     infoClick() {
@@ -61,7 +71,7 @@ export default {
         //console.log('r:', response);
       });*/
 
-    }
+    },
   }
 }
 </script>
@@ -70,6 +80,11 @@ export default {
 /* The following CSS uses nesting (future standard compliant).
    You must use "PostCSS Nesting" package to compile to current standard
  */
+.fileitem.selected {
+  & p {
+    background: #ccc !important;
+  }
+}
 .fileitem {
   vertical-align: middle;
   white-space: nowrap;

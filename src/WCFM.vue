@@ -12,7 +12,7 @@
         <pane size="30">
           <div class="pane-content">
             <div>
-              <FileTree :item="item" />
+              <Files :item="item" @select="onFileSelect"/>
             </div>
           </div>
         </pane>
@@ -94,7 +94,8 @@ import Poster from './classes/Poster.js'
 
 import SVGs from './components/SVGs.vue'
 import ConvertOptions from './components/ConvertOptions.vue'
-import FileTree from './components/FileTree.vue'
+//import FileTree from './components/FileTree.vue'
+import Files from './components/Files.vue'
 import InfoPane from './components/InfoPane.vue'
 
 //import Multipane from './components/standard/multipane.vue';
@@ -115,7 +116,7 @@ export default {
     ConvertOptions2,
     Variants,
     Modal,
-    FileTree,
+    Files,
     InfoPane,
     Splitpanes, Pane
   },
@@ -129,6 +130,9 @@ export default {
         console.log('convert response:', response);
       });
 //      alert(path);
+    },
+    onFileSelect(path) {
+      console.log('file select:', path);
     },
     displayInfo(path) { // called from FileItem.vue
       var me = this;

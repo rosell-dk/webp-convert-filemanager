@@ -49,7 +49,7 @@ if (!window["wcfmoptions"]) {
           isDir: true,
           isOpen: true,
           children: [
-            {name:'folder', isDir:true, children: [
+            {name:'test-folder', isDir:true, children: [
                 {name:'file', isDir:false},
                 {name:'subfolder', isDir:true, children: [
                   {name:'file', isDir:false},
