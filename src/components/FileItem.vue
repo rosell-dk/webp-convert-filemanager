@@ -1,11 +1,11 @@
 <template>
   <div :class="{fileitem:true, selected: selected}" @mouseover="hover = true" @mouseleave="hover = false" @click="onClick">
     <p>
-      <span v-if="item.isDir" class="foldUnfold" @click="this.$emit('foldUnfoldClick')">
+      <span v-if="item.isDir" class="foldUnfold" @click="this.$emit('toggle')">
         <svg v-if="item.isOpen" class="icon-fold"><use xlink:href="#icon-fold" /></svg>
         <svg v-if="!item.isOpen" class="icon-unfold"><use xlink:href="#icon-unfold" /></svg>
       </span>
-      <svg v-if="item.isDir" class="icon-folder" @click="this.$emit('foldUnfoldClick')"><use xlink:href="#icon-folder" /></svg>
+      <svg v-if="item.isDir" class="icon-folder" @click="this.$emit('toggle')"><use xlink:href="#icon-folder" /></svg>
       <svg v-if="!item.isDir" class="icon-file"><use xlink:href="#icon-file" /></svg>
       {{ item.name }}
       <!--
@@ -22,7 +22,7 @@
 
 export default {
   name: 'FileItem',
-  emits: ['foldUnfoldClick', 'select'],
+  emits: ['toggle', 'select'],
   props: {
     item: Object
   },
@@ -34,12 +34,13 @@ export default {
   },
   inject: ['wcfm'],
   methods: {
-    onClick() {
-      if (!this.item.isDir) {
+    onClick(e) {
+      console.log('click', e.target);
+      //if (!this.item.isDir) {
         this.selected = true;
         this.$emit('select', this);
 
-      }
+      //}
     },
     getWCFM() {
       return this.wcfm;
@@ -106,6 +107,7 @@ export default {
       cursor: pointer;
     }
 
+    /*
     & .buttons {
 
       float: right;
@@ -118,7 +120,7 @@ export default {
         background-color: white;
         margin-right: 10px;
       }
-    }
+    }*/
 
     & svg.icon-unfold, & svg.icon-fold{
       width: 12px;

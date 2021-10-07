@@ -131,8 +131,8 @@ export default {
       });
 //      alert(path);
     },
-    onFileSelect(path) {
-      console.log('file select:', path);
+    onFileSelect(path, isDir) {
+      console.log('select:', path, isDir ? '(dir)' : '(file)');
     },
     displayInfo(path) { // called from FileItem.vue
       var me = this;

@@ -1,5 +1,5 @@
 <template>
-  <FileItem :item="item" @dblclick="toggle" @click="toggle" @select="onSelect"/>
+  <FileItem :item="item" @dblclick="toggle" @toggle="toggle" @select="onSelect"/>
   <ul class="tree" v-if="(item.children !== undefined) && item.isOpen">
     <li v-for="child in item.children">
       <FileTree :item="child" @select="onSelect" />
