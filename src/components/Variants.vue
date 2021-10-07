@@ -1,5 +1,6 @@
 <template>
   <div class="variants-component">
+    File: {{ file }}
     <button @click="changeImage()">Change image</button>
     <!--
     <div class="zoom-slider">
@@ -43,6 +44,9 @@ export default {
     Variant
   },
   props: {
+    file: {
+      type: Object
+    }
   },
   methods:{
     sliderFormat(zoom) {

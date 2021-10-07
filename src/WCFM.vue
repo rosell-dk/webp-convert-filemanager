@@ -18,7 +18,7 @@
         </pane>
         <pane size="70" style="overflow-y: auto;">
           <div class="pane-content">
-            <Variants />
+            <Variants :file="file" />
           </div>
         </pane>
       </splitpanes>
@@ -132,7 +132,12 @@ export default {
 //      alert(path);
     },
     onFileSelect(path, isDir) {
-      console.log('select:', path, isDir ? '(dir)' : '(file)');
+
+      this.file = {
+        path: path,
+        isDir: isDir
+      }
+      //console.log('select:', path, isDir ? '(dir)' : '(file)');
     },
     displayInfo(path) { // called from FileItem.vue
       var me = this;
@@ -150,7 +155,7 @@ export default {
   },
   data() {
     return {
-      selectedPath: null,
+      file: null,
       selectedItem: null,
       item: {},     // the tree
       selectedInfo: {},
