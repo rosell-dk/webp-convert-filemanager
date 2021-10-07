@@ -65,6 +65,7 @@ export default {
 
   },
   data() {
+    var url = 'http://localhost:3000/src/assets/200x100.jpg';
     return {
       zoom: 1,
       translateX: 0,
@@ -75,17 +76,17 @@ export default {
         {
           'title': 'Original (JPG)',
           'size': 1280,
-          'url': 'http://localhost:3000/src/assets/dummy.jpg'
+          'url': url
         },
         {
           'title': 'Existing conversion',
           'size': 732,
-          'url': 'http://localhost:3000/src/assets/dummy.jpg'
+          'url': url,
         },
         {
           'title': 'Lossy, q:20',
           'size': 3500000,
-          'url': 'http://localhost:3000/src/assets/dummy.jpg'
+          'url': url
         }
 
       ]

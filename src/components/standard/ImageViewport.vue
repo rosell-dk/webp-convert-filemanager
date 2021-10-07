@@ -18,6 +18,7 @@
     <v-zoomer
       ref="zoomer"
       class="zoomer"
+      :minScale="0.1"
       :maxScale="8"
       @resize="onResize"
       :doubleClickToZoom="false"
@@ -115,6 +116,7 @@ export default {
     },
     updateContainerHeight() {
       //console.log('image ready', this.$refs.theimg.naturalWidth);
+
       if (this.$refs?.theimg?.naturalWidth) {
         let imageRatio = this.$refs.theimg.naturalWidth / this.$refs.theimg.naturalHeight;
         //let ratio = this.$refs.theimg.naturalWidth / this.$refs.zoomer?.containerWidth;
@@ -165,7 +167,12 @@ export default {
         this.$emit('update:zoom', 1);
       } else {
         // zoom to fit
-        this.$emit('update:zoom', 1 / this.ratio);
+        if (!this.ratio) {
+          this.updateRatio();
+        }
+        //console.log('update:zoom', 1 / this.ratio)
+        //this.$emit('update:zoom', 1 / this.ratio);
+        this.$refs.zoomer.reset();
       }
     }
 
