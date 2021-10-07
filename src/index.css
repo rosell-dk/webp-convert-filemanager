@@ -34,3 +34,23 @@ div.v-popper--theme-menu .v-popper__inner {
 .v-popper__inner p:last-child {
   margin-bottom: 0;
 }
+
+/* Standard tooltip */
+/*
+.tooltip {
+  // ...
+
+  & .popover {
+    .popover-inner {
+      background-color: yellow !important;
+      color: white;
+      padding: 24px;
+      border-radius: 5px;
+      box-shadow: 0 5px 30px rgba(black, .1);
+    }
+
+    .popover-arrow {
+      border-color: green;
+    }
+  }
+}*/

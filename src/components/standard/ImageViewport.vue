@@ -7,12 +7,14 @@
     TranslateX: {{$refs.zoomer?.translateX }} <br>
     TranslateY: {{$refs.zoomer?.translateY }} <br>-->
 <!--
-    Current scale: {{$refs.zoomer?.scale }}<br>
-    Container width: {{$refs.zoomer?.containerWidth }} / {{$refs.root?.offsetWidth }} <br>
-    Natural width: {{$refs.theimg?.naturalWidth }}<br>
-    Ratio: {{ ratio }} <br>
-    Container height: {{ height }} <br>
--->
+    <div v-if="$refs.zoomer && $refs.root && $refs.theimg">
+      Current scale: {{$refs.zoomer.scale }}<br>
+      Container width: {{$refs.zoomer.containerWidth }} / {{$refs.root.offsetWidth }} <br>
+      Natural width: {{$refs.theimg.naturalWidth }}<br>
+      Ratio: {{ ratio }} <br>
+      Container height: {{ height }} <br>
+    </div>-->
+
     <v-zoomer
       ref="zoomer"
       class="zoomer"
@@ -23,11 +25,20 @@
     >
       <img ref="theimg" :src="src" @load="onImgLoad">
     </v-zoomer>
+
+    <div class="zoom-info">
+
+      zoom: {{ Math.round(zoom*100) }}%
+
+    </div>
+
+
+    <!--
     <div class="zoom-slider">
       <ZoomSlider
         v-model:zoom="zoom"
       />
-    </div>
+    </div>-->
   </div>
 
 </template>
@@ -85,7 +96,7 @@ export default {
       //console.log('updating scale to:', newValue * this.ratio);
       // Hm, no setScale available :(  - zoomIn doesn't set scale, but zooms in further
       //this.$refs.zoomer.zoomIn(newValue);
-      //this.$refs.zoomer.scale = newValue / this.ratio;
+      this.$refs.zoomer.scale = newValue / this.ratio;
       this.updateScale()
     },
     translateX(newValue, oldValue) {
@@ -115,24 +126,36 @@ export default {
       this.height = containerHeight;
 
       this.updateRatio();
+      this.updateScale()
     },
     updateRatio() {
       //this.ratio = this.$refs.theimg.naturalWidth / this.$refs.zoomer?.containerWidth;
-      let ratioW = this.$refs.theimg.naturalWidth / this.$refs.zoomer?.containerWidth;
-      let ratioH = this.$refs.theimg.naturalHeight / this.$refs.zoomer?.containerHeight;
-      this.ratio = Math.max(ratioW, ratioH);
-      //this.ratio = this.$refs.zoomer?.containerWidth / this.$refs.theimg.naturalWidth;
-      this.updateScale()
-      //console.log('ratio:', this.ratio);
+      if (this.$refs?.theimg?.naturalWidth) {
+        let ratioW = this.$refs.theimg.naturalWidth / (this.$refs.zoomer?.containerWidth || this.$refs.root?.offsetWidth);
+        let ratioH = this.$refs.theimg.naturalHeight / (this.$refs.zoomer?.containerHeight || this.$refs.root?.offsetHeight);
+        let ratio = Math.max(ratioW, ratioH);
+        if (!isNaN(ratio)) {
+          this.ratio = ratio;
+          //console.log('ratio updated:', this.ratio);
+        }
+        //this.ratio = this.$refs.zoomer?.containerWidth / this.$refs.theimg.naturalWidth;
+      } else {
+        //console.log('ratio not updated', this.$refs.zoomer?.containerWidth);
+
+      }
     },
     updateScale() {
-      this.$refs.zoomer.scale = this.zoom * this.ratio;
+      if (this.zoom && this.ratio) {
+        this.$refs.zoomer.scale = this.zoom * this.ratio;
+      }
     },
     onResize() {
-      console.log('resize');
+      //console.log('resize');
+      this.updateRatio();
+      this.updateScale()
     },
     onDoubleTap() {
-      console.log('double tab');
+      //console.log('double tab');
       if (this.$refs.zoomer.scale == 1) {
         this.$emit('update:zoom', 1);
       } else {
@@ -151,48 +174,40 @@ export default {
     //console.log('element:', this.$refs.root.getBoundingClientRect());
     // https://v3.vuejs.org/api/basic-reactivity.html#isreactive
     //console.log('raw', toRaw(this.$refs.zoomer));
-    this.ro = new ResizeObserver(this.onResize).observe(reactive(this.$refs.root))
+    if (window.ResizeObserver) {
+      this.ro = new ResizeObserver(this.onResize).observe(reactive(this.$refs.root))
+    }
 
     this.$refs.zoomer.tapDetector.onDoubleTap(this.onDoubleTap)
 
-    this.$watch(
-      "$refs.zoomer.scale",
-      (newValue, oldValue) => {
-         //execute your code here
-         //console.log('scale changed to:', newValue);
+    this.$watch("$refs.zoomer.scale", (newValue, oldValue) => {
+       //console.log('scale changed to:', newValue);
+       if (!this.ratio) {
+         this.updateRatio();
+       }
+       if (this.ratio) {
          //console.log('updating zoom to:', newValue / this.ratio);
-
          this.$emit('update:zoom', newValue / this.ratio);
-      }
-    );
+       }
+    });
 
-    this.$watch(
-      "$refs.theimg.naturalWidth",
-      (newValue, oldValue) => {
-         //execute your code here
-         console.log('natural width change:', newValue);
-         //this.$emit('update:zoom', newValue);
-      }
-    );
+    this.$watch("$refs.theimg.naturalWidth", (newValue, oldValue) => {
+       console.log('natural width change:', newValue);
+    });
 
-    this.$watch(
-      "$refs.zoomer.translateX",
-      (newValue, oldValue) => {
-         this.$emit('update:translateX', newValue);
-      }
-    );
-    this.$watch(
-      "$refs.zoomer.translateY",
-      (newValue, oldValue) => {
-         this.$emit('update:translateY', newValue);
-      }
-    );
+    this.$watch("$refs.zoomer.translateX", (newValue, oldValue) => {
+       this.$emit('update:translateX', newValue);
+    });
 
-
+    this.$watch("$refs.zoomer.translateY", (newValue, oldValue) => {
+       this.$emit('update:translateY', newValue);
+    });
 
   },
   beforeDestroy () {
-    this.ro.unobserve(this.$refs.zoomer)
+    if (window.ResizeObserver) {
+      this.ro.unobserve(this.$refs.zoomer)
+    }
   },
 }
 </script>
@@ -202,6 +217,8 @@ export default {
    You must use "PostCSS Nesting" package to compile to current standard
  */
 .image-viewport {
+  position: relative;
+
   & .zoomer {
     width: 100%;
     /*height: 600px;*/
@@ -217,12 +234,26 @@ export default {
       -moz-user-drag: none;
     }
   }
-  & .zoom-slider {
+  /*& .zoom-slider {
     margin-top:10px;
     width: 100px;
     float: right;
+  }*/
+
+  & .zoom-info {
+    display: none;
+    position: absolute;
+    bottom: 0px;
+    right: 0px;
+    padding: 1px 4px;
+    font-size: 9px;
+    background-color: white;
+  }
+
+  &:hover .zoom-info {
+    display: block;
+    cursor: pointer;
   }
 
 }
-
 </style>

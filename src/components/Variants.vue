@@ -1,41 +1,46 @@
 <template>
-  <div class="variants">
+  <div class="variants-component">
     <button @click="changeImage()">Change image</button>
-    <ul>
-      <li>Original</li>
-      <li>Existing conversion</li>
-    </ul>
     <!--
     <div class="zoom-slider">
       <ZoomSlider
         v-model:zoom="zoom"
       />
     </div>-->
-    <!--
-    <br><br>
+
+    <!--<br><br>
     Zoom level is: {{ zoom }}<br>
     TranslateX is: {{ translateX }}<br>
     TranslateY is: {{ translateY }}<br>-->
     <br><br>
-    <div class="images">
-      <div v-for="variant in variants">
-        {{ variant.title }}
-        <ImageViewport :src="imageUrl" v-model:zoom="zoom" v-model:translateX="translateX" v-model:translateY="translateY" />
-      </div>
+    <div class="variants">
+      <Variant
+        v-for="(variant,i) in variants"
+        :variant="variant"
+        :variantIndex="i"
+        :class="{'selected': (i==selectedVariant)}"
+        v-model:zoom="zoom"
+        v-model:translateX="translateX"
+        v-model:translateY="translateY"
+        @select="onVariantSelect"
+        >
+      </Variant>
     </div>
   </div>
 </template>
 
 <script>
-import ImageViewport from './standard/ImageViewport.vue'
+//import ImageViewport from './standard/ImageViewport.vue'
 //import ZoomSlider from './ZoomSlider.vue'
+import Variant from './Variant.vue'
 //import Slider from '@vueform/slider'
 
 export default {
   name: 'Variants',
   components: {
-    ImageViewport,
+    //ImageViewport,
     //ZoomSlider
+    Variant
   },
   props: {
   },
@@ -52,6 +57,10 @@ export default {
       this.zoom = 1;
       this.translateX = 0;
       this.translateY = 0;
+      this.selectedVariant = -1;
+    },
+    onVariantSelect(index) {
+      this.selectedVariant = index;
     }
 
   },
@@ -61,12 +70,22 @@ export default {
       translateX: 0,
       translateY: 0,
       imageUrl: '',
+      selectedVariant: -1,
       variants: [
         {
-          'title': 'Original'
+          'title': 'Original (JPG)',
+          'size': 1280,
+          'url': 'http://localhost:3000/src/assets/dummy.jpg'
         },
         {
-          'title': 'Existing conversion'
+          'title': 'Existing conversion',
+          'size': 732,
+          'url': 'http://localhost:3000/src/assets/dummy.jpg'
+        },
+        {
+          'title': 'Lossy, q:20',
+          'size': 832,
+          'url': 'http://localhost:3000/src/assets/dummy.jpg'
         }
 
       ]
@@ -79,12 +98,49 @@ export default {
 /* The following CSS uses nesting (future standard compliant).
    You must use "PostCSS Nesting" package to compile to current standard
  */
-.variants {
-  & .images {
-    & > div {
+.variants-component {
+  & .variants {
+    & .variant.selected {
+      background-color: #ccc;
+    }
+    & .variant {
       display: inline-block;
-      width: 48%;
-      margin-right:2%;
+      width: 47%;
+      margin-right:1%;
+      padding: 1%;
+      margin-bottom: 20px;
+
+      & .header {
+        & .title {
+          display: inline-block;
+        }
+        & .size {
+          display: inline-block;
+          float: right;
+        }
+        & .zoom {
+          display: inline-block;
+          float: right;
+          visibility: hidden;
+        }
+      }
+
+      & .footer {
+        font-style: italic;
+        & .select {
+          float: right;
+          & button {
+            padding: 3px 10px;
+          }
+        }
+      }
+    }
+    & .variant:hover {
+      & .header {
+        & .zoom {
+          visibility: visible;
+        }
+      }
     }
   }
 }
