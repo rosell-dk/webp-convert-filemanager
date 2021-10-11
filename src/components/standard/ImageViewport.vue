@@ -23,6 +23,9 @@
       @resize="onResize"
       :doubleClickToZoom="false"
       :style="{height:height+'px'}"
+      pivot="cursor"
+      :limitTranslation="false"
+      :lockPanOnNoScale="false"
     >
       <img ref="theimg" :src="src" @load="onImgLoad">
     </v-zoomer>
@@ -54,7 +57,7 @@ export default {
     VueZoomer,
     ZoomSlider
   },
-  emits: ['update:zoom', 'update:translateX', 'update:translateY'],
+  emits: ['update:zoom', 'update:translateX', 'update:translateY', 'load'],
   props: {
     src: {
       type: String,
@@ -111,13 +114,6 @@ export default {
     },
   },
   methods: {
-    onImgLoad() {
-      //console.log('img load');
-      if (this.$refs?.theimg?.naturalWidth) {
-        //console.log('img is ready');
-      }
-      this.updateContainerHeight();
-    },
     updateContainerHeight() {
       //console.log('image ready', this.$refs.theimg.naturalWidth);
 
@@ -135,6 +131,11 @@ export default {
         }
         //let containerHeight = 300;
         this.height = containerHeight;
+
+        if (this.$refs?.zoomer) {
+          this.$refs.zoomer.onWindowResize()
+          this.$refs.zoomer.refreshContainerPos()
+        }
 
         this.updateRatio();
         this.updateScale()
@@ -161,6 +162,24 @@ export default {
         this.$refs.zoomer.scale = this.zoom * this.ratio;
       }
     },
+    zoomToFit() {
+      console.log('zoom to fit')
+      //this.updateContainerHeight();
+      if (!this.ratio) {
+        this.updateRatio();
+      }
+      console.log('calling reset')
+      this.$refs.zoomer.reset();
+    },
+    onImgLoad() {
+      //console.log('img load');
+      this.updateContainerHeight();
+
+      if (this.$refs?.theimg?.naturalWidth) {
+        //console.log('img is ready');
+        this.$emit('load');
+      }
+    },
     onResize() {
       //console.log('resize');
       //this.updateRatio();
@@ -169,16 +188,21 @@ export default {
     },
     onDoubleTap() {
       //console.log('double tab');
-      if (this.$refs.zoomer.scale == 1) {
+      //this.$refs.zoomer.scale = 1;
+      //this.$refs.zoomer.panLocked = true
+      //this.$refs.zoomer.translateX = 0
+      //this.$refs.zoomer.translateY = 0
+
+
+      if ((Math.round(this.$refs.zoomer.scale*10000)/10000) == 1) {
+        console.log('DoubleTab, zooming to 100%', this.$refs.zoomer.scale)
         this.$emit('update:zoom', 1);
       } else {
         // zoom to fit
-        if (!this.ratio) {
-          this.updateRatio();
-        }
+        console.log('DoubleTab, zooming to fit')
         //console.log('update:zoom', 1 / this.ratio)
         //this.$emit('update:zoom', 1 / this.ratio);
-        this.$refs.zoomer.reset();
+        this.zoomToFit();
       }
     }
 
@@ -199,12 +223,12 @@ export default {
     this.$refs.zoomer.tapDetector.onDoubleTap(this.onDoubleTap)
 
     this.$watch("$refs.zoomer.scale", (newValue, oldValue) => {
-       //console.log('scale changed to:', newValue);
+       console.log('scale changed to:', newValue);
        if (!this.ratio) {
          this.updateRatio();
        }
        if (this.ratio) {
-         //console.log('updating zoom to:', newValue / this.ratio);
+         console.log('updating zoom to:', newValue / this.ratio);
          this.$emit('update:zoom', newValue / this.ratio);
        }
     });

@@ -11,6 +11,7 @@
         v-model:zoom="zoom"
         v-model:translateX="translateX"
         v-model:translateY="translateY"
+        @load="onLoad"
       />
       <div class="footer">
         <div class="select"><button @click="onVariantSelect">select</button></div>
@@ -29,7 +30,7 @@ export default {
     ImageViewport,
     //ZoomSlider
   },
-  emits: ['select', 'update:zoom', 'update:translateX', 'update:translateY'],
+  emits: ['select', 'update:zoom', 'update:translateX', 'update:translateY', 'load'],
   props: {
     title: {
       type: String
@@ -83,11 +84,16 @@ export default {
     onVariantSelect() {
       console.log('variant select')
       this.$emit('select', this.variantIndex);
+    },
+    onLoad() {
+      this.$emit('load')
+    },
+    zoomToFit() {
+      this.$refs.theport.zoomToFit();
     }
   },
   mounted() {
     this.$watch("$refs.theport.zoom", (newValue, oldValue) => {
-      //console.log('zoom change');
       this.$emit('update:zoom', newValue);
     });
     this.$watch("$refs.theport.translateX", (newValue, oldValue) => {

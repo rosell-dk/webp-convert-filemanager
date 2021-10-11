@@ -14,10 +14,12 @@
     <Variant
       title="Original"
       :info="originalInfo"
+      ref="original"
       v-model:zoom="zoom"
       v-model:translateX="translateX"
       v-model:translateY="translateY"
       v-show="originalInfo"
+      @load="onOriginalLoad"
     />
     <Variant
       title="Existing conversion"
@@ -73,8 +75,18 @@ export default {
     onVariantSelect(index) {
       this.selectedVariant = index;
     },
+    onOriginalLoad() {
+      console.log('load');
+      //this.$refs.original.zoomToFit();
+      if (this.$refs.original) {
+        console.log('calling zoomToFit');
+        this.$refs.original.zoomToFit();
+        //this.zoom = 2;
+      }
+    },
     reset() {
       this.zoom = 1;
+
       this.translateX = 0;
       this.translateY = 0;
       this.originalInfo = null;
@@ -95,6 +107,7 @@ export default {
         if (response.converted) {
           me.convertedInfo = response.converted;
         }
+
         //console.log(response);
         //me.selectedInfo = response;
       });
