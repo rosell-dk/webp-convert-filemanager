@@ -112,6 +112,10 @@ export default {
   },
   methods: {
     onImgLoad() {
+      //console.log('img load');
+      if (this.$refs?.theimg?.naturalWidth) {
+        //console.log('img is ready');
+      }
       this.updateContainerHeight();
     },
     updateContainerHeight() {
@@ -122,7 +126,9 @@ export default {
         //let ratio = this.$refs.theimg.naturalWidth / this.$refs.zoomer?.containerWidth;
 
         //let containerWidth = this.$refs.root?.offsetWidth;
-        let containerWidth = this.$refs.zoomer?.containerWidth;
+        let containerWidth = this.$refs.root?.offsetWidth;
+        //console.log('containerWidth', containerWidth, this.$refs.root?.offsetWidth);  // this.$refs.zoomer?.containerWidth ?
+
         let containerHeight = containerWidth / imageRatio;
         if (containerHeight > 300) {
           containerHeight = 300;
@@ -137,8 +143,8 @@ export default {
     updateRatio() {
       //this.ratio = this.$refs.theimg.naturalWidth / this.$refs.zoomer?.containerWidth;
       if (this.$refs?.theimg?.naturalWidth) {
-        let ratioW = this.$refs.theimg.naturalWidth / (this.$refs.zoomer?.containerWidth || this.$refs.root?.offsetWidth);
-        let ratioH = this.$refs.theimg.naturalHeight / (this.$refs.zoomer?.containerHeight || this.$refs.root?.offsetHeight);
+        let ratioW = this.$refs.theimg.naturalWidth / this.$refs.root?.offsetWidth;
+        let ratioH = this.$refs.theimg.naturalHeight / this.$refs.root?.offsetHeight;
         let ratio = Math.max(ratioW, ratioH);
         if (!isNaN(ratio)) {
           this.ratio = ratio;
@@ -215,6 +221,7 @@ export default {
        this.$emit('update:translateY', newValue);
     });
 
+
   },
   beforeDestroy () {
     if (window.ResizeObserver) {
@@ -224,7 +231,7 @@ export default {
 }
 </script>
 
-<style scoped>
+<style>
 /* The following CSS uses nesting (future standard compliant).
    You must use "PostCSS Nesting" package to compile to current standard
  */
@@ -235,6 +242,7 @@ export default {
     width: 100%;
     /*height: 600px;*/
     border: solid 1px silver;
+    overflow: hidden;
 
     & img {
       vertical-align: top;

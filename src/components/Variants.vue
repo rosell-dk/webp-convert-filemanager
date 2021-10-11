@@ -17,7 +17,8 @@
     <div class="variants">
       <Variant
         v-for="(variant,i) in variants"
-        :variant="variant"
+        :title="variant.title"
+        :info="variant"
         :variantIndex="i"
         :class="{'selected': (i==selectedVariant)}"
         v-model:zoom="zoom"

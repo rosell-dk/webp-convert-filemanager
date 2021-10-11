@@ -98,19 +98,39 @@ if (!window["wcfmoptions"]) {
         }
         break;
         case 'info':
-          var response = {
-            original: {
-              name: 'file.png',
-              size: 100,
-              url: '',
-            },
-            converted: {
-              name: 'file.png.webp',
-              size: 70,
-              url: ''
-            },
-            log: 'blah blah blah'
+          //console.log('options', options);
+          if (options.path == 'root/file2') {
+            var response = {
+              original: {
+                filename: 'file.png',
+                size: 100,
+                url: 'http://localhost:3000/src/assets/200x100.jpg',
+              },
+              converted: {
+                filename: 'file.png.webp',
+                size: 70,
+                url: 'http://localhost:3000/src/assets/200x100.jpg'
+              },
+              log: 'blah blah blah'
+            };
+          } else {
+            var response = {
+              original: {
+                filename: 'file.png',
+                size: 100,
+                url: 'http://localhost:3000/src/assets/dummy2.jpg',
+              },
+              converted: {
+                filename: 'file.png.webp',
+                size: 70,
+                url: 'http://localhost:3000/src/assets/dummy2.jpg'
+              },
+              log: 'blah blah blah'
+            };
           }
+
+
+          //var response = {"success":false,"data":"Path does not exist or it is outside restricted basedir"};
           break;
         case 'convert':
           var response = {

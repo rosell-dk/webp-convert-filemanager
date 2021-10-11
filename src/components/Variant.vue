@@ -1,13 +1,13 @@
 <template>
     <div class="variant">
       <div class="header">
-        <div class="title">{{ variant.title }}</div>
+        <div class="title">{{ title }}</div>
         <div class="size">{{ filesize }} </div>
         <!--<div class="zoom">zoom: {{ Math.round(zoom*100) }}%</div>-->
       </div>
       <ImageViewport
         ref="theport"
-        :src="variant.url"
+        :src="imageUrl"
         v-model:zoom="zoom"
         v-model:translateX="translateX"
         v-model:translateY="translateY"
@@ -31,6 +31,16 @@ export default {
   },
   emits: ['select', 'update:zoom', 'update:translateX', 'update:translateY'],
   props: {
+    title: {
+      type: String
+    },
+    info: {
+      type: Object,
+    },
+    url: {
+      type: String,
+      default: '',
+    },
     zoom: {
       type: Number,
     },
@@ -40,23 +50,20 @@ export default {
     translateY: {
       type: Number,
     },
-    imageUrl: {
-      type: String,
-    },
     variantIndex: {
       type: Number,
-    },
-    variant: {
-      type: Object,
     },
 
   },
   computed: {
+    imageUrl: function() {
+      return this.info?.url;
+    },
     filesize: function() {
-      if (!this.variant?.size) {
+      if (!this.info?.size) {
         return '';
       }
-      let size = this.variant.size;
+      let size = this.info.size;
       if (size < 1024) {
         return size + ' bytes';
       }
