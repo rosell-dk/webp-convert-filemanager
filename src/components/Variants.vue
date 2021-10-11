@@ -24,6 +24,9 @@
         v-model:translateX="translateX"
         v-model:translateY="translateY"
         @select="onVariantSelect"
+        @update:zoom="onZoomChange"
+        @update:translateX="onTranslateXChange"
+        @update:translateY="onTranslateYChange"
         >
       </Variant>
     </div>
@@ -43,12 +46,39 @@ export default {
     //ZoomSlider
     Variant
   },
+  emits: ['update:zoom', 'update:translateX', 'update:translateY'],
   props: {
     file: {
       type: Object
+    },
+    zoom: {
+      type: Number,
+      default: 1,
+    },
+    translateX: {
+      type: Number,
+      default: 0,
+    },
+    translateY: {
+      type: Number,
+      default: 0,
+    },
+  },
+  watch: {
+    file(newValue, oldValue) {
+      console.log('file changed:', newValue);
     }
   },
   methods:{
+    onZoomChange(newValue) {
+      this.$emit('update:zoom', newValue);
+    },
+    onTranslateXChange(newValue) {
+      this.$emit('update:translateX', newValue);
+    },
+    onTranslateYChange(newValue) {
+      this.$emit('update:translateY', newValue);
+    },
     sliderFormat(zoom) {
       return Math.round(zoom * 100) + '%';
     },
@@ -58,9 +88,6 @@ export default {
       } else {
         this.imageUrl = 'http://localhost:3000/src/assets/dummy.jpg';
       }
-      this.zoom = 1;
-      this.translateX = 0;
-      this.translateY = 0;
       this.selectedVariant = -1;
     },
     onVariantSelect(index) {
@@ -68,20 +95,24 @@ export default {
     }
 
   },
+  mounted() {
+    this.$watch("$refs.variants.zoom", (newValue, oldValue) => {
+      //console.log('zoom change');
+//      this.$emit('update:zoom', newValue);
+    });/*
+    this.$watch("$refs.theport.translateX", (newValue, oldValue) => {
+      this.$emit('update:translateX', newValue);
+    });
+    this.$watch("$refs.theport.translateY", (newValue, oldValue) => {
+      this.$emit('update:translateY', newValue);
+    });*/
+  },
   data() {
     var url = 'http://localhost:3000/src/assets/200x100.jpg';
     return {
-      zoom: 1,
-      translateX: 0,
-      translateY: 0,
       imageUrl: '',
       selectedVariant: -1,
       variants: [
-        {
-          'title': 'Original (JPG)',
-          'size': 1280,
-          'url': url
-        },
         {
           'title': 'Existing conversion',
           'size': 732,

@@ -18,7 +18,7 @@
         </pane>
         <pane size="70" style="overflow-y: auto;">
           <div class="pane-content">
-            <Variants :file="file" />
+            <Properties :file="file" />
           </div>
         </pane>
       </splitpanes>
@@ -43,7 +43,7 @@
       </pane>
       <pane size="30">
         <div class="pane-content">
-          <Variants />
+          <Properties />
         </div>
       </pane>
     </splitpanes>
@@ -62,7 +62,7 @@
           <pane size="60" style="overflow-y: auto;">
             <div class="pane-content">
               <InfoPane :info="selectedInfo"/>
-              <Variants />
+              <Properties />
             </div>
           </pane>
         </splitpanes>
@@ -100,7 +100,7 @@ import InfoPane from './components/InfoPane.vue'
 
 //import Multipane from './components/standard/multipane.vue';
 import Modal from './components/standard/Modal.vue';
-import Variants from './components/Variants.vue';
+import Properties from './components/Properties.vue';
 //import MultipaneResizer from './components/standard/multipane-resizer.vue';
 import ConvertOptions2 from './components/ConvertOptions2.vue';
 
@@ -114,7 +114,7 @@ export default {
     SVGs,
     ConvertOptions,
     ConvertOptions2,
-    Variants,
+    Properties,
     Modal,
     Files,
     InfoPane,
