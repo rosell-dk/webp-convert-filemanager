@@ -19,10 +19,24 @@
         <pane size="70" style="overflow-y: auto;">
           <div class="pane-content" v-if="file">
             <FileProperties :file="file" v-if="!(file.isDir)"/>
-            <div v-if="file.isDir">Folder</div>
+            <FolderProperties :file="file" v-if="(file.isDir)"/>
           </div>
         </pane>
       </splitpanes>
+
+      <button class="convertOptionsButton" @click="showConvertOptions = true">Conversion options</button>
+
+      <Modal
+          v-show="showConvertOptions"
+          title="Conversion options"
+          closeButtonText="Ok"
+          width="600px"
+          height="95%" maxheight="650px"
+          alignment="right"
+          @close="onConvertCloseClick"
+        >
+        <ConvertOptions2 ref="convertOptions"/>
+      </Modal>
 
     <!--
     <splitpanes class="default-theme" style="position:absolute; top:0; left: 0">
@@ -102,6 +116,7 @@ import InfoPane from './components/InfoPane.vue'
 //import Multipane from './components/standard/multipane.vue';
 import Modal from './components/standard/Modal.vue';
 import FileProperties from './components/FileProperties.vue';
+import FolderProperties from './components/FolderProperties.vue';
 //import MultipaneResizer from './components/standard/multipane-resizer.vue';
 import ConvertOptions2 from './components/ConvertOptions2.vue';
 
@@ -116,6 +131,7 @@ export default {
     ConvertOptions,
     ConvertOptions2,
     FileProperties,
+    FolderProperties,
     Modal,
     Files,
     InfoPane,
@@ -131,6 +147,10 @@ export default {
         console.log('convert response:', response);
       });
 //      alert(path);
+    },
+    onConvertCloseClick() {
+      console.log('CLRCL');
+      this.showConvertOptions = false;
     },
     onFileSelect(path, isDir) {
 
@@ -160,6 +180,7 @@ export default {
       selectedItem: null,
       item: {},     // the tree
       selectedInfo: {},
+      showConvertOptions: false,
       //convertOptions: {},
       /*
       convertOptions: {
@@ -184,6 +205,11 @@ export default {
 </script>
 
 <style>
+  .convertOptionsButton {
+    position: absolute;
+    right: 10px;
+    top: 8px;
+  }
   .splitpanes__pane {
     background-color: white !important;
     padding: 0px;

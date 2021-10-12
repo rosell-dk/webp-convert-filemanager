@@ -187,24 +187,26 @@ export default {
 }
 
 .fade-enter-active {
-  transition: all 1s;
+  transition: all 0.5s;
   opacity: 0;
-  transform: scale(0);
-  transform: translateX(30px);
+  transform: scale(0.7);
+  /*transform: translateX(30px);*/
 }
 .fade-enter-to {
   opacity: 1;
-  transform: translateX(0px);
+  /*transform: translateX(0px);*/
   transform: scale(1);
 }
 
 .fade-leave-active {
-  transition: all 1s;
+  transition: all 0.5s;
+  transform: scale(1);
   opacity: 1;
   /*transform: scale(1) translateX(0px);*/
 }
 .fade-leave-to {
   opacity: 0;
+  transform: scale(0.7);
   /*transform: scale(0.9) translateX(30px);*/
 }
 

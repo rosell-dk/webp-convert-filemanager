@@ -120,11 +120,6 @@ if (!window["wcfmoptions"]) {
                 size: 100,
                 url: 'http://localhost:3000/src/assets/dummy2.jpg',
               },
-              converted: {
-                filename: 'file.png.webp',
-                size: 70,
-                url: 'http://localhost:3000/src/assets/dummy2.jpg'
-              },
               log: 'blah blah blah'
             };
           } else {

@@ -1,6 +1,6 @@
 <template>
   <div class="group">
-    <h3 style="margin-top:0; margin-bottom:20px">{{ ui ? ui.title : ''}}</h3>
+    <h3 style="margin-top:0; margin-bottom:20px" v-if="ui.title">{{ ui ? ui.title : ''}}</h3>
     <slot></slot>
   </div>
 </template>

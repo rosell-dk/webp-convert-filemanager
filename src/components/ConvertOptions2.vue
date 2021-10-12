@@ -116,7 +116,7 @@ export default {
       me.general = {
         'ui': {
           'component': 'group',
-          'title': 'Conversion options',
+          'title': '',
           'sub-components': components
         },
         'data': defaults
@@ -125,7 +125,7 @@ export default {
       me.png = {
         'ui': {
           'component': 'group',
-          'title': 'Conversion options (PNG)',
+          'title': 'PNG',
           'sub-components': pngUI
         },
         'data': pngDefaults

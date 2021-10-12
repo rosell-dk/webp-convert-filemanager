@@ -8,6 +8,7 @@
       :step="-1"
       :format="sliderFormat"
       tooltipPosition="bottom"
+      orientation="horizontal"
     />
   </div>
 </template>

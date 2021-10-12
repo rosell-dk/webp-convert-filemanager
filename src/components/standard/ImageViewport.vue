@@ -1,20 +1,6 @@
 <template>
   <!--<img :src="src" :style="{width:width}"/>-->
   <div ref="root" class="image-viewport" >
-    <!--
-    Current scale: {{$refs.zoomer?.scale }}<br>
-    Zoom: {{ zoom }}<br>
-    TranslateX: {{$refs.zoomer?.translateX }} <br>
-    TranslateY: {{$refs.zoomer?.translateY }} <br>-->
-<!--
-    <div v-if="$refs.zoomer && $refs.root && $refs.theimg">
-      Current scale: {{$refs.zoomer.scale }}<br>
-      Container width: {{$refs.zoomer.containerWidth }} / {{$refs.root.offsetWidth }} <br>
-      Natural width: {{$refs.theimg.naturalWidth }}<br>
-      Ratio: {{ ratio }} <br>
-      Container height: {{ height }} <br>
-    </div>-->
-
     <v-zoomer
       ref="zoomer"
       class="zoomer"
@@ -31,13 +17,8 @@
     </v-zoomer>
 
     <div class="zoom-info">
-
       zoom: {{ Math.round(zoom*100) }}%
-{{ scaleZoomRatio }}
-    </div>
-
-
-    <!--
+    </div><!--
     <div class="zoom-slider">
       <ZoomSlider
         v-model:zoom="zoom"
@@ -198,16 +179,14 @@ export default {
       }
     },
     zoomToFit() {
-      return;
+      //return;
       //this.updateContainerHeight();
       //this.$refs.zoomer.scale = 1;
+      /*
       if (this.scaleZoomRatio > 1) {
         console.log('zoom to fit - shrinking')
         //this.$emit('update:zoom', 1 / this.scaleZoomRatio)
         //this.$refs.zoomer.reset()
-        /*this.$emit('update:zoom', 0.5)
-        this.$emit('update:translateX', 0)
-        this.$emit('update:translateY', 0)*/
 
         //this.$emit('update:zoom', 0.2)
         this.$emit('update:zoom', 1)
@@ -219,7 +198,8 @@ export default {
         this.$emit('update:translateX', 0)
         this.$emit('update:translateY', 0)
         //this.$emit('update:zoom', 1)
-      }
+      }*/
+      //this.$refs.zoomer.reset();
       //console.log('this.scaleZoomRatio', this.scaleZoomRatio)
     },
     onImgLoad() {
@@ -239,7 +219,7 @@ export default {
       //this.updateContainerHeight();
     },
     onDoubleTap() {
-      //console.log('double tab');
+      console.log('double tab - zoom to 100%');
       //this.$refs.zoomer.scale = 1;
       //this.$refs.zoomer.panLocked = true
       //this.$refs.zoomer.translateX = 0
@@ -248,6 +228,11 @@ export default {
       //this.zoomToFit()
       //this.$emit('update:zoom', 0.5);
       //return
+      //this.$emit('update:zoom', 1);
+      this.$emit('update:zoom', 1);
+      this.$emit('update:translateX', 0);
+      this.$emit('update:translateY', 0);
+/*
       if ((Math.round(this.$refs.zoomer.scale*10000)/10000) == 1) {
         //console.log('DoubleTab, zooming to 100%', this.$refs.zoomer.scale)
         this.$emit('update:zoom', 1);
@@ -257,7 +242,7 @@ export default {
         //console.log('update:zoom', 1 / this.ratio)
         //this.$emit('update:zoom', 1 / this.ratio);
         this.zoomToFit();
-      }
+      }*/
     }
 
   },
