@@ -8,10 +8,13 @@
       <ImageViewport
         ref="theport"
         :src="imageUrl"
+        :height="height"
         v-model:zoom="zoom"
+        :scaleZoomRatio="scaleZoomRatio"
         v-model:translateX="translateX"
         v-model:translateY="translateY"
         @load="onLoad"
+        @resize="this.$emit('resize')"
       />
       <div class="footer">
         <div class="select"><button @click="onVariantSelect">select</button></div>
@@ -30,31 +33,17 @@ export default {
     ImageViewport,
     //ZoomSlider
   },
-  emits: ['select', 'update:zoom', 'update:translateX', 'update:translateY', 'load'],
+  emits: ['select', 'update:zoom', 'update:translateX', 'update:translateY', 'load', 'resize'],
   props: {
-    title: {
-      type: String
-    },
-    info: {
-      type: Object,
-    },
-    url: {
-      type: String,
-      default: '',
-    },
-    zoom: {
-      type: Number,
-    },
-    translateX: {
-      type: Number,
-    },
-    translateY: {
-      type: Number,
-    },
-    variantIndex: {
-      type: Number,
-    },
-
+    title: {type: String},
+    info: {type: Object},
+    url: {type: String, default: ''},
+    height: {type: Number},
+    zoom: {type: Number},
+    scaleZoomRatio: {type: Number},
+    translateX: {type: Number},
+    translateY: {type: Number},
+    variantIndex: {type: Number},
   },
   computed: {
     imageUrl: function() {
@@ -82,7 +71,7 @@ export default {
       return Math.round(zoom * 100) + '%';
     },*/
     onVariantSelect() {
-      console.log('variant select')
+      //console.log('variant select')
       this.$emit('select', this.variantIndex);
     },
     onLoad() {
@@ -94,6 +83,7 @@ export default {
   },
   mounted() {
     this.$watch("$refs.theport.zoom", (newValue, oldValue) => {
+      //console.log('variant is updating zoom:', newValue);
       this.$emit('update:zoom', newValue);
     });
     this.$watch("$refs.theport.translateX", (newValue, oldValue) => {

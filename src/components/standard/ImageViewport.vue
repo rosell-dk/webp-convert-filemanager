@@ -33,7 +33,7 @@
     <div class="zoom-info">
 
       zoom: {{ Math.round(zoom*100) }}%
-
+{{ scaleZoomRatio }}
     </div>
 
 
@@ -57,11 +57,9 @@ export default {
     VueZoomer,
     ZoomSlider
   },
-  emits: ['update:zoom', 'update:translateX', 'update:translateY', 'load'],
+  emits: ['update:zoom', 'update:translateX', 'update:translateY', 'load', 'resize'],
   props: {
-    src: {
-      type: String,
-    },
+    src: {type: String},
     /*
     width: {
       type: [Number, String],
@@ -71,36 +69,45 @@ export default {
       type: [Number, String],
       default: '30px',
     },*/
-    zoom: {
-      type: Number,
-      default: 1,
-    },
-    translateX: {
-      type: Number,
-      default: 1,
-    },
-    translateY: {
-      type: Number,
-      default: 1,
-    },
+    height: {type: Number, default: 500},
+    zoom: {type: Number, default: 1},
+    scaleZoomRatio: {type: Number},
+    translateX: {type: Number, default: 1},
+    translateY: {type: Number, default: 1},
   },
   data() {
     return {
 //      hover: false
       ratio: 1,
       ro: null,
-      height: 300,
     }
   },
   watch: {
+    height(newValue, oldValue) {
+      if (this.$refs?.zoomer) {
+        this.$refs.zoomer.onWindowResize()
+        this.$refs.zoomer.refreshContainerPos()
+      }
+    },
+    scaleZoomRatio(newValue) {
+      //console.log('scale/zoom ratio changed to:', newValue);
+      if (this.$refs?.zoomer) {
+        this.$refs.zoomer.onWindowResize()
+        this.$refs.zoomer.refreshContainerPos()
+      }
+      this.$refs.zoomer.scale = this.zoom * this.scaleZoomRatio
+    },
     zoom(newValue, oldValue) {
       //console.log('model watch');
       //console.log('zoom changed to:', newValue);
       //console.log('updating scale to:', newValue * this.ratio);
       // Hm, no setScale available :(  - zoomIn doesn't set scale, but zooms in further
       //this.$refs.zoomer.zoomIn(newValue);
-      this.$refs.zoomer.scale = newValue / this.ratio;
-      this.updateScale()
+      if (this.isImageReady()) {
+        //console.log('scale should be:', newValue * this.scaleZoomRatio)
+      }
+      this.$refs.zoomer.scale = newValue * this.scaleZoomRatio
+      //this.updateScale()
     },
     translateX(newValue, oldValue) {
       if (this.$refs.zoomer.translateX != newValue) {
@@ -114,41 +121,69 @@ export default {
     },
   },
   methods: {
-    updateContainerHeight() {
-      //console.log('image ready', this.$refs.theimg.naturalWidth);
-
+    getGoodContainerHeight() {
       if (this.$refs?.theimg?.naturalWidth) {
-        let imageRatio = this.$refs.theimg.naturalWidth / this.$refs.theimg.naturalHeight;
+        let imageRatio = this.$refs.theimg.naturalWidth / this.$refs.theimg.naturalHeight
         //let ratio = this.$refs.theimg.naturalWidth / this.$refs.zoomer?.containerWidth;
 
         //let containerWidth = this.$refs.root?.offsetWidth;
-        let containerWidth = this.$refs.root?.offsetWidth;
+        let containerWidth = this.$refs.root?.offsetWidth
         //console.log('containerWidth', containerWidth, this.$refs.root?.offsetWidth);  // this.$refs.zoomer?.containerWidth ?
 
-        let containerHeight = containerWidth / imageRatio;
+        let containerHeight = containerWidth / imageRatio
         if (containerHeight > 300) {
-          containerHeight = 300;
+          containerHeight = 300
         }
-        //let containerHeight = 300;
-        this.height = containerHeight;
+        return containerHeight
+      }
+      return 300;
+    },
+    updateContainerHeight() {
+      //console.log('image ready', this.$refs.theimg.naturalWidth);
+      return
+      if (this.$refs?.theimg?.naturalWidth) {
+        this.height = this.getGoodContainerHeight()
 
         if (this.$refs?.zoomer) {
           this.$refs.zoomer.onWindowResize()
           this.$refs.zoomer.refreshContainerPos()
         }
 
-        this.updateRatio();
-        this.updateScale()
+        this.updateRatio()
+        //this.updateScale()
       }
     },
+    isImageReady() {
+      if (!this.$refs?.theimg?.naturalWidth) {
+        return false
+      }
+      if (!this.$refs.root?.offsetWidth) {
+        return false
+      }
+      return true
+    },
+    calcScaleZoomRatio() {
+      if (!this.isImageReady()) {
+        return 1
+      }
+
+      let ratioW = this.$refs.theimg.naturalWidth / this.$refs.root?.offsetWidth
+      let ratioH = this.$refs.theimg.naturalHeight / this.$refs.root?.offsetHeight
+      let ratio = Math.max(ratioW, ratioH)
+      if (isNaN(ratio)) {
+        return 1
+      }
+      return ratio
+    },
     updateRatio() {
+      return
       //this.ratio = this.$refs.theimg.naturalWidth / this.$refs.zoomer?.containerWidth;
       if (this.$refs?.theimg?.naturalWidth) {
-        let ratioW = this.$refs.theimg.naturalWidth / this.$refs.root?.offsetWidth;
-        let ratioH = this.$refs.theimg.naturalHeight / this.$refs.root?.offsetHeight;
-        let ratio = Math.max(ratioW, ratioH);
+        let ratioW = this.$refs.theimg.naturalWidth / this.$refs.root?.offsetWidth
+        let ratioH = this.$refs.theimg.naturalHeight / this.$refs.root?.offsetHeight
+        let ratio = Math.max(ratioW, ratioH)
         if (!isNaN(ratio)) {
-          this.ratio = ratio;
+          this.ratio = ratio
           //console.log('ratio updated:', this.ratio);
         }
         //this.ratio = this.$refs.zoomer?.containerWidth / this.$refs.theimg.naturalWidth;
@@ -158,22 +193,38 @@ export default {
       }
     },
     updateScale() {
-      if (this.zoom && this.ratio) {
-        this.$refs.zoomer.scale = this.zoom * this.ratio;
+      if (this.zoom) {
+        this.$refs.zoomer.scale = this.zoom * this.scaleZoomRatio
       }
     },
     zoomToFit() {
-      console.log('zoom to fit')
+      return;
       //this.updateContainerHeight();
-      if (!this.ratio) {
-        this.updateRatio();
+      //this.$refs.zoomer.scale = 1;
+      if (this.scaleZoomRatio > 1) {
+        console.log('zoom to fit - shrinking')
+        //this.$emit('update:zoom', 1 / this.scaleZoomRatio)
+        //this.$refs.zoomer.reset()
+        /*this.$emit('update:zoom', 0.5)
+        this.$emit('update:translateX', 0)
+        this.$emit('update:translateY', 0)*/
+
+        //this.$emit('update:zoom', 0.2)
+        this.$emit('update:zoom', 1)
+        this.$emit('update:translateX', 0)
+        this.$emit('update:translateY', 0)
+      } else {
+        console.log('zoom to fit - it fits, so 100%')
+        this.$emit('update:zoom', 1)
+        this.$emit('update:translateX', 0)
+        this.$emit('update:translateY', 0)
+        //this.$emit('update:zoom', 1)
       }
-      console.log('calling reset')
-      this.$refs.zoomer.reset();
+      //console.log('this.scaleZoomRatio', this.scaleZoomRatio)
     },
     onImgLoad() {
       //console.log('img load');
-      this.updateContainerHeight();
+      //this.updateContainerHeight();
 
       if (this.$refs?.theimg?.naturalWidth) {
         //console.log('img is ready');
@@ -181,10 +232,11 @@ export default {
       }
     },
     onResize() {
+      this.$emit('resize');
       //console.log('resize');
       //this.updateRatio();
       //this.updateScale()
-      this.updateContainerHeight();
+      //this.updateContainerHeight();
     },
     onDoubleTap() {
       //console.log('double tab');
@@ -193,13 +245,15 @@ export default {
       //this.$refs.zoomer.translateX = 0
       //this.$refs.zoomer.translateY = 0
 
-
+      //this.zoomToFit()
+      //this.$emit('update:zoom', 0.5);
+      //return
       if ((Math.round(this.$refs.zoomer.scale*10000)/10000) == 1) {
-        console.log('DoubleTab, zooming to 100%', this.$refs.zoomer.scale)
+        //console.log('DoubleTab, zooming to 100%', this.$refs.zoomer.scale)
         this.$emit('update:zoom', 1);
       } else {
         // zoom to fit
-        console.log('DoubleTab, zooming to fit')
+        //console.log('DoubleTab, zooming to fit')
         //console.log('update:zoom', 1 / this.ratio)
         //this.$emit('update:zoom', 1 / this.ratio);
         this.zoomToFit();
@@ -223,26 +277,21 @@ export default {
     this.$refs.zoomer.tapDetector.onDoubleTap(this.onDoubleTap)
 
     this.$watch("$refs.zoomer.scale", (newValue, oldValue) => {
-       console.log('scale changed to:', newValue);
-       if (!this.ratio) {
-         this.updateRatio();
-       }
-       if (this.ratio) {
-         console.log('updating zoom to:', newValue / this.ratio);
-         this.$emit('update:zoom', newValue / this.ratio);
-       }
-    });
+       //console.log('scale changed to:', newValue);
+       //console.log('scale/zoom ratio is:', this.scaleZoomRatio)
+       if (this.isImageReady()) {
 
-    this.$watch("$refs.theimg.naturalWidth", (newValue, oldValue) => {
-       console.log('natural width change:', newValue);
+       }
+       //console.log('updating zoom to:', newValue / this.scaleZoomRatio)
+       this.$emit('update:zoom', newValue / this.scaleZoomRatio)
     });
 
     this.$watch("$refs.zoomer.translateX", (newValue, oldValue) => {
-       this.$emit('update:translateX', newValue);
+       this.$emit('update:translateX', newValue)
     });
 
     this.$watch("$refs.zoomer.translateY", (newValue, oldValue) => {
-       this.$emit('update:translateY', newValue);
+       this.$emit('update:translateY', newValue)
     });
 
 
@@ -262,7 +311,7 @@ export default {
 .image-viewport {
   position: relative;
 
-  & .zoomer {
+  & > .zoomer {
     width: 100%;
     /*height: 600px;*/
     border: solid 1px silver;

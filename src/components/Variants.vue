@@ -21,6 +21,7 @@
         :info="variant"
         :variantIndex="i"
         :class="{'selected': (i==selectedVariant)}"
+        :height="height"
         v-model:zoom="zoom"
         v-model:translateX="translateX"
         v-model:translateY="translateY"
@@ -49,21 +50,12 @@ export default {
   },
   emits: ['update:zoom', 'update:translateX', 'update:translateY'],
   props: {
-    file: {
-      type: Object
-    },
-    zoom: {
-      type: Number,
-      default: 1,
-    },
-    translateX: {
-      type: Number,
-      default: 0,
-    },
-    translateY: {
-      type: Number,
-      default: 0,
-    },
+    file: {type: Object},
+    viewport: {type: Object},
+    height: {type: Number},
+    zoom: {type: Number, default: 1},
+    translateX: {type: Number, default: 0},
+    translateY: {type: Number, default: 0},
   },
   watch: {
     file(newValue, oldValue) {

@@ -113,7 +113,7 @@ if (!window["wcfmoptions"]) {
               },
               log: 'blah blah blah'
             };
-          } else {
+          } else if (options.path == 'root/file') {
             var response = {
               original: {
                 filename: 'file.png',
@@ -124,6 +124,20 @@ if (!window["wcfmoptions"]) {
                 filename: 'file.png.webp',
                 size: 70,
                 url: 'http://localhost:3000/src/assets/dummy2.jpg'
+              },
+              log: 'blah blah blah'
+            };
+          } else {
+            var response = {
+              original: {
+                filename: 'file.png',
+                size: 100,
+                url: 'http://localhost:3000/src/assets/dummy.jpg',
+              },
+              converted: {
+                filename: 'file.png.webp',
+                size: 70,
+                url: 'http://localhost:3000/src/assets/dummy.jpg'
               },
               log: 'blah blah blah'
             };

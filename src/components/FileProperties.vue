@@ -12,32 +12,39 @@
     />-->
     <div v-show="loading">Getting info...</div>
     <Variant
+      ref="original"
       title="Original"
       :info="originalInfo"
-      ref="original"
+      :height="height"
       v-model:zoom="zoom"
+      :scaleZoomRatio="scaleZoomRatio"
       v-model:translateX="translateX"
       v-model:translateY="translateY"
       v-show="originalInfo"
       @load="onOriginalLoad"
+      @resize="onOriginalResize"
     />
     <Variant
       title="Existing conversion"
       :info="convertedInfo"
+      :height="height"
       v-model:zoom="zoom"
+      :scaleZoomRatio="scaleZoomRatio"
       v-model:translateX="translateX"
       v-model:translateY="translateY"
       v-show="convertedInfo"
     />
 
+<!--
     <Variants
+      :height="height"
       v-model:zoom="zoom"
       v-model:translateX="translateX"
       v-model:translateY="translateY"
       @select="onVariantSelect"
       v-if="false"
       >
-    </Variants>
+    </Variants>-->
   </div>
 </template>
 
@@ -67,7 +74,7 @@ export default {
     file(newValue, oldValue) {
       console.log('file changed:', newValue);
       if (!newValue.isDir) {
-        this.load(newValue.path)
+        this.load(newValue.path);
       }
     }
   },
@@ -76,28 +83,62 @@ export default {
       this.selectedVariant = index;
     },
     onOriginalLoad() {
-      console.log('load');
-      //this.$refs.original.zoomToFit();
+      console.log('original load')
+      //this.$refs.original.zoomToFit()
+      this.updateHeight();
+      //this.$refs.original.zoomToFit()
+      let scaleZoomRatio = this.$refs.original.$refs.theport.calcScaleZoomRatio();
+      console.log('scaleZoomRatio is:', scaleZoomRatio);
+
+
+      if (scaleZoomRatio > 1) {
+        console.log('shrinking to fit')
+        let theport = this.$refs.original.$refs.theport;
+        let theimg = theport.$refs.theimg;
+        let thecontainer = theport.$refs.root;
+        let w = theimg.naturalWidth;
+        let h = theimg.naturalHeight;
+        let containerWidth = thecontainer.offsetWidth;
+        let containerHeight = this.height;
+        let zh = containerHeight/h;
+        let zw = containerWidth/w;
+        console.log('h', h, 'ch', containerHeight, 'zh', zh, 'cw', containerWidth);
+
+        this.zoom = Math.min(zh, zw);
+
+        //this.zoom = scaleZoomRatio;
+      } else {
+        console.log('it fits when 100%')
+        this.zoom = 1;
+      }
+      this.translateX = 0;
+      this.translateY = 0;
+    },
+    onOriginalResize() {
+      this.updateHeight();
+    },
+    updateHeight() {
       if (this.$refs.original) {
-        console.log('calling zoomToFit');
-        this.$refs.original.zoomToFit();
+        //console.log('calling zoomToFit');
         //this.zoom = 2;
+        this.height = this.$refs.original.$refs.theport.getGoodContainerHeight();
+        this.scaleZoomRatio = this.$refs.original.$refs.theport.calcScaleZoomRatio();
+        console.log('this.scaleZoomRatio', this.scaleZoomRatio);
       }
     },
     reset() {
-      this.zoom = 1;
-
-      this.translateX = 0;
-      this.translateY = 0;
+      //this.zoom = 1;
+      //this.translateX = 0;
+      //this.translateY = 0;
       this.originalInfo = null;
       this.convertedInfo = null;
       this.errorMsg = '';
 
     },
     load(path) {
-      let me = this;
-      me.reset();
-      me.loading = true;
+      let me = this
+      me.reset()
+      me.loading = true
       Poster.post('info', {path: path}, function(response) {
         if (!response.success) {
           me.errorMsg = response.data;
@@ -122,8 +163,10 @@ export default {
   data() {
     return {
       zoom: 1,
+      scaleZoomRatio: 1,
       translateX: 0,
       translateY: 0,
+      height: 100,
       loading: false,
       errorMsg: '',
       originalInfo: null,
