@@ -34,6 +34,13 @@
       v-model:translateY="translateY"
       v-show="convertedInfo"
     />
+    <p>
+    Above, you see the original image. If it has been converted, you also see the converted image (provided that your browser supports webp).
+    </p>
+    <p>
+      You can zoom in on the image, ie using scroll wheel. Both images will zoom, allowing you to compare the quality.
+      Double-click the image to set zoom to 100%
+    </p>
 
 <!--
     <Variants

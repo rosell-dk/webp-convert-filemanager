@@ -16,9 +16,9 @@
         @load="onLoad"
         @resize="this.$emit('resize')"
       />
-      <div class="footer">
+      <!--<div class="footer">
         <div class="select"><button @click="onVariantSelect">select</button></div>
-      </div>
+      </div>-->
     </div>
 </template>
 

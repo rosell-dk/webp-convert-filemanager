@@ -6,9 +6,10 @@
     <p>
       You cannot do anything on folders yet. Browse to a file...
     </p>
+    <!--
     <p>
       PS: A <a href="https://ko-fi.com/rosell" target="_blank">cup of coffee</a> could speed development up...
-    </p>
+    </p>-->
   </div>
 </template>
 
