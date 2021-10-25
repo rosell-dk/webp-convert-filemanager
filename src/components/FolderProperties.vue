@@ -4,7 +4,7 @@
       Path: <span class="path">{{ file.path }}</span>
     </div>
     <p>
-      You cannot do anything on folders yet. Browse to a file...
+      You cannot do anything on folders yet. Browse to an image...
     </p>
     <!--
     <p>

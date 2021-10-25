@@ -24,7 +24,9 @@
         </pane>
       </splitpanes>
 
+<!--
       <button class="convertOptionsButton" @click="showConvertOptions = true">Conversion options</button>
+    -->
 
       <Modal
           v-show="showConvertOptions"
