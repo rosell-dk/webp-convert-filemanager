@@ -35,7 +35,7 @@ export default {
   inject: ['wcfm'],
   methods: {
     onClick(e) {
-      console.log('click', e.target);
+      //console.log('click', e.target);
       //if (!this.item.isDir) {
         this.selected = true;
         this.$emit('select', this);

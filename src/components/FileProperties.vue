@@ -79,7 +79,7 @@ export default {
   },
   watch: {
     file(newValue, oldValue) {
-      console.log('file changed:', newValue);
+      //console.log('file changed:', newValue);
       if (!newValue.isDir) {
         this.load(newValue.path);
       }
@@ -90,16 +90,16 @@ export default {
       this.selectedVariant = index;
     },
     onOriginalLoad() {
-      console.log('original load')
+      //console.log('original load')
       //this.$refs.original.zoomToFit()
       this.updateHeight();
       //this.$refs.original.zoomToFit()
       let scaleZoomRatio = this.$refs.original.$refs.theport.calcScaleZoomRatio();
-      console.log('scaleZoomRatio is:', scaleZoomRatio);
+      //console.log('scaleZoomRatio is:', scaleZoomRatio);
 
 
       if (scaleZoomRatio > 1) {
-        console.log('shrinking to fit')
+        //console.log('shrinking to fit')
         let theport = this.$refs.original.$refs.theport;
         let theimg = theport.$refs.theimg;
         let thecontainer = theport.$refs.root;
@@ -109,13 +109,13 @@ export default {
         let containerHeight = this.height;
         let zh = containerHeight/h;
         let zw = containerWidth/w;
-        console.log('h', h, 'ch', containerHeight, 'zh', zh, 'cw', containerWidth);
+        //console.log('h', h, 'ch', containerHeight, 'zh', zh, 'cw', containerWidth);
 
         this.zoom = Math.min(zh, zw);
 
         //this.zoom = scaleZoomRatio;
       } else {
-        console.log('it fits when 100%')
+        //console.log('it fits when 100%')
         this.zoom = 1;
       }
       this.translateX = 0;
@@ -130,7 +130,7 @@ export default {
         //this.zoom = 2;
         this.height = this.$refs.original.$refs.theport.getGoodContainerHeight();
         this.scaleZoomRatio = this.$refs.original.$refs.theport.calcScaleZoomRatio();
-        console.log('this.scaleZoomRatio', this.scaleZoomRatio);
+        //console.log('this.scaleZoomRatio', this.scaleZoomRatio);
       }
     },
     reset() {

@@ -45,7 +45,7 @@ export default {
     Poster.post('conversion-settings', {folder: ''}, function(response) {
       //me.item = response;
       // TODO: Loading animation
-      console.log('r:', response);
+      //console.log('r:', response);
 
       let components = [];
       let pngUI = [];

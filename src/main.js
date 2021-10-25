@@ -64,6 +64,8 @@ if (!window["wcfmoptions"]) {
         break;
       case 'conversion-settings':
         var response = {
+          //options: converterOptions,
+
           /*converters: [
             {id: 'cwebp', name: 'cwebp'}, // TODO: Accept option definitions!
             {id: 'vips', name: 'vips'},
@@ -73,7 +75,6 @@ if (!window["wcfmoptions"]) {
           //options: convertOptions,
           //optionsSchema: optionsSchema,
           //optionsUI: optionsUI,
-          options: converterOptions,
 
           /*supportedStandardOptions: {
             encoding: ['cwebp', 'vips', 'imagick', 'gmagick', 'imagemagick', 'graphicsmagick', 'ffmpeg', 'wpc'],
