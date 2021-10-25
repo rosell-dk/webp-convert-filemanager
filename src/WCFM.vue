@@ -21,13 +21,24 @@
             <FileProperties :file="file" v-if="!(file.isDir)"/>
             <FolderProperties :file="file" v-if="(file.isDir)"/>
           </div>
+          <div v-if="!file" style="padding:20px 30px">
+            <p>
+              <h3>Welcome to the <i>very early stage of</i> WebP Convert file manager.</h3>
+            </p>
+            <p>
+              At current stage you can browse the image files and compare the original vs the converted file.<br>
+              You cannot trigger conversions yet. To support development, you can <a href="https://ko-fi.com/rosell">buy me a cup of coffee</a>
+            </p>
+            <p>To open a folder, click the "+" sign next to the folder name or double click the folder name</p>
+
+          </div>
         </pane>
       </splitpanes>
 
 <!--
       <button class="convertOptionsButton" @click="showConvertOptions = true">Conversion options</button>
     -->
-
+<!--
       <Modal
           v-show="showConvertOptions"
           title="Conversion options"
@@ -38,7 +49,7 @@
           @close="onConvertCloseClick"
         >
         <ConvertOptions2 ref="convertOptions"/>
-      </Modal>
+      </Modal>-->
 
     <!--
     <splitpanes class="default-theme" style="position:absolute; top:0; left: 0">
@@ -230,7 +241,7 @@ export default {
     height: 100%;
     margin: 0;
     padding: 0;
-  }*/
+  }
   .mainpanel, #webpconvert-filemanager {
     height: 100%;
     min-height: 300px;
