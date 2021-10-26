@@ -71,7 +71,8 @@ export default {
   },
   mounted() {
     // if root, open the folder (which triggers load)
-    if (this.$refs.thefileitem.getFullPath().indexOf('/') == -1) {
+    let p = this.$refs.thefileitem.getFullPath();
+    if ((p == '/') || (p.indexOf('/') == -1)) {
       this.toggle();
     }
   }
