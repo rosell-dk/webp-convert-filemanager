@@ -49,11 +49,11 @@ if (!window["wcfmoptions"]) {
           case '':
             var response = {
               children: [
-                {name: 'root', isDir: true}
+                {name: '/', isDir: true, nickname: 'root'}
               ]
             }
             break;
-          case 'root':
+          case '/':
             var response = {
               children: [
                 {name:'empty-folder', isDir:true, isEmpty:true},
@@ -64,12 +64,12 @@ if (!window["wcfmoptions"]) {
               ]
             }
             break;
-          case 'root/empty-folder':
+          case '/empty-folder':
             var response = {
               children: []
             }
             break;
-          case 'root/test-folder':
+          case '/test-folder':
             var response = {
               children: [
                 {name:'banana', isDir:false},
@@ -78,7 +78,7 @@ if (!window["wcfmoptions"]) {
               ]
             }
             break;
-          case 'root/test-folder/subfolder':
+          case '/test-folder/subfolder':
             var response = {
               children: [
                 {name:'file2', isDir:false},

@@ -8,7 +8,7 @@
       </span>
       <svg v-if="item.isDir" class="icon-folder" @click="this.$emit('toggle')"><use xlink:href="#icon-folder" /></svg>
       <svg v-if="!item.isDir" class="icon-file"><use xlink:href="#icon-file" /></svg>
-      {{ item.name }}
+      {{ item.nickname || item.name }}
       <!--
       <div class="buttons">
         <button v-if="hover" @click.stop="infoClick()">Info</button>
@@ -56,7 +56,9 @@ export default {
         node = node.$parent;
       }
       path.pop();
-      return path.reverse().join('/');
+      path = path.reverse().join('/');
+      path = path.replace('//', '/');
+      return path;
     },
     infoClick() {
       this.getWCFM().displayInfo(this.getFullPath());
