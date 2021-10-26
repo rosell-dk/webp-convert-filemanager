@@ -39,7 +39,8 @@
     </p>
     <p>
       You can zoom in on the image, ie using scroll wheel. Both images will zoom, allowing you to compare the quality.
-      Double-click the image to set zoom to 100%
+      Double-click the image to set zoom to 100%.
+      You can also drag the image.
     </p>
 
 <!--

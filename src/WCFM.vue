@@ -21,17 +21,7 @@
             <FileProperties :file="file" v-if="!(file.isDir)"/>
             <FolderProperties :file="file" v-if="(file.isDir)"/>
           </div>
-          <div v-if="!file" style="padding:20px 30px">
-            <p>
-              <h3>Welcome to the <i>very early stage of</i> WebP Convert file manager.</h3>
-            </p>
-            <p>
-              At current stage you can browse the image files and compare the original vs the converted file.<br>
-              You cannot trigger conversions yet. To support development, you can <a href="https://ko-fi.com/rosell">buy me a cup of coffee</a>
-            </p>
-            <p>To open a folder, click the "+" sign next to the folder name or double click the folder name</p>
-
-          </div>
+          <Welcome v-if="!file" />
         </pane>
       </splitpanes>
 
@@ -124,14 +114,15 @@ import SVGs from './components/SVGs.vue'
 import ConvertOptions from './components/ConvertOptions.vue'
 //import FileTree from './components/FileTree.vue'
 import Files from './components/Files.vue'
-import InfoPane from './components/InfoPane.vue'
+//import InfoPane from './components/InfoPane.vue'
 
 //import Multipane from './components/standard/multipane.vue';
 import Modal from './components/standard/Modal.vue';
 import FileProperties from './components/FileProperties.vue';
 import FolderProperties from './components/FolderProperties.vue';
 //import MultipaneResizer from './components/standard/multipane-resizer.vue';
-import ConvertOptions2 from './components/ConvertOptions2.vue';
+//import ConvertOptions2 from './components/ConvertOptions2.vue';
+import Welcome from './components/Welcome.vue';
 
 //import Pane from './components/pane.vue';
 //import Splitpanes from './components/splitpanes.vue';
@@ -141,14 +132,15 @@ export default {
   name: 'WCFM',
   components: {
     SVGs,
-    ConvertOptions,
-    ConvertOptions2,
+    //ConvertOptions,
+    //ConvertOptions2,
     FileProperties,
     FolderProperties,
     Modal,
     Files,
-    InfoPane,
-    Splitpanes, Pane
+    //InfoPane,
+    Splitpanes, Pane,
+    Welcome
   },
   methods: {
     onConvertClick(path) {
