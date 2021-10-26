@@ -174,7 +174,7 @@ export default {
   },
   mounted() {
     var me = this;
-    Poster.post('get-folder', {folder: ''}, function(response) {
+    Poster.post('get-folder', {path: ''}, function(response) {
       me.item = response.children[0];
     });
   },

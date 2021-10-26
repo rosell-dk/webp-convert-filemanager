@@ -31,7 +31,7 @@ export default {
   methods: {
     load() {
       var me = this;
-      Poster.post('get-folder', {folder: this.$refs.thefileitem.getFullPath()}, function(response) {
+      Poster.post('get-folder', {path: this.$refs.thefileitem.getFullPath()}, function(response) {
         //me.item = response;
         //me.treeStatusText = 'sorting...';
         //me.item = me.sortTree(response);
@@ -54,7 +54,7 @@ export default {
         });
         me.item.loaded = true;
         me.loading = false;
-        console.log('response', response);
+        //console.log('response', response);
       });
 
     },

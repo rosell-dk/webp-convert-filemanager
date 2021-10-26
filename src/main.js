@@ -42,10 +42,10 @@ wcfm.use(VTooltip, {
 if (!window["wcfmoptions"]) {
   window["wcfmoptions"] = {}
   window["wcfmoptions"]['poster'] = function(command, options, successCallback, errorCallback) {
-    console.log(options);
+    //console.log(options);
     switch (command) {
       case 'get-folder':
-        switch (options['folder']) {
+        switch (options['path']) {
           case '':
             var response = {
               children: [
