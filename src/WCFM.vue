@@ -12,7 +12,7 @@
         <pane size="30">
           <div class="pane-content">
             <div>
-              <Files :item="item" @select="onFileSelect"/>
+              <Files :item="item" :statusText="treeStatusText" @select="onFileSelect"/>
             </div>
           </div>
         </pane>
@@ -178,13 +178,43 @@ export default {
       Poster.post('info', {path: path}, function(response) {
         me.selectedInfo = response;
       });
+    },
+    sortTree(item) {
+      var me = this;
+
+      // Sort first by dir, next by name
+      item.children.sort(function(a, b) {
+        if ((a.isDir) && (!b.isDir)) {
+          return -1;
+        }
+        if ((!a.isDir) && (b.isDir)) {
+          return 1;
+        }
+        if (a.name > b.name) {
+          return 1;
+        }
+        if (a.name < b.name) {
+          return -1;
+        }
+        return 0;
+      });
+
+      item.children.forEach(function(subitem) {
+        if (subitem.isDir) {
+          subitem = me.sortTree(subitem);
+        }
+      });
+      return item;
     }
   },
   mounted() {
     var me = this;
 
     Poster.post('get-tree', {folder: ''}, function(response) {
-      me.item = response;
+      //me.item = response;
+      me.treeStatusText = 'sorting...';
+      me.item = me.sortTree(response);
+      //console.log(response);
     });
   },
   data() {
@@ -192,6 +222,7 @@ export default {
       file: null,
       selectedItem: null,
       item: null,     // the tree
+      treeStatusText: 'loading file tree...',
       selectedInfo: {},
       showConvertOptions: false,
       //convertOptions: {},

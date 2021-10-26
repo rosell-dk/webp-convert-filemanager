@@ -53,11 +53,12 @@ if (!window["wcfmoptions"]) {
             {name:'file', isDir:false, isConverted: true},
             {name:'aaa', isDir:false, isConverted: true},
             {name:'test-folder', isDir:true, children: [
-                {name:'file', isDir:false},
+                {name:'banana', isDir:false},
                 {name:'subfolder', isDir:true, children: [
-                  {name:'file', isDir:false},
+                  {name:'file2', isDir:false},
+                  {name:'file1', isDir:false},
                 ]},
-                {name:'file', isDir:false}
+                {name:'apple', isDir:false}
               ]
             },
             {name:'file2', isDir:false, isConverted: false}

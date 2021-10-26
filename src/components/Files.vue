@@ -1,8 +1,6 @@
 <template>
   <FileTree v-if="item" :item="item" @select="onSelect"/>
-  <div v-if="!item">
-    loading file tree...
-  </div>
+  <div v-if="!item">{{ statusText }}</div>
 </template>
 
 <script>
@@ -15,7 +13,8 @@ export default {
   },
   emits: ['select'],
   props: {
-    item: Object
+    item: Object,
+    statusText: String
   },
   methods: {
     onSelect(c) {
