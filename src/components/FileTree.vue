@@ -1,5 +1,8 @@
 <template>
-  <FileItem :item="item" @dblclick="toggle" @toggle="toggle" @select="onSelect"/>
+  <FileItem ref="thefileitem" :item="item" @dblclick="toggle" @toggle="toggle" @select="onSelect"/>
+  <ul v-if="loading">
+    <li>loading...</li>
+  </ul>
   <ul class="tree" v-if="(item.children !== undefined) && item.isOpen">
     <li v-for="child in item.children">
       <FileTree :item="child" @select="onSelect" />
@@ -20,13 +23,56 @@ export default {
   props: {
     item: Object
   },
+  data() {
+    return {
+      loading: false,
+    }
+  },
   methods: {
+    load() {
+      var me = this;
+      Poster.post('get-folder', {folder: this.$refs.thefileitem.getFullPath()}, function(response) {
+        //me.item = response;
+        //me.treeStatusText = 'sorting...';
+        //me.item = me.sortTree(response);
+        me.loading = true;
+        me.item.children = response.children.sort(function(a, b) {
+          // Sort first by dir, next by name
+          if ((a.isDir) && (!b.isDir)) {
+            return -1;
+          }
+          if ((!a.isDir) && (b.isDir)) {
+            return 1;
+          }
+          if (a.name > b.name) {
+            return 1;
+          }
+          if (a.name < b.name) {
+            return -1;
+          }
+          return 0;
+        });
+        me.item.loaded = true;
+        me.loading = false;
+        console.log('response', response);
+      });
+
+    },
     toggle() {
       this.item.isOpen = !this.item.isOpen;
+      if (!this.item.loaded) {
+        this.load();
+      }
     },
     onSelect(c) {
       //console.log('select received and transmitting');
       this.$emit('select', c);
+    }
+  },
+  mounted() {
+    // if root, open the folder (which triggers load)
+    if (this.$refs.thefileitem.getFullPath().indexOf('/') == -1) {
+      this.toggle();
     }
   }
 }

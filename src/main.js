@@ -42,8 +42,55 @@ wcfm.use(VTooltip, {
 if (!window["wcfmoptions"]) {
   window["wcfmoptions"] = {}
   window["wcfmoptions"]['poster'] = function(command, options, successCallback, errorCallback) {
+    console.log(options);
     switch (command) {
-      case 'get-tree':
+      case 'get-folder':
+        switch (options['folder']) {
+          case '':
+            var response = {
+              children: [
+                {name: 'root', isDir: true}
+              ]
+            }
+            break;
+          case 'root':
+            var response = {
+              children: [
+                {name:'empty-folder', isDir:true, isEmpty:true},
+                {name:'file', isDir:false, isConverted: true},
+                {name:'aaa', isDir:false, isConverted: true},
+                {name:'test-folder', isDir:true},
+                {name:'file2', isDir:false, isConverted: false}
+              ]
+            }
+            break;
+          case 'root/empty-folder':
+            var response = {
+              children: []
+            }
+            break;
+          case 'root/test-folder':
+            var response = {
+              children: [
+                {name:'banana', isDir:false},
+                {name:'subfolder', isDir:true},
+                {name:'apple', isDir:false}
+              ]
+            }
+            break;
+          case 'root/test-folder/subfolder':
+            var response = {
+              children: [
+                {name:'file2', isDir:false},
+                {name:'file1', isDir:false},
+              ]
+            }
+            break;
+          default:
+            errorCallback();
+            return
+        }
+        /*
         var response = {
           name: 'root',
           isDir: true,
@@ -63,7 +110,7 @@ if (!window["wcfmoptions"]) {
             },
             {name:'file2', isDir:false, isConverted: false}
           ]
-        };
+        };*/
         break;
       case 'conversion-settings':
         var response = {

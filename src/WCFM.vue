@@ -171,42 +171,16 @@ export default {
         me.selectedInfo = response;
       });
     },
-    sortTree(item) {
-      var me = this;
-
-      // Sort first by dir, next by name
-      item.children.sort(function(a, b) {
-        if ((a.isDir) && (!b.isDir)) {
-          return -1;
-        }
-        if ((!a.isDir) && (b.isDir)) {
-          return 1;
-        }
-        if (a.name > b.name) {
-          return 1;
-        }
-        if (a.name < b.name) {
-          return -1;
-        }
-        return 0;
-      });
-
-      item.children.forEach(function(subitem) {
-        if (subitem.isDir) {
-          subitem = me.sortTree(subitem);
-        }
-      });
-      return item;
-    }
   },
   mounted() {
     var me = this;
 
-    Poster.post('get-tree', {folder: ''}, function(response) {
+    Poster.post('get-folder', {folder: ''}, function(response) {
       //me.item = response;
-      me.treeStatusText = 'sorting...';
-      me.item = me.sortTree(response);
-      //console.log(response);
+      //me.treeStatusText = 'sorting...';
+      //me.item = me.sortTree(response);
+      console.log(response);
+      me.item = response.children[0];
     });
   },
   data() {
