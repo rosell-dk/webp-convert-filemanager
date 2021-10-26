@@ -26,7 +26,7 @@ export default {
   },
   watch: {
     file(newValue, oldValue) {
-      console.log('file changed:', newValue);
+      //console.log('folder changed:', newValue);
     }
   },
 }
