@@ -1,7 +1,7 @@
 <template>
   <div :class="{fileitem:true, selected: selected}" @mouseover="hover = true" @mouseleave="hover = false" @click="onClick">
     <p>
-      <span v-if="item.isDir" class="foldUnfold" @click="this.$emit('toggle')">
+      <span v-if="item.isDir" :class="{'fold-unfold':true, empty:item.children.length==0}" @click="this.$emit('toggle')">
         <svg v-if="item.isOpen" class="icon-fold"><use xlink:href="#icon-fold" /></svg>
         <svg v-if="!item.isOpen" class="icon-unfold"><use xlink:href="#icon-unfold" /></svg>
       </span>
@@ -102,10 +102,15 @@ export default {
     line-height: 25px;
     border-bottom:1px solid #f2f2f2;
 
-    & .foldUnfold {
+    & .fold-unfold {
       user-select: none;
       cursor: pointer;
     }
+
+    & .fold-unfold.empty {
+      visibility: hidden;
+    }
+
 
     /*
     & .buttons {
