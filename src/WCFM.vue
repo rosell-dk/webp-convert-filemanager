@@ -174,12 +174,7 @@ export default {
   },
   mounted() {
     var me = this;
-
     Poster.post('get-folder', {folder: ''}, function(response) {
-      //me.item = response;
-      //me.treeStatusText = 'sorting...';
-      //me.item = me.sortTree(response);
-      console.log(response);
       me.item = response.children[0];
     });
   },
