@@ -191,7 +191,7 @@ export default {
     return {
       file: null,
       selectedItem: null,
-      item: {},     // the tree
+      item: null,     // the tree
       selectedInfo: {},
       showConvertOptions: false,
       //convertOptions: {},

@@ -1,5 +1,8 @@
 <template>
-  <FileTree :item="item" @select="onSelect"/>
+  <FileTree v-if="item" :item="item" @select="onSelect"/>
+  <div v-if="!item">
+    loading file tree...
+  </div>
 </template>
 
 <script>
