@@ -3,7 +3,7 @@
     <div class="path">
       Path: <span class="path">{{ file.path }}</span>
     </div>
-    <div class="error" v-if="errorMsg">{{ errorMsg }}</div>
+    <div class="error" v-if="errorMsg != ''"><p>Error: {{ errorMsg }}</p></div>
 
 <!--    <Variant
       title="Original"
@@ -34,6 +34,21 @@
       v-model:translateY="translateY"
       v-show="convertedInfo"
     />
+    <Modal
+        v-show="showingLogDialog"
+        title="Conversion log"
+        closeButtonText="Ok"
+        width="600px"
+        height="95%" maxheight="650px"
+        alignment="center"
+        @close="showingLogDialog = false"
+      >
+      {{ log }}
+    </Modal>
+    <div>
+      <button @click="onConvertClick">Convert</button>
+      <button @click="showingLogDialog = true" v-if="log != ''" class="log-button">View conversion log</button>
+    </div>
     <p>
     Above, you see the original image. If it has been converted, you also see the converted image (provided that your browser supports webp).
     </p>
@@ -61,6 +76,7 @@
 //import ZoomSlider from './ZoomSlider.vue'
 import Variant from './Variant.vue'
 import Variants from './Variants.vue'
+import Modal from './standard/Modal.vue'
 //import Slider from '@vueform/slider'
 import Poster from '../classes/Poster.js'
 
@@ -70,7 +86,8 @@ export default {
     //ImageViewport,
     //ZoomSlider
     Variant,
-    Variants
+    Variants,
+    Modal
   },
   props: {
     file: {
@@ -82,7 +99,8 @@ export default {
     file(newValue, oldValue) {
       //console.log('file changed:', newValue);
       if (!newValue.isDir) {
-        this.load(newValue.path);
+        this.changePath(newValue.path);
+        console.log('hi');
       }
     }
   },
@@ -125,6 +143,23 @@ export default {
     onOriginalResize() {
       this.updateHeight();
     },
+    onConvertClick() {
+      let me = this;
+
+      Poster.post('convert', {path: this.path}, function(response) {
+
+        if (response?.success == false) {
+          me.errorMsg = response.data;
+        } else {
+          //me.reload();
+          me.log = response.log;
+        }
+
+        //console.log(response);
+        //me.selectedInfo = response;
+      });
+
+    },
     updateHeight() {
       if (this.$refs.original) {
         //console.log('calling zoomToFit');
@@ -140,15 +175,25 @@ export default {
       //this.translateY = 0;
       this.originalInfo = null;
       this.convertedInfo = null;
-      this.errorMsg = '';
+      //this.errorMsg = 'reset';
 
     },
-    load(path) {
-      let me = this
-      me.reset()
-      me.loading = true
-      Poster.post('info', {path: path}, function(response) {
-        if (!response.success) {
+    reload() {
+      this.load();
+    },
+    changePath(path) {
+      console.log('there');
+      this.reset();
+      this.path = path;
+      this.loading = true;
+      this.errorMsg = '';
+      this.load();
+      this.log = '';
+    },
+    load() {
+      let me = this;
+      Poster.post('info', {path: this.path}, function(response) {
+        if (response?.success == false) {
           me.errorMsg = response.data;
         }
         me.loading = false;
@@ -165,7 +210,9 @@ export default {
   },
   mounted() {
     if (this.file) {
-      this.load(this.file.path);
+      //this.load(this.file.path);
+      this.path = this.file.path;
+      this.load();
     }
   },
   data() {
@@ -179,6 +226,9 @@ export default {
       errorMsg: '',
       originalInfo: null,
       convertedInfo: null,
+      path: '',
+      log: '',
+      showingLogDialog: false,
     }
   }
 }
@@ -199,6 +249,9 @@ export default {
       color: #666;
       font-style: italic;
     }
+  }
+  & .log-button {
+    margin-left: 15px;
   }
 }
 </style>

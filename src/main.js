@@ -150,7 +150,7 @@ if (!window["wcfmoptions"]) {
         break;
         case 'info':
           //console.log('options', options);
-          if (options.path == 'root/file2') {
+          if (options.path == '/file2') {
             var response = {
               original: {
                 filename: 'file.png',
@@ -164,7 +164,7 @@ if (!window["wcfmoptions"]) {
               },
               log: 'blah blah blah'
             };
-          } else if (options.path == 'root/file') {
+          } else if (options.path == '/file') {
             var response = {
               original: {
                 filename: 'file.png',
@@ -193,9 +193,16 @@ if (!window["wcfmoptions"]) {
           //var response = {"success":false,"data":"Path does not exist or it is outside restricted basedir"};
           break;
         case 'convert':
-          var response = {
-            success: false,
-            msg: 'Image type could not be detected',
+          if (options.path == '/file2') {
+            var response = {
+              success: false,
+              data: 'We pretend file2 errors converting...',
+            }
+          } else {
+            var response = {
+              success: true,
+              log: 'All is groovy.'
+            }
           }
           /*var response = {
             success: true,
