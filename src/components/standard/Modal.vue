@@ -29,15 +29,18 @@ export default {
   props: {
     title: {type: String},
     closeButtonText: {type: String},
-    alignment: {type: String},
     width: {type: [Number, String], default: '95%'},
-    height: {type: [Number, String], default: '95%'},
+    maxwidth: {type: [Number, String], default: '700px'},
+    alignment: {type: String, default: 'center'},   // left / right / center
+    height: {type: [Number, String], default: '92%'},
     maxheight: {type: [Number, String], default: '700px'},
+    valignment: {type: String, default: 'center'}, // top / bottom / center
   },
   computed: {
     containerStyle() {
       let style = {
         width: this.width,
+        'max-width': this.maxwidth,
         height: this.height,
         'max-height': this.maxheight,
       };
@@ -48,6 +51,14 @@ export default {
         style['position'] = 'absolute';
         style['right'] = '10px';
       }
+      if (this.valignment == 'center') {
+        style['top'] = '50%';
+        style['transform'] = 'translateY(-50%)';
+      }
+      if (this.alignment == 'bottom') {
+        style['position'] = 'absolute';
+        style['bottom'] = '10px';
+      }
       return style;
 
     }
@@ -56,7 +67,25 @@ export default {
   methods: {
     onCloseClick() {
       this.$emit('close');
+    },
+    registerKeyDownEvent() {
+      let me = this;
+      document.onkeydown = function(evt) {
+        evt = evt || window.event;
+        var isEscape = false;
+        if ("key" in evt) {
+          isEscape = (evt.key === "Escape" || evt.key === "Esc");
+        } else {
+          isEscape = (evt.keyCode === 27);
+        }
+        if (isEscape) {
+          me.$emit('close');
+        }
+      };
     }
+  },
+  mounted() {
+    this.registerKeyDownEvent();
   }
 }
 </script>
@@ -77,8 +106,6 @@ export default {
     vertical-align: middle;*/
     height: 100%;
     width: 100%;
-    padding-top: 30px;
-
 
     & .modal-container {
       padding: 0;

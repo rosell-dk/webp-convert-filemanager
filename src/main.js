@@ -153,39 +153,35 @@ if (!window["wcfmoptions"]) {
           if (options.path == '/file2') {
             var response = {
               original: {
-                filename: 'file.png',
                 size: 100,
                 url: 'http://localhost:3000/src/assets/200x100.jpg',
               },
               converted: {
-                filename: 'file.png.webp',
                 size: 70,
-                url: 'http://localhost:3000/src/assets/200x100.jpg'
+                url: 'http://localhost:3000/src/assets/200x100.jpg',
               },
-              log: 'blah blah blah'
+              log: 'blah blah blah\n\rand *more* blah'
             };
           } else if (options.path == '/file') {
             var response = {
               original: {
-                filename: 'file.png',
                 size: 100,
                 url: 'http://localhost:3000/src/assets/dummy2.jpg',
               },
-              log: 'blah blah blah'
+              log: 'blah blah *blah*'
+
             };
           } else {
             var response = {
               original: {
-                filename: 'file.png',
                 size: 100,
                 url: 'http://localhost:3000/src/assets/dummy.jpg',
               },
               converted: {
-                filename: 'file.png.webp',
                 size: 70,
-                url: 'http://localhost:3000/src/assets/dummy.jpg'
+                url: 'http://localhost:3000/src/assets/dummy.jpg',
               },
-              log: 'blah blah blah'
+              log: 'blah blah *blah*'
             };
           }
 
@@ -197,11 +193,16 @@ if (!window["wcfmoptions"]) {
             var response = {
               success: false,
               data: 'We pretend file2 errors converting...',
+              log: 'Oh no!',
             }
           } else {
             var response = {
               success: true,
-              log: 'All is groovy.'
+              converted: {
+                size: 26050,
+                url: "http://we0/wordpress/wp-content/uploads/2021/10/Screenshot_2021-10-04_13-43-11.png.webp",
+              },
+              log: 'All is *groovy*\nnext line',
             }
           }
           /*var response = {

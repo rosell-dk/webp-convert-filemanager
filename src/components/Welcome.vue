@@ -3,26 +3,28 @@
   <div class="welcome">
     <div class="headline">
       <div>Welcome to</div>
-      <h3>WebP Convert file manager 0.2</h3>
+      <h3>WebP Convert file manager</h3>
     </div>
     <p>
-      At current stage you can browse the image files and compare the original vs the converted file.<br>
       To open a folder, click the "+" sign next to the folder name or double click the folder name
     </p>
     <p>
       <h4>Whats new?</h4>
-      <i>Changes in 0.2:</i>
       <ul>
-        <li>Tree branches are now loaded on need basis (loaded the complete tree in one go was causing timeout on sites with huge amounts of images)</li>
-      </ul>
-      <i>Changes in 0.1:</i>
-      <ul>
-        <li>Everything is new! This is the first tentative pre-alpha work-in-progress release.</li>
+        <li>You can now convert files and view conversion log</li>
       </ul>
     </p>
     <p>
       <h4>Whats planned ahead?</h4>
-      Next thing is of course to enable you to trigger conversions.
+      I have plenty of ideas, but no planned priority.
+      Ideas:
+      <ul>
+        <li>Trigger bulk conversion on folders / mark for background conversion</li>
+        <li>Stats on folders</li>
+        <li>Display more info on images (mime type, dimensions and such)</li>
+        <li>Adjust conversion settings</li>
+        <li>Interface to allow adjusting quality on a conversion quickly and compare directly</li>
+      </ul>
       To support development, you can <a href="https://ko-fi.com/rosell" target="_blank">buy me a cup of coffee</a>
     </p>
 

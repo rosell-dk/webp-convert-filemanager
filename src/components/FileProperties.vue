@@ -38,16 +38,21 @@
         v-show="showingLogDialog"
         title="Conversion log"
         closeButtonText="Ok"
-        width="600px"
-        height="95%" maxheight="650px"
-        alignment="center"
+        width="95vw"
+        maxwidth="1400px"
+        height="95vh"
         @close="showingLogDialog = false"
       >
-      {{ log }}
+      <div v-html="log"/>
     </Modal>
     <div>
-      <button @click="onConvertClick">Convert</button>
-      <button @click="showingLogDialog = true" v-if="log != ''" class="log-button">View conversion log</button>
+      <button @click="onConvertClick">
+        <span v-if="convertedInfo">Reconvert</span>
+        <span v-if="!convertedInfo">Convert</span>
+      </button>
+      <!-- Got loading icon here: https://icons8.com/preloaders/en/filtered-search/circular/svg/ -->
+      <svg class="icon-converting" width="15" height="15" v-if="converting"><use xlink:href="#icon-loading" /></svg>
+      <button @click="showingLogDialog = true" v-if="log != ''" class="log-button" :disabled="converting">View conversion log</button>
     </div>
     <p>
     Above, you see the original image. If it has been converted, you also see the converted image (provided that your browser supports webp).
@@ -79,6 +84,7 @@ import Variants from './Variants.vue'
 import Modal from './standard/Modal.vue'
 //import Slider from '@vueform/slider'
 import Poster from '../classes/Poster.js'
+import SimpleMarkdown from '../classes/SimpleMarkdown.js'
 
 export default {
   name: 'FileProperties',
@@ -100,7 +106,6 @@ export default {
       //console.log('file changed:', newValue);
       if (!newValue.isDir) {
         this.changePath(newValue.path);
-        console.log('hi');
       }
     }
   },
@@ -145,14 +150,17 @@ export default {
     },
     onConvertClick() {
       let me = this;
-
+      this.converting = true;
       Poster.post('convert', {path: this.path}, function(response) {
-
+        me.converting = false;
         if (response?.success == false) {
           me.errorMsg = response.data;
-        } else {
-          //me.reload();
-          me.log = response.log;
+        }
+        if (response.converted) {
+          me.convertedInfo = response.converted;
+        }
+        if (response.log) {
+          me.log = SimpleMarkdown.md2html(response.log);
         }
 
         //console.log(response);
@@ -182,13 +190,12 @@ export default {
       this.load();
     },
     changePath(path) {
-      console.log('there');
       this.reset();
       this.path = path;
       this.loading = true;
       this.errorMsg = '';
-      this.load();
       this.log = '';
+      this.load();
     },
     load() {
       let me = this;
@@ -200,6 +207,9 @@ export default {
         me.originalInfo = response.original;
         if (response.converted) {
           me.convertedInfo = response.converted;
+        }
+        if (response.log) {
+          me.log = SimpleMarkdown.md2html(response.log);
         }
 
         //console.log(response);
@@ -229,6 +239,7 @@ export default {
       path: '',
       log: '',
       showingLogDialog: false,
+      converting: false,
     }
   }
 }
@@ -252,6 +263,9 @@ export default {
   }
   & .log-button {
     margin-left: 15px;
+  }
+  & .icon-converting {
+    padding: 0px 5px 0;
   }
 }
 </style>

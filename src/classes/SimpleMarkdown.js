@@ -60,6 +60,6 @@ export default class SimpleMarkdown {
     for (var i=0; i<arr.length; i++) {
       result.push(SimpleMarkdown.md2htmlOneLine(arr[i]));
     }
-    return result.join('');
+    return result.join('<br>');
   }
 }
