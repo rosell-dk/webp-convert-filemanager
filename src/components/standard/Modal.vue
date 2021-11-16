@@ -129,18 +129,19 @@ export default {
 
       & .close-button {
         position: absolute;
-        right: 2px;
-        top: 2px;
+        right: 3px;
+        top: 3px;
         background-color: white;
         padding: 2px 5px;
-        font-size: 12px;
+        font-size: 10px;
         z-index: 999;
-        border-radius: 20px;
+        border-radius: 18px;
         border: 1px solid #ccc;
       }
 
       & .close-button:hover {
         cursor: pointer;
+        background-color: #999;
       }
 
       & .modal-body {
