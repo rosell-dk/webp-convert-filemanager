@@ -11,29 +11,42 @@
       url="http://localhost:3000/src/assets/200x100.jpg"
     />-->
     <div v-show="loading">Getting info...</div>
-    <Variant
-      ref="original"
-      title="Original"
-      :info="originalInfo"
-      :height="height"
-      v-model:zoom="zoom"
-      :scaleZoomRatio="scaleZoomRatio"
-      v-model:translateX="translateX"
-      v-model:translateY="translateY"
-      v-show="originalInfo"
-      @load="onOriginalLoad"
-      @resize="onOriginalResize"
-    />
-    <Variant
-      title="Existing conversion"
-      :info="convertedInfo"
-      :height="height"
-      v-model:zoom="zoom"
-      :scaleZoomRatio="scaleZoomRatio"
-      v-model:translateX="translateX"
-      v-model:translateY="translateY"
-      v-show="convertedInfo"
-    />
+    <div>
+      <div class="variant-wrap">
+        <Variant
+          ref="original"
+          title="Original"
+          :info="originalInfo"
+          :height="height"
+          v-model:zoom="zoom"
+          :scaleZoomRatio="scaleZoomRatio"
+          v-model:translateX="translateX"
+          v-model:translateY="translateY"
+          v-show="originalInfo"
+          @load="onOriginalLoad"
+          @resize="onOriginalResize"
+        />
+        <div class="variant-footer">
+          {{ originalMime }}
+        </div>
+      </div>
+      <div class="variant-wrap">
+        <Variant
+          title="Existing conversion"
+          :info="convertedInfo"
+          :height="height"
+          v-model:zoom="zoom"
+          :scaleZoomRatio="scaleZoomRatio"
+          v-model:translateX="translateX"
+          v-model:translateY="translateY"
+          v-show="convertedInfo"
+        />
+        <div class="variant-footer" v-if="convertedInfo">
+          {{ convertedMime }}
+          <svg class="icon-trash" @click="onDeleteConvertedClick" v-tooltip="'Delete conversion'"><use xlink:href="#icon-trash" /></svg>
+        </div>
+      </div>
+    </div>
     <Modal
         v-show="showingLogDialog"
         title="Conversion log"
@@ -101,6 +114,20 @@ export default {
       default: {}
     }
   },
+  computed: {
+    originalMime: function() {
+      if (!this.originalInfo?.mime) {
+        return '';
+      }
+      return this.originalInfo.mime;
+    },
+    convertedMime: function() {
+      if (!this.convertedInfo?.mime) {
+        return '';
+      }
+      return this.convertedInfo.mime;
+    },
+  },
   watch: {
     file(newValue, oldValue) {
       //console.log('file changed:', newValue);
@@ -166,7 +193,17 @@ export default {
         //console.log(response);
         //me.selectedInfo = response;
       });
-
+    },
+    onDeleteConvertedClick() {
+      let me = this;
+      Poster.post('delete-converted', {path: this.path}, function(response) {
+        if (response?.success == false) {
+          me.errorMsg = response.data;
+        } else {
+          me.log = '';
+          me.convertedInfo = null;
+        }
+      });
     },
     updateHeight() {
       if (this.$refs.original) {
@@ -250,6 +287,28 @@ export default {
    You must use "PostCSS Nesting" package to compile to current standard
  */
 .file-properties {
+  & .variant-wrap {
+    display:inline-block;
+    width:48%;
+    margin-right:2%;
+    margin-bottom: 20px;
+    vertical-align: top;
+
+    & .variant-footer {
+      font-style: italic;
+
+      & button {
+        float: right;
+        padding: 3px 10px;
+      }
+    }
+    & .icon-trash {
+      width: 18px;
+      height: 18px;
+      cursor: pointer;
+      float: right;
+    }
+  }
   & .error {
     color: red;
     font-weight: bold;

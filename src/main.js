@@ -155,10 +155,12 @@ if (!window["wcfmoptions"]) {
               original: {
                 size: 100,
                 url: 'http://localhost:3000/src/assets/200x100.jpg',
+                mime2: 'image/jpeg'
               },
               converted: {
                 size: 70,
                 url: 'http://localhost:3000/src/assets/200x100.jpg',
+                mime: 'image/webp'
               },
               log: 'blah blah blah\n\rand *more* blah'
             };
@@ -167,6 +169,7 @@ if (!window["wcfmoptions"]) {
               original: {
                 size: 100,
                 url: 'http://localhost:3000/src/assets/dummy2.jpg',
+                mime: 'image/jpeg'
               },
               log: 'blah blah *blah*'
 
@@ -176,10 +179,12 @@ if (!window["wcfmoptions"]) {
               original: {
                 size: 100,
                 url: 'http://localhost:3000/src/assets/dummy.jpg',
+                mime: 'image/jpeg'
               },
               converted: {
                 size: 70,
                 url: 'http://localhost:3000/src/assets/dummy.jpg',
+                mime: 'image/webp'
               },
               log: 'blah blah *blah*'
             };
@@ -201,6 +206,7 @@ if (!window["wcfmoptions"]) {
               converted: {
                 size: 26050,
                 url: "http://we0/wordpress/wp-content/uploads/2021/10/Screenshot_2021-10-04_13-43-11.png.webp",
+                mime: 'image/webp'
               },
               log: 'All is *groovy*\nnext line',
             }
@@ -210,6 +216,20 @@ if (!window["wcfmoptions"]) {
             msg: '',
           }*/
           break;
+
+        case 'delete-converted':
+          if (options.path == '/file2') {
+            var response = {
+              success: false,
+              data: 'We pretend file2 errors deleting...',
+            }
+          } else {
+            var response = {
+              success: true,
+            }
+          }
+          break;
+
         default:
           var response = 'ok';
           break;

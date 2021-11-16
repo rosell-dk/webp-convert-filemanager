@@ -21,9 +21,10 @@
       <ul>
         <li>Trigger bulk conversion on folders / mark for background conversion</li>
         <li>Stats on folders</li>
-        <li>Display more info on images (mime type, dimensions and such)</li>
+        <li>Display more info on images (dimensions and such)</li>
         <li>Adjust conversion settings</li>
         <li>Interface to allow adjusting quality on a conversion quickly and compare directly</li>
+        <li>Compare converters side-by-side (visual quality, result size, conversion time)</li>
       </ul>
       To support development, you can <a href="https://ko-fi.com/rosell" target="_blank">buy me a cup of coffee</a>
     </p>

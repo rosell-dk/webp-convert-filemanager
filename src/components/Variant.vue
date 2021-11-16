@@ -2,7 +2,7 @@
     <div class="variant">
       <div class="header">
         <div class="title">{{ title }}</div>
-        <div class="size">{{ filesize }} </div>
+        <div class="size">{{ filesize }}</div>
         <!--<div class="zoom">zoom: {{ Math.round(zoom*100) }}%</div>-->
       </div>
       <ImageViewport
@@ -16,6 +16,10 @@
         @load="onLoad"
         @resize="this.$emit('resize')"
       />
+      <!--
+      <div class="footer">
+        {{ mime }}
+      </div>-->
       <!--<div class="footer">
         <div class="select"><button @click="onVariantSelect">select</button></div>
       </div>-->
@@ -63,7 +67,14 @@ export default {
       }
       size /= 1024;
       return Math.round(size*10)/10 + ' MB'
-    }
+    },
+    /*
+    mime: function() {
+      if (!this.info?.mime) {
+        return '';
+      }
+      return this.info?.mime;
+    }*/
   },
   methods:{
     /*
@@ -105,10 +116,6 @@ export default {
    You must use "PostCSS Nesting" package to compile to current standard
  */
 .variant {
-    display: inline-block;
-    width: 48%;
-    margin-right:2%;
-    margin-bottom: 20px;
 
     & .header {
       & .title {
