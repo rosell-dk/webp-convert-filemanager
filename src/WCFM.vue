@@ -25,10 +25,8 @@
         </pane>
       </splitpanes>
 
-<!--
+
       <button class="convertOptionsButton" @click="showConvertOptions = true">Conversion options</button>
-    -->
-<!--
       <Modal
           v-show="showConvertOptions"
           title="Conversion options"
@@ -39,7 +37,7 @@
           @close="onConvertCloseClick"
         >
         <ConvertOptions2 ref="convertOptions"/>
-      </Modal>-->
+      </Modal>
 
     <!--
     <splitpanes class="default-theme" style="position:absolute; top:0; left: 0">
@@ -111,7 +109,7 @@ import 'splitpanes/dist/splitpanes.css'
 import Poster from './classes/Poster.js'
 
 import SVGs from './components/SVGs.vue'
-import ConvertOptions from './components/ConvertOptions.vue'
+//import ConvertOptions from './components/ConvertOptions.vue'
 //import FileTree from './components/FileTree.vue'
 import Files from './components/Files.vue'
 //import InfoPane from './components/InfoPane.vue'
@@ -121,19 +119,20 @@ import Modal from './components/standard/Modal.vue';
 import FileProperties from './components/FileProperties.vue';
 import FolderProperties from './components/FolderProperties.vue';
 //import MultipaneResizer from './components/standard/multipane-resizer.vue';
-//import ConvertOptions2 from './components/ConvertOptions2.vue';
+import ConvertOptions2 from './components/ConvertOptions2.vue';
 import Welcome from './components/Welcome.vue';
 
 //import Pane from './components/pane.vue';
 //import Splitpanes from './components/splitpanes.vue';
 
+// PS: v-tooltip docs: https://v-tooltip.netlify.app/guide/#quick-start
 
 export default {
   name: 'WCFM',
   components: {
     SVGs,
     //ConvertOptions,
-    //ConvertOptions2,
+    ConvertOptions2,
     FileProperties,
     FolderProperties,
     Modal,

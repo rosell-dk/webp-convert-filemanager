@@ -114,7 +114,10 @@ if (!window["wcfmoptions"]) {
         break;
       case 'conversion-settings':
         var response = {
-          //options: converterOptions,
+          options: converterOptions,
+          defaults: {
+            quality: 17
+          },
 
           /*converters: [
             {id: 'cwebp', name: 'cwebp'}, // TODO: Accept option definitions!

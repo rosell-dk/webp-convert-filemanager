@@ -2,9 +2,14 @@
   <div class="convert-options">
     <!--<p>General: {{ general.data }}</p>
     <p>PNG: {{ png.data }}</p>-->
+    <button
+      v-tooltip="'Swich between advanced view (all available options) and simple view (most used options)'"
+      v-text="advancedView ? 'Hide advanced options' : 'Show advanced options'"
+      @click="advancedView = !advancedView">
+    </button>
 
-    <AutoUI :ui="general.ui" :schema="schema" :modelValue="general.data" expressionContext="general"/>
-    <AutoUI :ui="png.ui" :schema="schema" :modelValue="png.data" expressionContext="png" :advancedView="true" :showAdvancedButton="false"/>
+    <AutoUI :ui="general.ui" :schema="schema" :modelValue="general.data" expressionContext="general" :advancedView="advancedView" :showAdvancedButton="false"/>
+    <AutoUI v-show="advancedView" :ui="png.ui" :schema="schema" :modelValue="png.data" expressionContext="png" :advancedView="advancedView" :showAdvancedButton="false"/>
   </div>
 </template>
 
@@ -37,7 +42,8 @@ export default {
       png: {
         ui: {},
         data: {}
-      }
+      },
+      advancedView: false
     }
   },
   mounted() {
@@ -57,10 +63,23 @@ export default {
       };
 
       let ids = [];
-      for (var i=0; i<response.options.length; i++) {
-        ids.push(response.options[i].id);
+      let generalOptions = response.options['general'];
+      let uniqueOptions = response.options['unique'];
+
+      let allOptions = generalOptions.map((x) => x);
+      for (const item in uniqueOptions) {
+        for (let i=0; i<uniqueOptions[item].length; i++) {
+          let option = uniqueOptions[item][i];
+          option['id'] = item + '-' + option['id'];
+          allOptions.push(option);
+        }
       }
 
+      for (var i=0; i<allOptions.length; i++) {
+        ids.push(allOptions[i].id);
+      }
+
+      /*
       pngUI.push({
         "component": "multi-select",
         'data-property': 'overrides',
@@ -74,14 +93,43 @@ export default {
               "string"
           ],
           "default": ['hello1']
+      }*/
+
+      let unsupportedBy = {};
+
+      for (var i=0; i<allOptions.length; i++) {
+        let option = allOptions[i];
+        if (option.schema) {
+          schemaProperties[option.id] = option.schema;
+          if (response.defaults[option.id]) {
+            defaults[option.id] = response.defaults[option.id];
+          } else {
+            if (option.schema.default != undefined) {
+              defaults[option.id] = option.schema.default;
+              pngDefaults[option.id] = option.schema.default;
+            }
+          }
+        }
+        if (option.unsupportedBy) {
+          unsupportedBy[option.id] = option.unsupportedBy
+        }
+      }
+      for (const [key, value] of Object.entries(defaults['png'])) {
+        pngDefaults[key] = value;
       }
 
+      for (var i=0; i<generalOptions.length; i++) {
+        //components.push(generalOptions[i].schema);
 
-      for (var i=0; i<response.options.length; i++) {
-        let option = response.options[i];
+        let option = generalOptions[i];
         if (option.ui) {
           let componentUi = option.ui;
           componentUi['data-property'] = option.id;
+          if (componentUi['display']) {
+            componentUi['display'] = 'supported("' + option.id + '") && (' + componentUi['display'] + ')';
+          } else {
+            componentUi['display'] = 'supported("' + option.id + '")';
+          }
           components.push(componentUi);
 
           //let componentUiPNG = option.ui;
@@ -95,28 +143,43 @@ export default {
           pngUI.push(componentUiPNG);
 
         }
-        if (option.schema) {
-          let componentUi = option.schema;
-          schemaProperties[option.id] = option.schema;
-          components.push(componentUi);
-          if (option.schema.default != undefined) {
-            defaults[option.id] = option.schema.default;
-            pngDefaults[option.id] = option.schema.default;
+      }
+
+      for (const converter in uniqueOptions) {
+        let group = {
+          'component': 'group',
+          'title': converter + ' options',
+          'sub-components': [],
+          'display': "(option.converter == '" + converter + "') || (option.converter == 'stack')"
+        }
+        let containsUnadvanced = false;
+        for (let i=0; i<uniqueOptions[converter].length; i++) {
+          let option = uniqueOptions[converter][i];
+          if (option.ui) {
+            let componentUi = option.ui;
+            componentUi['data-property'] = option.id;
+            if (!componentUi['advanced']) {
+              containsUnadvanced = true;
+            }
+            group['sub-components'].push(componentUi);
           }
         }
+        group['advanced'] = !containsUnadvanced;
+        if (group['sub-components'].length > 0) {
+          components.push(group);
+
+        }
       }
-      for (const [key, value] of Object.entries(defaults['png'])) {
-        pngDefaults[key] = value;
-      }
+
       //Object.assign(person, job);
 
-
+      //console.log(unsupportedBy);
 //console.log('options', me.options);
 
       me.general = {
         'ui': {
           'component': 'group',
-          'title': '',
+          'title': 'General',
           'sub-components': components
         },
         'data': defaults
@@ -125,7 +188,7 @@ export default {
       me.png = {
         'ui': {
           'component': 'group',
-          'title': 'PNG',
+          'title': 'PNG overrides',
           'sub-components': pngUI
         },
         'data': pngDefaults
@@ -160,7 +223,23 @@ export default {
         imageType: 'any',
         supported: function(optionId) {
             // Check if optionId is supported for the selected converter
+            if (!me.general.data['converter']) {
+              return true;
+            }
+            let converter = me.general.data['converter'];
+            if (converter == 'stack') {
+              return true;
+            }
+            if (!unsupportedBy) {
+              return true;
+            }
+            if (!unsupportedBy[optionId]) {
+              return true;
+            }
 
+            let unsupported = unsupportedBy[optionId].includes(converter);
+            return !unsupported;
+            //return true;
         },
       };
 
@@ -172,7 +251,12 @@ export default {
           //console.log(me.png.data.overrides);
           //return true;
           return (me.png.data.overrides.indexOf(id) > -1)
-        }
+        },
+        supported: function(optionId) {
+            // Check if optionId is supported for the selected converter
+            //console.log('supported (png)?', optionId);
+            return true;
+        },
       };
       //console.log('globalContext', globalContext);
       JsExpression.setGlobalContext(globalContextGeneral, 'general');
@@ -204,7 +288,13 @@ export default {
 }
 </script>
 
-<style scoped>
+<style>
+.convert-options {
+  & button {
+    float: right;
+    margin-top: 10px;
+  }
+}
 /*
 .convert-options {
   height:100%;

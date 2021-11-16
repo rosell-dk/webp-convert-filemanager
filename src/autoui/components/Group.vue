@@ -1,6 +1,6 @@
 <template>
   <div class="group">
-    <h3 style="margin-top:0; margin-bottom:20px" v-if="ui.title">{{ ui ? ui.title : ''}}</h3>
+    <h3 v-if="ui.title">{{ ui ? ui.title : ''}}</h3>
     <slot></slot>
   </div>
 </template>
@@ -32,3 +32,14 @@ export default {
   }
 }
 </script>
+<style scoped>
+  h3 {
+    margin: 20px 0 20px;
+  }
+/*
+.convert-options {
+  height:100%;
+  overflow-y: auto;
+  padding:10px 20px;
+}*/
+</style>
