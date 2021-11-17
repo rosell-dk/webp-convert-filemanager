@@ -4,7 +4,7 @@ export default {
             "id": "converter",
             "schema": {
                 "title": "Converter",
-                "description": "Cwebp and vips are best. the *magick are nearly as good, but only recent versions supports near-lossless. gd is poor, as it does not support any webp options. For full discussion, check the guide",
+                "description": "Conversion method. Cwebp and vips are best. the *magick are nearly as good, but only recent versions supports near-lossless. gd is poor, as it does not support any webp options. For full discussion, check the guide",
                 "enum": [
                     "cwebp",
                     "vips",
@@ -532,7 +532,7 @@ export default {
                         "cwebp-103-linux-x86-64-static",
                         "cwebp-061-linux-x86-64"
                     ],
-                    "display": "option['try-supplied-binary-for-os'] == true"
+                    "display": "option['cwebp-try-supplied-binary-for-os'] == true"
                 },
                 "sensitive": false
             },
@@ -549,7 +549,7 @@ export default {
                 "ui": {
                     "component": "",
                     "advanced": true,
-                    "display": "option['try-supplied-binary-for-os'] == true"
+                    "display": "option['cwebp-try-supplied-binary-for-os'] == true"
                 },
                 "sensitive": true
             },
@@ -595,50 +595,58 @@ export default {
             {
                 "id": "api-key",
                 "schema": {
+                    "title": "API key",
+                    "description": "",
                     "type": [
                         "string"
                     ],
                     "default": ""
                 },
-                "ui": null,
+                "ui": {
+                    "component": "password",
+                    "advanced": false,
+                    "display": "option['wpc-api-version'] != 0"
+                },
                 "sensitive": true
             },
             {
                 "id": "secret",
                 "schema": {
+                    "title": "Secret",
+                    "description": "",
                     "type": [
                         "string"
                     ],
                     "default": ""
                 },
-                "ui": null,
+                "ui": {
+                    "component": "password",
+                    "advanced": false,
+                    "display": "option['wpc-api-version'] == 0"
+                },
                 "sensitive": true
             },
             {
                 "id": "api-url",
                 "schema": {
+                    "title": "API url",
+                    "description": "URL to connect to",
                     "type": [
                         "string"
                     ],
                     "default": ""
                 },
-                "ui": null,
-                "sensitive": true
-            },
-            {
-                "id": "url",
-                "schema": {
-                    "type": [
-                        "string"
-                    ],
-                    "default": ""
+                "ui": {
+                    "component": "password",
+                    "advanced": false
                 },
-                "ui": null,
                 "sensitive": true
             },
             {
                 "id": "api-version",
                 "schema": {
+                    "title": "API version",
+                    "description": "",
                     "type": [
                         "integer"
                     ],
@@ -646,17 +654,31 @@ export default {
                     "minimum": 0,
                     "maximum": 2
                 },
-                "ui": null
+                "ui": {
+                    "component": "select",
+                    "advanced": false,
+                    "options": [
+                        "0",
+                        "1",
+                        "2"
+                    ]
+                }
             },
             {
                 "id": "crypt-api-key-in-transfer",
                 "schema": {
+                    "title": "Crypt API key in transfer",
+                    "description": "",
                     "type": [
                         "boolean"
                     ],
                     "default": false
                 },
-                "ui": null
+                "ui": {
+                    "component": "checkbox",
+                    "advanced": true,
+                    "display": "option['wpc-api-version'] >= 1"
+                }
             }
         ],
         "ffmpeg": [],
@@ -672,7 +694,7 @@ export default {
                     "default": ""
                 },
                 "ui": {
-                    "component": "input"
+                    "component": "password"
                 },
                 "sensitive": true
             },
@@ -716,7 +738,6 @@ export default {
                 },
                 "ui": {
                     "component": "multi-select",
-                    "advanced": true,
                     "options": [
                         "cwebp",
                         "vips",
@@ -727,9 +748,9 @@ export default {
                         "wpc",
                         "ffmpeg",
                         "ewww",
-                        "gd",
-                        "stack"
+                        "gd"
                     ],
+                    "advanced": true
                 },
                 "sensitive": false
             },
@@ -795,6 +816,7 @@ export default {
         ]
     }
 }
+
   /*
   [
     {

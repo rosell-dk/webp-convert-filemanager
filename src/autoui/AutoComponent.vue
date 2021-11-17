@@ -14,6 +14,7 @@
             <MultiSelect v-model="localModel" :schema="componentSchema" :ui="ui"/>
           </div>
           <Input v-if="ui.component == 'input'" v-model="localModel" :schema="componentSchema"/>
+          <Input v-if="ui.component == 'password'" :sensitive="true" v-model="localModel" :schema="componentSchema"/>
           <Group v-if="ui.component == 'group'" v-model="localModel" :schema="componentSchema" :ui="ui">
             <AutoComponent v-for="sub in ui['sub-components']" :ui="sub" :schema="schema" :modelValue="modelValue" :advancedView="advancedView" :expressionContext="expressionContext" @componentDataChange="onComponentDataChange"/>
           </Group>

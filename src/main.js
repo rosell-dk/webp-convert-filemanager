@@ -116,7 +116,9 @@ if (!window["wcfmoptions"]) {
         var response = {
           options: converterOptions,
           defaults: {
-            quality: 17
+            quality: 17,
+            'ewww-api-key': 'apilapi',
+            'wpc-api-key': 'bogulogu'
           },
 
           /*converters: [
