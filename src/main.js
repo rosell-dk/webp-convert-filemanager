@@ -127,7 +127,7 @@ if (!window["wcfmoptions"]) {
               //"near-lossless": 60,
               "quality": 90
             },
-            converter: 'gd',
+            converter: 'vips',
           },
 
           /*converters: [

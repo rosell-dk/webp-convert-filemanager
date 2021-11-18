@@ -97,6 +97,7 @@ export default {
       }*/
       if (this.displayExpr) {
         //console.log('this.expressionContext', this.expressionContext);
+        //return true;
         return this.displayExpr.evaluate(this.expressionContext); // general | png
       }
       return true;

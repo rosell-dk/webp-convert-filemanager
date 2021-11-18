@@ -57,10 +57,9 @@ export default {
       }
 
       // Filter out unsupported options
-      // TODO: Also filter out converter specific options. It is cluttering to send cwebp options to gd converter...
       let optionsUnfiltered = JSON.parse(JSON.stringify(this.general.data));  // deep clone general options
       let converter = optionsUnfiltered['converter'];
-      let options = [];
+      let options = {};
       for (var optionId in optionsUnfiltered) {
         if (optionsUnfiltered.hasOwnProperty(optionId)) {
           if (this.isOptionSupportedByConverter(optionId, converter)) {
@@ -69,15 +68,14 @@ export default {
         }
       }
 
+      // filter out converter specific options. It is cluttering to send cwebp options to gd converter...
       if (c!='stack') {
         for (var c in this.uniqueOptionIds) {
           if (c!=converter) {
             for (var i=0; i<this.uniqueOptionIds[c].length; i++) {
-
               let removeId = this.uniqueOptionIds[c][i];
               delete options[removeId];
             }
-
           }
         }
 
@@ -94,17 +92,20 @@ export default {
         //console.log(JSON.stringify(options));
         return options;
       }
-      let pngOptions = JSON.parse(JSON.stringify(this.png.data));
+      let pngOptions = this.png.data;
       //console.log(options);
       let overrides = pngOptions['overrides'];
 
-      let selectedPngOptions = [];
+      let selectedPngOptions = {};
+      let me = this;
       overrides.forEach(function(id) {
         //console.log('id', id, pngOptions[id]);
         if (pngOptions[id] !== undefined) {
           //if (pngOptions[id] != options[id]) {
             //options['png-' + id] = pngOptions[id];
-            selectedPngOptions[id] = pngOptions[id];
+            if (me.isOptionSupportedByConverter(id, converter)) {
+              selectedPngOptions[id] = pngOptions[id];
+            }
             //console.log('done');
           //}
         }
@@ -213,8 +214,9 @@ export default {
           unsupportedBy[option.id] = option.unsupportedBy
         }
       }
-      if (defaults['png']) {
-        for (const [key, value] of Object.entries(defaults['png'])) {
+      //console.log('png de', response.defaults['png']);
+      if (response.defaults['png']) {
+        for (const [key, value] of Object.entries(response.defaults['png'])) {
           if (pngDefaults[key] != value) {
             pngDefaults[key] = value;
             hasSpecificPNGOptions = true;
@@ -393,10 +395,13 @@ export default {
       let globalContextPNG = {
         //option: me.png.data,
         option: function(id){
-          if (!me.isOptionSupportedByConverter(id, me.png.data['converter'])) {
+          let usePNGconverter = (me.png.data.overrides.indexOf('converting') > -1);
+          let converter = (usePNGconverter ? me.png.data['converter'] : me.general.data['converter']);
+          if (!me.isOptionSupportedByConverter(id, converter)) {
             return schemaDefaults[id];
           }
-          return me.png.data[id];
+          let overriding = (me.png.data.overrides.indexOf(id) > -1);
+          return (overriding ? me.png.data[id] : me.general.data[id]);
         },
         imageType: 'png',
         overriding: function(id) {
@@ -436,9 +441,6 @@ export default {
       }*/
     });
 
-    Poster.post('get-tree', {folder: ''}, function(response) {
-      me.item = response;
-    });
   },
   data() {
     return {
