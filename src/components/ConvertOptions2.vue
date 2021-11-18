@@ -11,6 +11,7 @@
     <AutoUI :ui="general.ui" :schema="schema" :modelValue="general.data" expressionContext="general" :advancedView="advancedView" :showAdvancedButton="false"/>
     <AutoUI v-show="tweakpng" :ui="png.ui" :schema="schema" :modelValue="png.data" expressionContext="png" :advancedView="advancedView" :showAdvancedButton="false"/>
     <AutoUI :ui="uniqueUi" :schema="schema" :modelValue="general.data" expressionContext="general" :advancedView="advancedView" :showAdvancedButton="false"/>
+
   </div>
 </template>
 
@@ -59,6 +60,7 @@ export default {
       let options = {...this.general.data};  // clone general options
       let tweakpng = options.tweakpng;
       delete options['tweakpng'];
+      delete options['png'];
 
       // TODO: delete options not supported by the converter
 
@@ -70,15 +72,21 @@ export default {
       //console.log(options);
       let overrides = pngOptions['overrides'];
 
+      let selectedPngOptions = [];
       overrides.forEach(function(id) {
+        //console.log('id', id, pngOptions[id]);
         if (pngOptions[id] !== undefined) {
-          if (pngOptions[id] != options[id]) {
-            options['png-' + id] = pngOptions[id];
-          }
+          //if (pngOptions[id] != options[id]) {
+            //options['png-' + id] = pngOptions[id];
+            selectedPngOptions[id] = pngOptions[id];
+            //console.log('done');
+          //}
         }
       });
+      //console.log('selected', selectedPngOptions);
+      options['png'] = {...selectedPngOptions};
 
-      //console.log(JSON.stringify(options));
+      //console.log('stringified' + JSON.stringify(options));
       return options;
     }
   },
@@ -199,7 +207,7 @@ export default {
               // it should be ignored, then...
               //componentUi['display'] = '!supported("encoding") || (' + componentUi['display'] + ')';
               componentUi['display'] = componentUi['display'].replace(/option.encoding/gi, "getOption('encoding')");
-              console.log('result', componentUi['display']);
+              //console.log('result', componentUi['display']);
             }
 
             componentUi['display'] = 'supported("' + option.id + '") && (' + componentUi['display'] + ')';

@@ -1,7 +1,7 @@
 export default class Poster {
   static post(action, options, successCallback) {
     var me = this;
-    //console.log('Posting:' + action);
+    //console.log('Posting:' + action, options);
 
     // TODO: Find another way, which doesn't pollute window
     // IE: https://vuejs.org/v2/cookbook/adding-instance-properties.html
