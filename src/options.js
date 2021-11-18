@@ -78,7 +78,6 @@ export default {
                 "lossless"
             ],
             "unsupportedBy": [
-                "ffmpeg",
                 "ewww",
                 "gd",
                 "stack"
@@ -316,6 +315,45 @@ export default {
             },
             "unsupportedBy": [
                 "ffmpeg",
+                "ewww",
+                "gd",
+                "stack"
+            ]
+        },
+        {
+            "id": "preset",
+            "schema": {
+                "title": "Preset",
+                "description": "Using a preset will set many of the other options to suit a particular type of source material. It even overrides them. It does however not override the quality option. \"none\" means that no preset will be set",
+                "enum": [
+                    "none",
+                    "default",
+                    "photo",
+                    "picture",
+                    "drawing",
+                    "icon",
+                    "text"
+                ],
+                "type": [
+                    "string"
+                ],
+                "default": "none"
+            },
+            "ui": {
+                "component": "select",
+                "advanced": true
+            },
+            "sensitive": false,
+            "options": [
+                "none",
+                "default",
+                "photo",
+                "picture",
+                "drawing",
+                "icon",
+                "text"
+            ],
+            "unsupportedBy": [
                 "ewww",
                 "gd",
                 "stack"
