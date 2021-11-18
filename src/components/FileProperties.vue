@@ -114,6 +114,7 @@ export default {
       default: {}
     }
   },
+  inject: ['wcfm'],
   computed: {
     originalMime: function() {
       if (!this.originalInfo?.mime) {
@@ -178,7 +179,10 @@ export default {
     onConvertClick() {
       let me = this;
       this.converting = true;
-      Poster.post('convert', {path: this.path}, function(response) {
+      let options = this.wcfm.$refs.convertOptions?.getOptions();
+      me.errorMsg = '';
+
+      Poster.post('convert', {path: this.path, convertOptions: options}, function(response) {
         me.converting = false;
         if (response?.success == false) {
           me.errorMsg = response.data;

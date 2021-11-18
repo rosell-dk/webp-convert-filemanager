@@ -142,6 +142,7 @@ export default {
     Welcome
   },
   methods: {
+    /*
     onConvertClick(path) {
       var me = this;
       let options = this.$refs.convertOptions?.general?.data;
@@ -151,7 +152,7 @@ export default {
         console.log('convert response:', response);
       });
 //      alert(path);
-    },
+},*/
     onConvertCloseClick() {
       console.log('CLRCL');
       this.showConvertOptions = false;

@@ -21,7 +21,7 @@
       <ul>
         <li>Trigger bulk conversion on folders / mark for background conversion</li>
         <li>Stats on folders</li>
-        <li>Display more info on images (dimensions and such)</li>
+        <li>Display more info on images (dimensions, quality on jpeg and such)</li>
         <li>Adjust conversion settings</li>
         <li>Interface to allow adjusting quality on a conversion quickly and compare directly</li>
         <li>Compare converters side-by-side (visual quality, result size, conversion time)</li>

@@ -1,5 +1,5 @@
 <template>
-  <div @input="onLocalChange()">
+  <div @input="onLocalChange()" class="autoui-input">
     <input :type="inputType" :class="inputClass" v-model="stringValue" />
     <svg v-if="sensitive" :class="{'icon-eye':true, 'revealed':passwordRevealed}" @click="onEyeClick"><use xlink:href="#icon-eye" /></svg>
   </div>
@@ -32,7 +32,7 @@ export default {
           return '';
         }
 
-        return 'sensitive' + (this.passwordRevealed ? ' revealed' : ' hidden');
+        return 'sensitive' + (this.passwordRevealed ? ' revealed' : ' obscured');
       }
     },
     valueAsString: function() {
@@ -101,7 +101,7 @@ export default {
 }
 </script>
 
-<style scoped>
+<style>
   /* https://stackoverflow.com/questions/35120217/base64-encoded-opentype-font-face-using-data-uri */
   /* https://base64.guru/converter/encode/file */
   /* https://stackoverflow.com/questions/16258194/imitate-a-password-type-input-while-using-a-contenteditable-div/16258358 */
@@ -111,30 +111,33 @@ export default {
     font-weight: normal;
     font-style: normal;
   }
-  .icon-eye {
-    width: 18px;
-    height: 18px;
-    margin-left: 5px;
-    cursor: pointer;
+  .autoui-input {
+    & .icon-eye {
+      width: 18px;
+      height: 18px;
+      margin-left: 5px;
+      cursor: pointer;
+    }
+    & .icon-eye:hover {
+      fill: #333;
+    }
+    & .icon-eye.revealed {
+      fill: #888;
+    }
+    & input {
+      width: 100%;
+      min-height: 30px;
+    }
+    & input.obscured {
+      font-family: 'password', sans-serif;
+      font-size: 8px;
+    }
+    & input.sensitive {
+      width: calc(100% - 30px);
+    }
+    & input.small {
+      max-width: 100px;
+    }
   }
-  .icon-eye:hover {
-    fill: #333;
-  }
-  .icon-eye.revealed {
-    fill: #888;
-  }
-  input {
-    width: 100%;
-    min-height: 30px;
-  }
-  input.hidden {
-    font-family: 'password', sans-serif;
-    font-size: 8px;
-  }
-  input.sensitive {
-    width: calc(100% - 30px);
-  }
-  input.small {
-    max-width: 100px;
-  }
+
 </style>

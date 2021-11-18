@@ -80,12 +80,12 @@ export default {
       return null;
     },
     enabled() {
+
       if (this?.ui.advanced) {
         // TODO: check advancedView. Maybe through the globalContext set in JSExpression?
         //return false;
         //console.log('parent', this.$parent.data);
 
-    //    console.log(this.$parent.$parent.test);
         if (!this.advancedView) {
             return false;
         }
@@ -115,13 +115,11 @@ export default {
     return {
       localModel: '',
       displayExpr: null,
-      test:'hej',
     }
   },
   mounted() {
     //console.log('mounted:', this.modelValue);
     this.updateLocalModel(this.modelValue);
-
     if (this?.ui.display) {
       this.displayExpr = new JsExpression(this.ui.display);
     }

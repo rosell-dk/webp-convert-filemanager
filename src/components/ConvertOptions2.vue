@@ -9,7 +9,8 @@
     </button>
 
     <AutoUI :ui="general.ui" :schema="schema" :modelValue="general.data" expressionContext="general" :advancedView="advancedView" :showAdvancedButton="false"/>
-    <AutoUI v-show="advancedView" :ui="png.ui" :schema="schema" :modelValue="png.data" expressionContext="png" :advancedView="advancedView" :showAdvancedButton="false"/>
+    <AutoUI v-show="tweakpng" :ui="png.ui" :schema="schema" :modelValue="png.data" expressionContext="png" :advancedView="advancedView" :showAdvancedButton="false"/>
+    <AutoUI :ui="uniqueUi" :schema="schema" :modelValue="general.data" expressionContext="general" :advancedView="advancedView" :showAdvancedButton="false"/>
   </div>
 </template>
 
@@ -24,26 +25,61 @@ export default {
     AutoUI
   },
   computed: {
+    tweakpng() {
+      if (this?.general?.data?.tweakpng == undefined) {
+        return true;
+      }
+      return this.general.data.tweakpng;
+    }
   },
-  data() {
-    return {
-      ui: {},
-      schema: {},
-      general: {
-        ui: {},
-        data: {
-          quality: 40,
-          'alpha-quality': 65,
-          'auto-limit': true,
-          "command-line-options": '',
-          'skip-these-precompiled-binaries': ''
+  methods: {
+    isOptionSupportedByConverter(optionId, converter) {
+      // Check if optionId is supported for the selected converter
+      if (!converter) {
+        return true;
+      }
+      if (converter == 'stack') {
+        return true;
+      }
+      if (!this.unsupportedBy) {
+        return true;
+      }
+      if (!this.unsupportedBy[optionId]) {
+        return true;
+      }
+
+      let unsupported = this.unsupportedBy[optionId].includes(converter);
+      return !unsupported;
+    },
+    getOptions() {
+      if (!this?.general?.data) {
+        return {}
+      }
+
+      let options = {...this.general.data};  // clone general options
+      let tweakpng = options.tweakpng;
+      delete options['tweakpng'];
+
+      // TODO: delete options not supported by the converter
+
+      if (!tweakpng) {
+        //console.log(JSON.stringify(options));
+        return options;
+      }
+      let pngOptions = this.png.data;
+      //console.log(options);
+      let overrides = pngOptions['overrides'];
+
+      overrides.forEach(function(id) {
+        if (pngOptions[id] !== undefined) {
+          if (pngOptions[id] != options[id]) {
+            options['png-' + id] = pngOptions[id];
+          }
         }
-      },
-      png: {
-        ui: {},
-        data: {}
-      },
-      advancedView: false
+      });
+
+      //console.log(JSON.stringify(options));
+      return options;
     }
   },
   mounted() {
@@ -53,14 +89,15 @@ export default {
       // TODO: Loading animation
       //console.log('r:', response);
 
-      let components = [];
+      let generalUi = [];
+      let uniqueUi = [];
       let pngUI = [];
 
-      let schemaProperties = {};
+      let schemaProperties = {};    // See #3 for the rationale of splitting ui and schema
       let defaults = {};
       let pngDefaults = {
-        'overrides': ['encoding', 'quality', 'alpha-quality', 'near-lossless']
-      };
+        'overrides': ['encoding', 'quality', 'near-lossless']
+      };  // ps: removed 'alpha-quality', as it only makes sense for PNG
 
       let ids = [];
       let generalOptions = response.options['general'];
@@ -70,7 +107,9 @@ export default {
       for (const item in uniqueOptions) {
         for (let i=0; i<uniqueOptions[item].length; i++) {
           let option = uniqueOptions[item][i];
-          option['id'] = item + '-' + option['id'];
+          if (option['id'].indexOf(item + '-') == -1) {
+            option['id'] = item + '-' + option['id'];
+          }
           allOptions.push(option);
         }
       }
@@ -79,12 +118,12 @@ export default {
         ids.push(allOptions[i].id);
       }
 
-      /*
       pngUI.push({
         "component": "multi-select",
         'data-property': 'overrides',
         // TODO: set to complete list
-        "options": ids
+        "options": ids,
+        "display": "false"
       });
       schemaProperties['overrides'] = {
           "title": "Overrides",
@@ -92,10 +131,11 @@ export default {
           "type": [
               "string"
           ],
-          "default": ['hello1']
-      }*/
+          "default": []
+      }
 
       let unsupportedBy = {};
+      let hasSpecificPNGOptions = false;
 
       for (var i=0; i<allOptions.length; i++) {
         let option = allOptions[i];
@@ -115,11 +155,14 @@ export default {
         }
       }
       for (const [key, value] of Object.entries(defaults['png'])) {
-        pngDefaults[key] = value;
+        if (pngDefaults[key] != value) {
+          pngDefaults[key] = value;
+          hasSpecificPNGOptions = true;
+        }
       }
 
       for (var i=0; i<generalOptions.length; i++) {
-        //components.push(generalOptions[i].schema);
+        //generalUi.push(generalOptions[i].schema);
 
         let option = generalOptions[i];
         if (option.ui) {
@@ -130,16 +173,17 @@ export default {
           } else {
             componentUi['display'] = 'supported("' + option.id + '")';
           }
-          components.push(componentUi);
+          generalUi.push(componentUi);
 
           //let componentUiPNG = option.ui;
-          let componentUiPNG = Object.assign({}, option.ui);
-          componentUiPNG['data-property'] = option.id;
+          let componentUiPNG = Object.assign({}, componentUi);
+          //componentUiPNG['data-property'] = option.id;
           if (componentUiPNG['display']) {
             componentUiPNG['display'] = 'overriding("' + option.id + '") && (' + componentUiPNG['display'] + ')';
           } else {
             componentUiPNG['display'] = 'overriding("' + option.id + '")'
           }
+          //console.log(componentUiPNG);
           pngUI.push(componentUiPNG);
 
         }
@@ -166,33 +210,64 @@ export default {
         }
         group['advanced'] = !containsUnadvanced;
         if (group['sub-components'].length > 0) {
-          components.push(group);
-
+          uniqueUi.push(group);
+          //generalUi.push(group);
         }
       }
 
+      generalUi.push({
+        "component": "checkbox",
+        'data-property': 'tweakpng',
+        // TODO: set to complete list
+      });
+      schemaProperties['tweakpng'] = {
+          "title": "Tweak settings for PNG",
+          "description": "",
+          "type": [
+              "boolean"
+          ],
+          "default": false
+      }
+      defaults['tweakpng'] = hasSpecificPNGOptions;
       //Object.assign(person, job);
 
       //console.log(unsupportedBy);
 //console.log('options', me.options);
 
+      /*generalUi.push({
+        'component': 'group',
+        'title': 'PNG overrides',
+        'display': 'option.tweakpng',
+        'sub-components': pngUI,
+      });*/
+
       me.general = {
         'ui': {
           'component': 'group',
           'title': 'General',
-          'sub-components': components
+          'sub-components': generalUi,
+
         },
         'data': defaults
       }
 
+      me.uniqueUi = {
+        'component': 'group',
+        'title': '',
+        'sub-components': uniqueUi,
+      };
+
+
+
       me.png = {
         'ui': {
           'component': 'group',
-          'title': 'PNG overrides',
-          'sub-components': pngUI
+          'title': 'PNG tweaks',
+          'sub-components': pngUI,
         },
         'data': pngDefaults
       }
+      me.unsupportedBy = unsupportedBy;
 
       /*
       me.ui = {
@@ -226,20 +301,7 @@ export default {
             if (!me.general.data['converter']) {
               return true;
             }
-            let converter = me.general.data['converter'];
-            if (converter == 'stack') {
-              return true;
-            }
-            if (!unsupportedBy) {
-              return true;
-            }
-            if (!unsupportedBy[optionId]) {
-              return true;
-            }
-
-            let unsupported = unsupportedBy[optionId].includes(converter);
-            return !unsupported;
-            //return true;
+            return me.isOptionSupportedByConverter(optionId, me.general.data['converter']);
         },
       };
 
@@ -247,15 +309,22 @@ export default {
         option: me.png.data,
         imageType: 'png',
         overriding: function(id) {
-          //console.log('overriding?', id);
-          //console.log(me.png.data.overrides);
-          //return true;
+          // Tells if an option is selected as having a PNG override
           return (me.png.data.overrides.indexOf(id) > -1)
         },
         supported: function(optionId) {
             // Check if optionId is supported for the selected converter
             //console.log('supported (png)?', optionId);
-            return true;
+            //console.log('supported', me.png.data['overrides']);
+            /*let overridden = (me.png.data.overrides.indexOf(optionId) > -1);
+            if (overridden) {
+
+            }*/
+            // Check if optionId is supported for the selected converter
+            if (!me.general.data['converter']) {
+              return true;
+            }
+            return me.isOptionSupportedByConverter(optionId, me.general.data['converter']);
         },
       };
       //console.log('globalContext', globalContext);
@@ -280,10 +349,28 @@ export default {
       me.item = response;
     });
   },
-  watch: {
-  },
-  methods: {
-
+  data() {
+    return {
+      //ui: {},
+      schema: {},
+      general: {
+        ui: {},
+        data: {
+          quality: 40,
+          'alpha-quality': 65,
+          'auto-limit': true,
+          "command-line-options": '',
+          'skip-these-precompiled-binaries': ''
+        }
+      },
+      png: {
+        ui: {},
+        data: {}
+      },
+      advancedView: false,
+      unsupportedBy: [],
+      uniqueUi: []
+    }
   }
 }
 </script>
