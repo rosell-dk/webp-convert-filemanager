@@ -11,7 +11,6 @@
     <AutoUI :ui="general.ui" :schema="schema" :modelValue="general.data" expressionContext="general" :advancedView="advancedView" :showAdvancedButton="false"/>
     <AutoUI v-show="tweakpng" :ui="png.ui" :schema="schema" :modelValue="png.data" expressionContext="png" :advancedView="advancedView" :showAdvancedButton="false"/>
     <AutoUI :ui="uniqueUi" :schema="schema" :modelValue="general.data" expressionContext="general" :advancedView="advancedView" :showAdvancedButton="false"/>
-
   </div>
 </template>
 
@@ -57,7 +56,34 @@ export default {
         return {}
       }
 
-      let options = {...this.general.data};  // clone general options
+      // Filter out unsupported options
+      // TODO: Also filter out converter specific options. It is cluttering to send cwebp options to gd converter...
+      let optionsUnfiltered = JSON.parse(JSON.stringify(this.general.data));  // deep clone general options
+      let converter = optionsUnfiltered['converter'];
+      let options = [];
+      for (var optionId in optionsUnfiltered) {
+        if (optionsUnfiltered.hasOwnProperty(optionId)) {
+          if (this.isOptionSupportedByConverter(optionId, converter)) {
+            options[optionId] = optionsUnfiltered[optionId];
+          }
+        }
+      }
+
+      if (c!='stack') {
+        for (var c in this.uniqueOptionIds) {
+          if (c!=converter) {
+            for (var i=0; i<this.uniqueOptionIds[c].length; i++) {
+
+              let removeId = this.uniqueOptionIds[c][i];
+              delete options[removeId];
+            }
+
+          }
+        }
+
+      }
+
+
       let tweakpng = options.tweakpng;
       delete options['tweakpng'];
       delete options['png'];
@@ -68,7 +94,7 @@ export default {
         //console.log(JSON.stringify(options));
         return options;
       }
-      let pngOptions = this.png.data;
+      let pngOptions = JSON.parse(JSON.stringify(this.png.data));
       //console.log(options);
       let overrides = pngOptions['overrides'];
 
@@ -84,7 +110,8 @@ export default {
         }
       });
       //console.log('selected', selectedPngOptions);
-      options['png'] = {...selectedPngOptions};
+      //options['png'] = {...selectedPngOptions};
+      options['png'] = selectedPngOptions;
 
       //console.log('stringified' + JSON.stringify(options));
       return options;
@@ -186,10 +213,12 @@ export default {
           unsupportedBy[option.id] = option.unsupportedBy
         }
       }
-      for (const [key, value] of Object.entries(defaults['png'])) {
-        if (pngDefaults[key] != value) {
-          pngDefaults[key] = value;
-          hasSpecificPNGOptions = true;
+      if (defaults['png']) {
+        for (const [key, value] of Object.entries(defaults['png'])) {
+          if (pngDefaults[key] != value) {
+            pngDefaults[key] = value;
+            hasSpecificPNGOptions = true;
+          }
         }
       }
 
@@ -230,13 +259,16 @@ export default {
         }
       }
 
+      let uniqueOptionIds = [];
+
       for (const converter in uniqueOptions) {
         let group = {
           'component': 'group',
           'title': converter + ' options',
           'sub-components': [],
-          'display': "(option.converter == '" + converter + "') || (option.converter == 'stack')"
+          'display': "(option('converter') == '" + converter + "') || (option('converter') == 'stack')"
         }
+        uniqueOptionIds[converter] = [];
         let containsUnadvanced = false;
         for (let i=0; i<uniqueOptions[converter].length; i++) {
           let option = uniqueOptions[converter][i];
@@ -247,6 +279,7 @@ export default {
               containsUnadvanced = true;
             }
             group['sub-components'].push(componentUi);
+            uniqueOptionIds[converter].push(option.id);
           }
         }
         group['advanced'] = !containsUnadvanced;
@@ -256,7 +289,7 @@ export default {
         }
       }
       defaults['tweakpng'] = hasSpecificPNGOptions;
-
+      me.uniqueOptionIds = {...uniqueOptionIds};
       /*
       generalUi.push({
         "component": "checkbox",
@@ -427,7 +460,8 @@ export default {
       },
       advancedView: false,
       unsupportedBy: [],
-      uniqueUi: []
+      uniqueUi: [],
+      uniqueOptionIds: [],    // hash of ids for each converter
     }
   }
 }
