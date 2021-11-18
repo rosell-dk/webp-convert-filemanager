@@ -119,9 +119,13 @@ if (!window["wcfmoptions"]) {
             quality: 17,
             'ewww-api-key': 'apilapi',
             'wpc-api-key': 'bogulogu',
+            "encoding": "lossless",
             //'png-quality': 99,
             'png': {
-              quality: 99
+              //quality: 99
+              "encoding": "lossless",
+              //"near-lossless": 60,
+              "quality": 90
             },
             converter: 'gd',
           },

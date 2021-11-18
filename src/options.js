@@ -88,7 +88,7 @@ export default {
             "id": "quality",
             "schema": {
                 "title": "Quality (Lossy)",
-                "description": "Quality for lossy encoding. ",
+                "description": "Quality for lossy encoding. In case you enable \"auto-limit\", you can consider this property a maximum quality.",
                 "default-png": 85,
                 "default-jpeg": 75,
                 "oneOf": [
@@ -112,7 +112,7 @@ export default {
             },
             "ui": {
                 "component": "slider",
-                "display": "option.encoding != 'lossless'"
+                "display": "option('encoding') != 'lossless'"
             },
             "unsupportedBy": [
                 "stack"
@@ -137,7 +137,7 @@ export default {
                         "https:\/\/github.com\/rosell-dk\/webp-convert\/blob\/master\/docs\/v2.0\/converting\/introduction-for-converting.md#preventing-unnecessarily-high-quality-setting-for-low-quality-jpegs"
                     ]
                 ],
-                "display": "option.encoding != 'lossless'"
+                "display": "option('encoding') != 'lossless'"
             },
             "unsupportedBy": []
         },
@@ -161,7 +161,7 @@ export default {
                         "https:\/\/github.com\/rosell-dk\/webp-convert\/blob\/master\/docs\/v2.0\/converting\/introduction-for-converting.md#alpha-quality"
                     ]
                 ],
-                "display": "(option.encoding != 'lossless') && (imageType!='jpeg')"
+                "display": "(option('encoding') != 'lossless') && (imageType!='jpeg')"
             },
             "unsupportedBy": [
                 "ffmpeg",
@@ -190,7 +190,7 @@ export default {
                         "https:\/\/github.com\/rosell-dk\/webp-convert\/blob\/master\/docs\/v2.0\/converting\/introduction-for-converting.md#near-lossless"
                     ]
                 ],
-                "display": "option.encoding != 'lossy'"
+                "display": "option('encoding') != 'lossy'"
             },
             "unsupportedBy": [
                 "gmagick",
@@ -312,7 +312,7 @@ export default {
             "ui": {
                 "component": "checkbox",
                 "advanced": true,
-                "display": "(option.encoding != 'lossless') && (option.method>2)"
+                "display": "(option('encoding') != 'lossless') && (option('method')>2)"
             },
             "unsupportedBy": [
                 "ffmpeg",
@@ -532,7 +532,7 @@ export default {
                         "cwebp-103-linux-x86-64-static",
                         "cwebp-061-linux-x86-64"
                     ],
-                    "display": "option['cwebp-try-supplied-binary-for-os'] == true"
+                    "display": "option('cwebp-try-supplied-binary-for-os') == true"
                 },
                 "sensitive": false
             },
@@ -549,7 +549,7 @@ export default {
                 "ui": {
                     "component": "",
                     "advanced": true,
-                    "display": "option['cwebp-try-supplied-binary-for-os'] == true"
+                    "display": "option('cwebp-try-supplied-binary-for-os') == true"
                 },
                 "sensitive": true
             },
@@ -605,7 +605,7 @@ export default {
                 "ui": {
                     "component": "password",
                     "advanced": false,
-                    "display": "option['wpc-api-version'] != 0"
+                    "display": "option('wpc-api-version') != 0"
                 },
                 "sensitive": true
             },
@@ -622,7 +622,7 @@ export default {
                 "ui": {
                     "component": "password",
                     "advanced": false,
-                    "display": "option['wpc-api-version'] == 0"
+                    "display": "option('wpc-api-version') == 0"
                 },
                 "sensitive": true
             },
@@ -677,7 +677,7 @@ export default {
                 "ui": {
                     "component": "checkbox",
                     "advanced": true,
-                    "display": "option['wpc-api-version'] >= 1"
+                    "display": "option('wpc-api-version') >= 1"
                 }
             }
         ],

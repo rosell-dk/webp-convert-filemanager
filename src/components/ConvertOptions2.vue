@@ -89,6 +89,7 @@ export default {
       // TODO: Loading animation
       //console.log('r:', response);
 
+
       let generalUi = [];
       let uniqueUi = [];
       let pngUI = [];
@@ -102,6 +103,23 @@ export default {
       let ids = [];
       let generalOptions = response.options['general'];
       let uniqueOptions = response.options['unique'];
+
+      generalOptions.push(
+        {
+            "id": "tweakpng",
+            "schema": {
+                "title": "Tweak settings for PNG",
+                "description": "",
+                "type": ["boolean"],
+                "default": false
+            },
+            "ui": {
+              "component": "checkbox",
+              'data-property': 'tweakpng',
+            },
+            "unsupportedBy": [],    // 'ewww', 'gd' ?
+        }
+      );
 
       let allOptions = generalOptions.map((x) => x);
       for (const item in uniqueOptions) {
@@ -137,17 +155,23 @@ export default {
       let unsupportedBy = {};
       let hasSpecificPNGOptions = false;
 
+      let schemaDefaults = [];
+
       for (var i=0; i<allOptions.length; i++) {
         let option = allOptions[i];
         if (option.schema) {
           schemaProperties[option.id] = option.schema;
           if (response.defaults[option.id]) {
             defaults[option.id] = response.defaults[option.id];
+            pngDefaults[option.id] = response.defaults[option.id];
           } else {
             if (option.schema.default != undefined) {
               defaults[option.id] = option.schema.default;
               pngDefaults[option.id] = option.schema.default;
             }
+          }
+          if (option.schema.default != undefined) {
+            schemaDefaults[option.id] = option.schema.default;
           }
         }
         if (option.unsupportedBy) {
@@ -168,7 +192,16 @@ export default {
         if (option.ui) {
           let componentUi = option.ui;
           componentUi['data-property'] = option.id;
+
           if (componentUi['display']) {
+            if (componentUi['display'].indexOf("option.encoding") >= 0) {
+              // option.encoding might have been set even though the converter doesn't support it
+              // it should be ignored, then...
+              //componentUi['display'] = '!supported("encoding") || (' + componentUi['display'] + ')';
+              componentUi['display'] = componentUi['display'].replace(/option.encoding/gi, "getOption('encoding')");
+              console.log('result', componentUi['display']);
+            }
+
             componentUi['display'] = 'supported("' + option.id + '") && (' + componentUi['display'] + ')';
           } else {
             componentUi['display'] = 'supported("' + option.id + '")';
@@ -214,7 +247,9 @@ export default {
           //generalUi.push(group);
         }
       }
+      defaults['tweakpng'] = hasSpecificPNGOptions;
 
+      /*
       generalUi.push({
         "component": "checkbox",
         'data-property': 'tweakpng',
@@ -229,6 +264,8 @@ export default {
           "default": false
       }
       defaults['tweakpng'] = hasSpecificPNGOptions;
+      */
+
       //Object.assign(person, job);
 
       //console.log(unsupportedBy);
@@ -294,7 +331,14 @@ export default {
       }
 
       let globalContextGeneral = {
-        option: me.general.data,
+        //option: me.general.data,
+        option: function(id) {
+          //return 'any';
+          if (!me.isOptionSupportedByConverter(id, me.general.data['converter'])) {
+            return schemaDefaults[id];
+          }
+          return me.general.data[id];
+        },
         imageType: 'any',
         supported: function(optionId) {
             // Check if optionId is supported for the selected converter
@@ -306,7 +350,13 @@ export default {
       };
 
       let globalContextPNG = {
-        option: me.png.data,
+        //option: me.png.data,
+        option: function(id){
+          if (!me.isOptionSupportedByConverter(id, me.png.data['converter'])) {
+            return schemaDefaults[id];
+          }
+          return me.png.data[id];
+        },
         imageType: 'png',
         overriding: function(id) {
           // Tells if an option is selected as having a PNG override
