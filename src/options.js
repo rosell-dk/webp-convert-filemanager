@@ -363,6 +363,21 @@ export default {
     "unique": {
         "cwebp": [
             {
+                "id": "use-nice",
+                "schema": {
+                    "title": "Use nice",
+                    "description": "If *use-nice* is set, it will be examined if the *nice* command is available. If it is, the binary is executed using *nice*. This assigns low priority to the process and will save system resources - but result in slower conversion.",
+                    "type": [
+                        "boolean"
+                    ],
+                    "default": true
+                },
+                "ui": {
+                    "component": "checkbox",
+                    "advanced": true
+                }
+            },
+            {
                 "id": "try-cwebp",
                 "schema": {
                     "title": "Try plain cwebp command",
@@ -484,6 +499,21 @@ export default {
         "gmagick": [],
         "imagemagick": [
             {
+                "id": "use-nice",
+                "schema": {
+                    "title": "Use nice",
+                    "description": "If *use-nice* is set, it will be examined if the *nice* command is available. If it is, the binary is executed using *nice*. This assigns low priority to the process and will save system resources - but result in slower conversion.",
+                    "type": [
+                        "boolean"
+                    ],
+                    "default": true
+                },
+                "ui": {
+                    "component": "checkbox",
+                    "advanced": true
+                }
+            },
+            {
                 "id": "try-common-system-paths",
                 "schema": {
                     "title": "Try locating ImageMagick in common system paths",
@@ -499,7 +529,23 @@ export default {
                 }
             }
         ],
-        "graphicsmagick": [],
+        "graphicsmagick": [
+            {
+                "id": "use-nice",
+                "schema": {
+                    "title": "Use nice",
+                    "description": "If *use-nice* is set, it will be examined if the *nice* command is available. If it is, the binary is executed using *nice*. This assigns low priority to the process and will save system resources - but result in slower conversion.",
+                    "type": [
+                        "boolean"
+                    ],
+                    "default": true
+                },
+                "ui": {
+                    "component": "checkbox",
+                    "advanced": true
+                }
+            }
+        ],
         "wpc": [
             {
                 "id": "api-key",
@@ -590,7 +636,23 @@ export default {
                 }
             }
         ],
-        "ffmpeg": [],
+        "ffmpeg": [
+            {
+                "id": "use-nice",
+                "schema": {
+                    "title": "Use nice",
+                    "description": "If *use-nice* is set, it will be examined if the *nice* command is available. If it is, the binary is executed using *nice*. This assigns low priority to the process and will save system resources - but result in slower conversion.",
+                    "type": [
+                        "boolean"
+                    ],
+                    "default": true
+                },
+                "ui": {
+                    "component": "checkbox",
+                    "advanced": true
+                }
+            }
+        ],
         "ewww": [
             {
                 "id": "api-key",
@@ -681,134 +743,3 @@ export default {
         ]
     }
 }
-
-  /*
-  [
-    {
-      "id": "converter",
-      "type": "string",
-      "default": 'cwebp',
-      "ui": {
-        "component": "select",
-        "label": "Converter",
-        "options": ['cwebp', 'ewww'],
-        "optionLabels": {
-          'cwebp': 'cwebp',
-          'ewww': 'ewww',
-        }
-      },
-    },
-  {
-    "id": "metadata",
-    "type": "string",
-    "default": 'exif',
-    "ui": {
-      "component": "multi-select",
-      "label": "Metadata",
-      "options": ['all', 'none', 'exif', 'icc', 'xmp'],
-      "optionLabels": {
-        'all': 'All',
-        'none': 'None',
-        'exif': 'Exif',
-        'icc': 'ICC',
-        'xmp': 'XMP'
-      }
-    },
-  },
-  {
-    "id": "encoding",
-    "type": "string",
-    "default": 'auto',
-    "ui": {
-      "component": "select",
-      "label": "Encoding",
-      "options": ['auto', 'lossy', 'lossless'],
-      "optionLabels": {
-        'auto': 'Auto',
-        'lossy': 'Lossy',
-        'lossless': 'Lossless'
-      }
-    },
-  },
-  {
-    "id": "quality",
-    "type": "int",
-    "default": 85,
-    "min": 0,
-    "max": 100,
-    "ui": {
-      "component": "input",
-      "label": "Quality (lossy)",
-      "default": {
-        'function': 'if-else',
-        'args': [
-          {
-            'function': 'equals',
-            'args': [
-              {
-                'function': 'state',
-                'args': ['imageType']
-              },
-              'png'
-            ]
-          },
-          90,
-          95
-        ]
-      }
-    },
-  },
-  {
-    "id": "try-supplied-binary-for-os",
-    "type": "boolean",
-    "default": false,
-    "ui": {
-      "component": "checkbox",
-      "label": "Try supplied binary for OS",
-      "help-text": "help me!",
-      "display2": {
-        'function': 'inArray',
-        'args': [
-          {
-            'function': 'state',
-            'args': ['option', 'converter']
-          },
-          ['cwebp']
-        ]
-      },
-    },
-  },
-  {
-    "id": "skip-these-precompiled-binaries",
-    "type": "string",
-    "default": "",
-    "ui": {
-      "component": "input",
-      "label": "Skip these precompiled binaries",
-      "display2": {
-        'function': 'and',
-        'args': [
-          {
-            'function': 'inArray',
-            'args': [
-              {
-                'function': 'state',
-                'args': ['option', 'converter']
-              },
-              ['cwebp']
-            ]
-          },
-          {
-            'function': 'equals',
-            'args': [
-              {
-                'function': 'state',
-                'args': ['option', 'try-supplied-binary-for-os']
-              },
-              true
-            ]
-          }
-        ],
-      },
-    },
-  },*/
