@@ -11,7 +11,13 @@
     <p>
       <h4>Whats new?</h4>
       <ul>
-        <li>You can now convert files and view conversion log</li>
+        <li>
+          You can now adjust conversion settings.
+          The settings start out with the defaults stored in WebP Express
+          (It will however not start out with Stack converter, but instead with your top active working converter -
+          in order to simplify the UI).
+          There are a couple of additional conversion settings that you don't find in WebP Express settings.
+        </li>
       </ul>
     </p>
     <p>
@@ -22,7 +28,6 @@
         <li>Trigger bulk conversion on folders / mark for background conversion</li>
         <li>Stats on folders</li>
         <li>Display more info on images (dimensions, quality on jpeg and such)</li>
-        <li>Adjust conversion settings</li>
         <li>Interface to allow adjusting quality on a conversion quickly and compare directly</li>
         <li>Compare converters side-by-side (visual quality, result size, conversion time)</li>
       </ul>
