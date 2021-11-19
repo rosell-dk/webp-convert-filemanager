@@ -47,15 +47,12 @@ export default class SimpleMarkdown {
       }
     }
 
-    // Empty line
-    if (line == '') {
-        line = '<br>';
-    }
     return line;
   }
 
   static md2html(md) {
-    var arr = md.match(/[^\r\n]+/g);
+    md = md.replace(/\r\n/g, "\n");
+    var arr = md.split("\n");
     var result = [];
     for (var i=0; i<arr.length; i++) {
       result.push(SimpleMarkdown.md2htmlOneLine(arr[i]));
