@@ -121,7 +121,7 @@ export default {
             "id": "auto-limit",
             "schema": {
                 "title": "Auto-limit",
-                "description": "Enable this option to prevent an unnecessarily high quality setting for low quality jpegs. You really should enable this.",
+                "description": "Enable this option to prevent an unnecessarily high quality setting for low quality jpegs. It works by adjusting quality setting down to the quality of the jpeg. Converting ie a jpeg with quality:50 to ie quality:80 does not get you better quality than converting it to quality:80, but it does get you a much bigger file - so you really should enable this option.\n\nThe option is ignored for PNG and never adjusts quality up. \n\nThe feature requires Imagick, ImageMagick or Gmagick in order to detect the quality of the jpeg. \n\nThe option is relative new. Before this option, you could do the same by setting quality to \"auto\" and specifying a \"max-quality\" and a \"default-quality\". These are deprecated now.",
                 "type": [
                     "boolean"
                 ],
