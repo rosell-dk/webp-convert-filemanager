@@ -107,7 +107,7 @@ export default {
                     "integer",
                     "string"
                 ],
-                "default": 85
+                "default": 75
             },
             "ui": {
                 "component": "slider",
@@ -363,7 +363,7 @@ export default {
     "unique": {
         "cwebp": [
             {
-                "id": "use-nice",
+                "id": "cwebp-use-nice",
                 "schema": {
                     "title": "Use nice",
                     "description": "If *use-nice* is set, it will be examined if the *nice* command is available. If it is, the binary is executed using *nice*. This assigns low priority to the process and will save system resources - but result in slower conversion.",
@@ -378,7 +378,7 @@ export default {
                 }
             },
             {
-                "id": "try-cwebp",
+                "id": "cwebp-try-cwebp",
                 "schema": {
                     "title": "Try plain cwebp command",
                     "description": "If set, the converter will try executing \"cwebp -version\". In case it succeeds, and the version is higher than those working cwebps found using other methods, the conversion will be done by executing this cwebp.",
@@ -393,7 +393,7 @@ export default {
                 }
             },
             {
-                "id": "try-discovering-cwebp",
+                "id": "cwebp-try-discovering-cwebp",
                 "schema": {
                     "title": "Try discovering cwebp binary",
                     "description": "If set, the converter will try to discover installed cwebp binaries using a \"which -a cwebp\" command, or in case that fails, a \"whereis -b cwebp\" command. These commands will find cwebp binaries residing in PATH",
@@ -408,7 +408,7 @@ export default {
                 }
             },
             {
-                "id": "try-common-system-paths",
+                "id": "cwebp-try-common-system-paths",
                 "schema": {
                     "title": "Try locating cwebp in common system paths",
                     "description": "If set, the converter will look for a cwebp binaries residing in common system locations such as \"\/usr\/bin\/cwebp\". If such exist, it is assumed that they are valid cwebp binaries. A version check will be run on the binaries found (they are executed with the \"-version\" flag. The cwebp with the highest version found using this method and the other enabled methods will be used for the actual conversion.Note: All methods for discovering cwebp binaries are per default enabled. You can save a few microseconds by disabling some, but it is probably not worth it, as your setup will then become less resilient to system changes.",
@@ -423,7 +423,7 @@ export default {
                 }
             },
             {
-                "id": "try-supplied-binary-for-os",
+                "id": "cwebp-try-supplied-binary-for-os",
                 "schema": {
                     "title": "Try precompiled cwebp binaries",
                     "description": "If set, the converter will try use a precompiled cwebp binary that comes with webp-convert. But only if it has a higher version that those found by other methods. As the library knows the versions of its bundled binaries, no additional time is spent executing them with the \"-version\" parameter. The binaries are hash-checked before executed. The library btw. comes with several versions of precompiled cwebps because they have different dependencies - some works on some systems and others on others.",
@@ -438,7 +438,7 @@ export default {
                 }
             },
             {
-                "id": "skip-these-precompiled-binaries",
+                "id": "cwebp-skip-these-precompiled-binaries",
                 "schema": {
                     "title": "Skip these precompiled binaries",
                     "description": "",
@@ -461,7 +461,7 @@ export default {
                 "sensitive": false
             },
             {
-                "id": "rel-path-to-precompiled-binaries",
+                "id": "cwebp-rel-path-to-precompiled-binaries",
                 "schema": {
                     "title": "Rel path to precompiled binaries",
                     "description": "",
@@ -478,7 +478,7 @@ export default {
                 "sensitive": true
             },
             {
-                "id": "command-line-options",
+                "id": "cwebp-command-line-options",
                 "schema": {
                     "title": "Command line options",
                     "description": "",
@@ -499,7 +499,7 @@ export default {
         "gmagick": [],
         "imagemagick": [
             {
-                "id": "use-nice",
+                "id": "imagemagick-use-nice",
                 "schema": {
                     "title": "Use nice",
                     "description": "If *use-nice* is set, it will be examined if the *nice* command is available. If it is, the binary is executed using *nice*. This assigns low priority to the process and will save system resources - but result in slower conversion.",
@@ -514,7 +514,7 @@ export default {
                 }
             },
             {
-                "id": "try-common-system-paths",
+                "id": "imagemagick-try-common-system-paths",
                 "schema": {
                     "title": "Try locating ImageMagick in common system paths",
                     "description": "If set, the converter will look for a ImageMagick binaries residing in common system locations such as \"\/usr\/bin\/convert\". If such exist, it is assumed that they are valid ImageMagick binaries. ",
@@ -531,7 +531,7 @@ export default {
         ],
         "graphicsmagick": [
             {
-                "id": "use-nice",
+                "id": "graphicsmagick-use-nice",
                 "schema": {
                     "title": "Use nice",
                     "description": "If *use-nice* is set, it will be examined if the *nice* command is available. If it is, the binary is executed using *nice*. This assigns low priority to the process and will save system resources - but result in slower conversion.",
@@ -548,7 +548,7 @@ export default {
         ],
         "wpc": [
             {
-                "id": "api-key",
+                "id": "wpc-api-key",
                 "schema": {
                     "title": "API key",
                     "description": "",
@@ -565,7 +565,7 @@ export default {
                 "sensitive": true
             },
             {
-                "id": "secret",
+                "id": "wpc-secret",
                 "schema": {
                     "title": "Secret",
                     "description": "",
@@ -582,7 +582,7 @@ export default {
                 "sensitive": true
             },
             {
-                "id": "api-url",
+                "id": "wpc-api-url",
                 "schema": {
                     "title": "API url",
                     "description": "URL to connect to",
@@ -598,7 +598,7 @@ export default {
                 "sensitive": true
             },
             {
-                "id": "api-version",
+                "id": "wpc-api-version",
                 "schema": {
                     "title": "API version",
                     "description": "",
@@ -620,7 +620,7 @@ export default {
                 }
             },
             {
-                "id": "crypt-api-key-in-transfer",
+                "id": "wpc-crypt-api-key-in-transfer",
                 "schema": {
                     "title": "Crypt API key in transfer",
                     "description": "",
@@ -638,7 +638,7 @@ export default {
         ],
         "ffmpeg": [
             {
-                "id": "use-nice",
+                "id": "ffmpeg-use-nice",
                 "schema": {
                     "title": "Use nice",
                     "description": "If *use-nice* is set, it will be examined if the *nice* command is available. If it is, the binary is executed using *nice*. This assigns low priority to the process and will save system resources - but result in slower conversion.",
@@ -655,7 +655,7 @@ export default {
         ],
         "ewww": [
             {
-                "id": "api-key",
+                "id": "ewww-api-key",
                 "schema": {
                     "title": "Ewww API key",
                     "description": "ewww API key. If you choose \"auto\", webp-convert will convert to both lossy and lossless and pick the smallest result",
@@ -670,7 +670,7 @@ export default {
                 "sensitive": true
             },
             {
-                "id": "check-key-status-before-converting",
+                "id": "ewww-check-key-status-before-converting",
                 "schema": {
                     "title": "Check key status before converting",
                     "description": "If enabled, the api key will be validated (relative inexpensive) before trying to convert. For automatic conversions, you should enable it. Otherwise you run the risk that the same files will be uploaded to ewww cloud service over and over again, in case the key has expired. For manually triggered conversions, you can safely disable the option.",
@@ -687,10 +687,11 @@ export default {
         "gd": [],
         "stack": [
             {
-                "id": "converters",
+                "id": "stack-converters",
                 "schema": {
                     "title": "Converters",
                     "description": "Converters to try, ordered by priority.",
+                    "sensitive": true,
                     "type": [
                         "array"
                     ],
@@ -723,10 +724,10 @@ export default {
                     ],
                     "advanced": true
                 },
-                "sensitive": false
+                "sensitive": true
             },
             {
-                "id": "shuffle",
+                "id": "stack-shuffle",
                 "schema": {
                     "title": "Shuffle",
                     "description": "Shuffles the converter order on each conversion. Can for example be used to spread out requests on multiple cloud converters",

@@ -158,12 +158,16 @@ export default {
       );
 
       let allOptions = generalOptions.map((x) => x);
+
+
       for (const item in uniqueOptions) {
         for (let i=0; i<uniqueOptions[item].length; i++) {
           let option = uniqueOptions[item][i];
+          /*
+          // prefix unique options with converter
           if (option['id'].indexOf(item + '-') == -1) {
             option['id'] = item + '-' + option['id'];
-          }
+          }*/
           allOptions.push(option);
         }
       }
