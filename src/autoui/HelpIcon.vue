@@ -5,8 +5,8 @@
       <template #popper>
         <div class="menu-inner">
           <!--<p v-html="option.schema['description']"></p>-->
-          <p>
-            {{ schema.description }}
+          <p v-for="paragraph in descriptionParagraphs">
+            {{ paragraph }}
           </p>
           <div class="buttons" v-if="ui.links">
             <!--<button v-if="ui.urls.guide">Guide</button>
@@ -35,6 +35,11 @@ export default {
   props: {
     schema: Object,
     ui: Object
+  },
+  computed: {
+    descriptionParagraphs() {
+      return this.schema.description.split(/\n\n/);
+    }
   },
   data() {
     return {
