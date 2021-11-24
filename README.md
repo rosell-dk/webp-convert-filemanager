@@ -5,8 +5,8 @@ It works well with the [webp-convert](https://github.com/rosell-dk/webp-convert)
 
 Here are some screenshots:
 
-**File Properties**
+**File Tree and File Properties:**
 ![File Properties](https://raw.githubusercontent.com/rosell-dk/webp-convert-filemanager/master/docs/wcfm-screenshot1.png)
 
-**Conversion Options**
+**Conversion Options:**
 ![Conversion options](https://raw.githubusercontent.com/rosell-dk/webp-convert-filemanager/master/docs/wcfm-screenshot2.png)
